@@ -9,7 +9,7 @@ docker-compose -f docker-compose.yaml up -d
 
 ```
 
-## golang 1.18.2
+## golang
 
 ## python 3.9
 

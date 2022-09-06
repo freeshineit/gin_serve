@@ -7,7 +7,7 @@
 `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
 
 
-## [golang](https://go.dev/)@1.18.2
+## [golang](https://go.dev/)@1.19
 
 `brew install go`
 
