@@ -1,0 +1,55 @@
+version: "3"
+services:
+  mysql:
+    # 指定镜像
+    image: mysql:5.7
+
+    # 指定容器名称
+    container_name: mysql_container
+
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+
+    volumes:
+      - ./docker/mysql/conf:/etc/mysql
+      - ./docker/mysql/logs:/var/log/mysql
+      - ./docker/mysql/data:/var/lib/mysql
+
+    # 端口映射
+    ports:
+      - 3306:3306
+
+    # 网络和ip
+    # networks:
+    #   extnetwork:
+    #     ipv4_address: 192.168.0.2
+
+    privileged: true
+    restart: always
+
+  redis:
+    image: redis:5
+
+    container_name: redis_container
+
+    ports:
+      - 6379:6379
+
+    volumes:
+      - ./docker/redis/data:/data
+      - ./docker/redis/redis.conf:/etc/redis/redis.conf
+
+    command: redis-server /etc/redis/redis.conf
+
+    # networks:
+    #   extnetwork:
+    #     ipv4_address: 192.168.0.3
+
+    privileged: true
+    restart: always
+
+networks:
+  extnetwork:
+    ipam:
+      config:
+        - subnet: 192.168.0.0/16
