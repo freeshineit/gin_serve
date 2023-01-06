@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"go_python_app/routes"
+	"go_python_serve/routes"
 	"log"
 	"net/http"
 	"os"
