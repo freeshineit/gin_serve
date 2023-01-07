@@ -6,10 +6,99 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
+    <link href="/static/style/common.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 100vw;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .w-320 {
+            width: 320px;
+        }
+
+        #login_form>input {
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 
 <body>
-    <div>Register</div>
+    <div class="container">
+        <div class="w-320">
+            <form id="login_form">
+                <input type="text" id="name" name='name' placeholder="Name">
+                <input type="email" id="email" name="email" placeholder="Email">
+                <input type="password" id="password" name="password" placeholder="Password">
+                <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password">
+                <input type="file" id="avatar" name="avatar" placeholder="Avatar" accept="image/*">
+                <input type="text" id="gender" name="gender" placeholder="Gender">
+                <button type="submit" class="btn btn-primary btn-block">Register</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        ; (function () {
+            const login_form = document.getElementById('login_form')
+
+            let avatar = ''
+
+            document.getElementById('avatar').addEventListener("change", () => {
+                avatar = ''
+                var fd = new FormData()
+                var file = document.getElementById('avatar')
+                fd.append('file', file.files[0])
+                axios({
+                    method: "post",
+                    url: "/api/file_upload",
+                    headers: {
+                        "Content-Type": "application/form-data"
+                    },
+                    data: fd
+                }).then((res) => {
+                    console.log(res.data);
+                    const urls = res.data.data.urls || [];
+                    console.log(urls)
+                    avatar = urls[0]
+                })
+            }, false)
+
+            login_form.addEventListener('submit', (e) => {
+                // e.stopPropagation()
+                e.preventDefault()
+
+                const nameEle = document.getElementById('name')
+                const emailEle = document.getElementById('email')
+                const passwordEle = document.getElementById('password')
+                const confirmPasswordEle = document.getElementById('confirm_password')
+                const genderEle = document.getElementById('gender')
+
+                const name = nameEle.value
+                const email = emailEle.value
+                const password = passwordEle.value
+                const confirmPassword = confirmPasswordEle.value
+                const gender = genderEle.value
+
+                if (email && password && password === confirmPassword && name && avatar && gender) {
+                    axios.post("/api/register", {
+                        name,
+                        email,
+                        password,
+                        avatar,
+                        gender
+                    }).then(res => {
+                        console.log(res)
+                    })
+                }
+
+            }, false)
+        })();
+    </script>
 </body>
 
 </html>
