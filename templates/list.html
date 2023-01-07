@@ -6,10 +6,64 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>List</title>
+    <link href="/static/style/common.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .w-500 {
+            width: 500px;
+            padding-top: 50px;
+            padding-bottom: 50px;
+        }
+
+        .input-wrapper {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .input-wrapper>button {
+            width: 100px;
+        }
+
+        .list-wrapper {}
+
+        .list-wrapper li {
+            height: 30px;
+            line-height: 20px;
+            padding: 5px;
+        }
+
+        .list-wrapper li:hover {
+            background-color: aliceblue;
+        }
+    </style>
 </head>
 
 <body>
-    <div>List</div>
+    <div class="container">
+        <div class="w-500">
+            <div class="input-wrapper">
+                <input id="todo" placeholder="Input" />
+                <button class="btn btn-primary">添加</button>
+            </div>
+            <ul class="list-wrapper">
+                <li>1</li>
+                <li>2</li>
+                <li>3</li>
+            </ul>
+        </div>
+    </div>
+    <script>
+        (function () {
+
+        })();
+    </script>
 </body>
 
 </html>
