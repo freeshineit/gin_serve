@@ -1,0 +1,47 @@
+var Axios = (function () {
+  var service = axios.create({
+    headers: {},
+    withCredentials: true,
+    timeout: 30000
+  });
+
+  // 请求拦截器
+  service.interceptors.request.use(
+    (config) => {
+      console.log("config", config);
+      const token = localStorage.getItem("__token__");
+      if (token && config["headers"]) {
+        config["headers"]["Authorization"] = `Basic ${token}`;
+      }
+      return config;
+    },
+    (err) => {
+      err.message = "服务器异常，请联系管理员！";
+      // 错误抛到业务代码
+      return Promise.reject(err);
+    }
+  );
+
+  // 响应拦截器
+  service.interceptors.response.use(
+    (response) => {
+      const status = response.status;
+      let msg = "";
+      if (status < 200 || (status >= 300 && status != 401 && status != 500)) {
+        // 处理http错误，抛到业务代码
+        return response;
+      } else if (status == 200) {
+        return response;
+      } else if (status == 500) {
+        return response;
+      }
+    },
+    (err) => {
+      err.message = "请求超时或服务器异常，请检查网络或联系管理员！";
+      return Promise.reject(err);
+    }
+  );
+
+  window.Axios = service;
+  return service;
+})(window);
