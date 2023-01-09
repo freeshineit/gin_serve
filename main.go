@@ -12,6 +12,7 @@ import (
 )
 
 func main() {
+	// set up routes
 	r := routes.SetupRoutes()
 
 	// code from gin github

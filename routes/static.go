@@ -13,5 +13,6 @@ func SetStaticFS(r *gin.Engine) {
 	// set server static
 	r.StaticFile("favicon.ico", "./public/favicon.ico")
 	r.StaticFS("/static", http.Dir("public/static"))
-	// r.StaticFS("/upload", http.Dir("upload"))
+	// upload file
+	r.StaticFS("/images/upload", http.Dir("upload"))
 }

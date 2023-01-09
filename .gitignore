@@ -1,4 +1,6 @@
 docker/mysql/data
 docker/mysql/logs
 docker/redis/data
-go_python_app
+go_python_serve
+tmp/
+upload/

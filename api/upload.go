@@ -43,7 +43,7 @@ func FileUpload(c *gin.Context) {
 		filesURL = append(filesURL, "images/upload/"+file.Filename)
 	}
 
-	c.JSON(http.StatusOK, models.BuildResponse(http.StatusOK, "success", gin.H{
+	c.JSON(http.StatusOK, models.BuildOKResponse(gin.H{
 		"urls": filesURL,
 	}))
 }

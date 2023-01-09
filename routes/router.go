@@ -1,11 +1,19 @@
 package routes
 
 import (
+	"go_python_serve/api"
+	"go_python_serve/middleware"
+	"go_python_serve/models"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 )
 
 func SetupRoutes() *gin.Engine {
 	r := gin.Default()
+
+	// 中间件
+	middleware.SetMiddleware(r)
 
 	// 设置静态资源
 	SetStaticFS(r)
@@ -15,9 +23,10 @@ func SetupRoutes() *gin.Engine {
 
 	apiGroup := r.Group("/api")
 	{
-
-		// // 表单提交
-		// apiGroup.POST("/form_post", api.FormPost)
+		apiGroup.POST("/register", api.Register)
+		apiGroup.POST("/login", api.Login)
+		apiGroup.POST("/logout", api.Logout)
+		apiGroup.POST("/file_upload", api.FileUpload)
 
 		// // json提交
 		// apiGroup.POST("/json_post", api.JSONPost)
@@ -34,10 +43,10 @@ func SetupRoutes() *gin.Engine {
 			// message := c.Query("message")
 			// nick := c.DefaultQuery("nick", "anonymous")
 
-			// c.JSON(http.StatusOK, models.BuildResponse(http.StatusOK, "success", gin.H{
-			// 	message: message,
-			// 	nick:    nick,
-			// }))
+			c.JSON(http.StatusOK, models.BuildOKResponse(gin.H{
+				"message": "message",
+				"nick":    "nick",
+			}))
 		})
 	}
 
@@ -69,10 +78,10 @@ func SetupRoutes() *gin.Engine {
 			// message := c.Query("message")
 			// nick := c.DefaultQuery("nick", "anonymous")
 
-			// c.JSON(http.StatusOK, models.BuildResponse(http.StatusOK, "success", gin.H{
-			// 	message: message,
-			// 	nick:    nick,
-			// }))
+			c.JSON(http.StatusOK, models.BuildOKResponse(gin.H{
+				"message": "message",
+				"nick":    "nick",
+			}))
 		})
 	}
 
@@ -105,10 +114,10 @@ func SetupRoutes() *gin.Engine {
 			// message := c.Query("message")
 			// nick := c.DefaultQuery("nick", "anonymous")
 
-			// c.JSON(http.StatusOK, models.BuildResponse(http.StatusOK, "success", gin.H{
-			// 	message: message,
-			// 	nick:    nick,
-			// }))
+			c.JSON(http.StatusOK, models.BuildOKResponse(gin.H{
+				"message": "message",
+				"nick":    "nick",
+			}))
 		})
 	}
 
