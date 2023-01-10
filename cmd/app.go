@@ -6,7 +6,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"go_python_serve/config"
+	"go_python_serve/app/config"
 )
 
 var cfgFile string
