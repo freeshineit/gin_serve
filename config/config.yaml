@@ -1,0 +1,5 @@
+logger:
+  dir: "logs"
+
+jwt:
+  secret: "xiaoshaoqq@gmial.com<>!@#$%^&*?"

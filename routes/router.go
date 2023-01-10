@@ -9,19 +9,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func SetupRoutes() *gin.Engine {
-	r := gin.Default()
-
-	// 中间件
-	middleware.SetMiddleware(r)
+func SetupRoutes(router *gin.Engine) *gin.Engine {
 
 	// 设置静态资源
-	SetStaticFS(r)
+	SetStaticFS(router)
 
 	// set page router
-	SetRoutesPage(r)
+	SetRoutesPage(router)
 
-	apiGroup := r.Group("/api")
+	apiGroup := router.Group("/api")
 	{
 		apiGroup.POST("/register", api.Register)
 		apiGroup.POST("/login", api.Login)
@@ -51,7 +47,7 @@ func SetupRoutes() *gin.Engine {
 	}
 
 	// /api/v1
-	apiV1Group := r.Group("/api/v1")
+	apiV1Group := router.Group("/api/v1", middleware.AuthJWT())
 	{
 		// // 表单提交
 		// apiGroup.POST("/form_post", api.FormPost)
@@ -86,7 +82,7 @@ func SetupRoutes() *gin.Engine {
 	}
 
 	// /api/v2
-	apiV2Group := r.Group("/api/v2")
+	apiV2Group := router.Group("/api/v2", middleware.AuthJWT())
 	{
 
 		// // 表单提交
@@ -121,5 +117,5 @@ func SetupRoutes() *gin.Engine {
 		})
 	}
 
-	return r
+	return router
 }

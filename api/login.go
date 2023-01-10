@@ -43,3 +43,15 @@ func Logout(c *gin.Context) {
 
 	c.JSON(http.StatusOK, models.BuildOKResponse(user))
 }
+
+// token 刷新
+func Refresh(c *gin.Context) {
+	var user models.User
+
+	if err := c.ShouldBind(&user); err != nil {
+		c.JSON(http.StatusOK, models.BuildErrorResponse[any]("use should bind error", err))
+
+	}
+
+	c.JSON(http.StatusOK, models.BuildOKResponse(user))
+}

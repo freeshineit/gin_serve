@@ -12,12 +12,15 @@ docker-compose -f docker-compose.yaml up -d
 # https://github.com/cosmtrek/air Live reload for Go apps
 air
 
+## development
+# http://localhost:3000
+go run main.go --port=3000 --mod=release
+
 # build
 go build
 ```
 
 ## golang
 
-## python 3.9
 
 

@@ -4,3 +4,4 @@ docker/redis/data
 go_python_serve
 tmp/
 upload/
+logs/
