@@ -20,6 +20,7 @@ var timeFormat = "02/01/2006:15:04:05 -0700"
 
 // Logger is the logrus logger handler
 func Logger(logger logrus.FieldLogger, notLogged ...string) gin.HandlerFunc {
+
 	hostname, err := os.Hostname()
 	if err != nil {
 		hostname = "unknow"

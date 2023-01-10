@@ -22,7 +22,7 @@ jobs:
           go-version: ${{ matrix.go-version }}
 
       - name: Test
-        run: go test
+        run: make test
 
       - name: Build
-        run: export GIN_MODE=release go build
+        run: make build

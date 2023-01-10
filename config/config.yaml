@@ -1,5 +1,6 @@
 logger:
   dir: "logs"
+  suffix: ".log"
 
 jwt:
   secret: "xiaoshaoqq@gmial.com<>!@#$%^&*?"

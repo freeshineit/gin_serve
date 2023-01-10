@@ -5,3 +5,4 @@ go_python_serve
 tmp/
 upload/
 logs/
+bin

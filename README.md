@@ -14,10 +14,13 @@ air
 
 ## development
 # http://localhost:3000
-go run main.go --port=3000 --mod=release
+go run cmd/app.go --port=3000
 
 # build
-go build
+make build
+
+# run production 
+./bin/app --port=3000 --mode=release
 ```
 
 ## golang

@@ -1,15 +1,16 @@
 #一定不能用4个空格代替tab
 
 GOCMD=go
-GOBUILD=$(GOCMD) build  -i -v -ldflags '-w -s'
+GOBUILD=$(GOCMD) build -i -v -ldflags '-w -s'
 GOCLEAN=$(GOCMD) clean
 GOTEST=$(GOCMD) test ./...
 GOGET=$(GOCMD) get -u -v
 
 OS := $(shell uname -s | awk '{print tolower($$0)}')
 
-BINARY = bin/go-server-cli
+BINARY = ./bin/app
 
+# 
 GOARCH = amd64
 
 LDFLAGS = -ldflags="$$(govvv -flags)"
@@ -23,7 +24,7 @@ lint:
 	golint
 
 build:
-	env CGO_ENABLED=0 GOOS=$(OS) GOARCH=$(GOARCH) GIN_MODE=release $(GOBUILD)  -o $(BINARY)
+	env CGO_ENABLED=0 GOOS=$(OS) GOARCH=$(GOARCH) GIN_MODE=release  $(GOBUILD) -o $(BINARY) ./cmd/app.go
 
 clean:
 	$(GOCLEAN)

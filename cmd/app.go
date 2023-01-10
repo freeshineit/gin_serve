@@ -1,4 +1,4 @@
-package cmd
+package main
 
 import (
 	"go_python_serve/server"
@@ -29,7 +29,7 @@ var rootCmd = &cobra.Command{
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
-func Execute() {
+func execute() {
 	cobra.CheckErr(rootCmd.Execute())
 }
 
@@ -63,4 +63,7 @@ func initConfig() {
 	}
 }
 
-// 定义 rootCmd 命令的执行
+// 执行
+func main() {
+	execute()
+}
