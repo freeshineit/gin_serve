@@ -2,7 +2,7 @@ package utils
 
 import (
 	"fmt"
-	"go_python_serve/models"
+	"go_python_serve/app/models"
 
 	"github.com/golang-jwt/jwt"
 	"github.com/spf13/viper"

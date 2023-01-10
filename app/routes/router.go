@@ -1,9 +1,9 @@
 package routes
 
 import (
-	"go_python_serve/api"
-	"go_python_serve/middleware"
-	"go_python_serve/models"
+	"go_python_serve/app/api"
+	"go_python_serve/app/middleware"
+	"go_python_serve/app/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

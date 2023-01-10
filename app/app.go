@@ -1,10 +1,10 @@
-package server
+package app
 
 import (
 	"context"
 	"errors"
-	"go_python_serve/middleware"
-	"go_python_serve/routes"
+	"go_python_serve/app/middleware"
+	"go_python_serve/app/routes"
 	"net/http"
 	"os"
 	"os/signal"

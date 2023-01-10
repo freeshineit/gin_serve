@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"go_python_serve/utils"
+	"go_python_serve/app/utils"
 
 	"github.com/gin-gonic/gin"
 )

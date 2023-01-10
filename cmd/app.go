@@ -1,7 +1,7 @@
 package main
 
 import (
-	"go_python_serve/server"
+	"go_python_serve/app"
 	"log"
 
 	"github.com/spf13/cobra"
@@ -20,7 +20,7 @@ var rootCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		port := cmd.Flag("port").Value.String()
 		mode := cmd.Flag("mode").Value.String()
-		server.RunServer(server.ServerConfig{
+		app.RunServer(app.ServerConfig{
 			Port: port,
 			Mode: mode,
 		})
