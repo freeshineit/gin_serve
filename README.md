@@ -21,6 +21,11 @@ make build
 
 # run production 
 ./bin/app --port=3000 --mode=release
+
+# docker deploy app
+docker build -t go_app:v0.1 .
+# run docker
+docker run -it -p 3000:3000 --rm --name go_app go_app:v0.1
 ```
 
 ## golang
