@@ -13,7 +13,7 @@ func (c *Config) InitConfig() error {
 	if c.Name != "" {
 		viper.SetConfigFile(c.Name)
 	} else {
-		viper.AddConfigPath("config")
+		viper.AddConfigPath("app/config")
 		viper.SetConfigName("config")
 	}
 	viper.SetConfigType("yaml")
