@@ -1,0 +1,29 @@
+
+port = "3030"
+mode = "debug"
+
+[app]
+  env = "debug"
+
+[http.server]
+  port = "8080"
+
+[database.mysql]
+  host = "localhost"
+  port = 3306
+  database = "gin"
+  user = "root"
+  password = "123456"
+  connection_max = 1000
+
+[cache.redis]
+  host = "localhost"
+  port = 6379
+  db = 0
+  password = "123456"
+
+[logger]
+  dir = "logs/"
+  http_path = "http/"
+  error_path = "error/"
+
