@@ -52,7 +52,7 @@
                 const password = passwordEle.value
 
                 if (email && password) {
-                    axios.post("/api/v1/login", {
+                    axios.post("/api/login", {
                         email,
                         password
                     }).then(res => {
