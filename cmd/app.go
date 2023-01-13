@@ -20,6 +20,9 @@ var rootCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		port := cmd.Flag("port").Value.String()
 		mode := cmd.Flag("mode").Value.String()
+
+		log.Printf("app version %s", app.Version)
+
 		app.RunServer(app.ServerConfig{
 			Port: port,
 			Mode: mode,
@@ -39,7 +42,7 @@ func init() {
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default: ./app/config/config.yaml)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default: ./app/config/config.toml)")
 
 	rootCmd.Flags().StringP("port", "p", "8080", "default server port 8080")
 	rootCmd.Flags().StringP("mode", "m", "debug", "default  server running in 'debug' mode")
@@ -60,6 +63,8 @@ func initConfig() {
 		}
 		log.Printf("载入配置成功")
 		// c.WatchConfig(configChange)
+
+		config.GetLogger()
 	}
 }
 
