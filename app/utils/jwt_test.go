@@ -28,7 +28,17 @@ func TestExampleNewWithClaims(t *testing.T) {
 // Example creating a token using a custom claims type.  The StandardClaim is embedded
 // in the custom type to allow for easy encoding, parsing and validation of standard claims.
 func TestExampleParseWithClaims(t *testing.T) {
-	tokenString := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyIjp7IklkIjoiIiwibmFtZSI6IlNoaW5lU2hhbyIsImVtYWlsIjoieGlhb3NoYW9xcUBnbWFpbC5jb20iLCJnZW5kZXIiOiJNYW4iLCJhdmF0YXIiOiIvdXBsb2FkL2F2YXRhci5wbmcifSwiaXNzIjoiU2hpbmVTaGFvIiwic3ViIjoieGlhb3NoYW9xcUBnbWFpbC5jb20iLCJhdWQiOlsiX0F1ZGllbmNlXyJdLCJleHAiOjE2NzM3MDk2MzEsIm5iZiI6MTY3MzcwMjQzMSwiaWF0IjoxNjczNzAyNDMxLCJqdGkiOiIxIn0.pXTxq-KsYgWTUtKkE8SjMqpEqEiQNSj-JFt3UEFHM7A"
+	// tokenString := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyIjp7IklkIjoiIiwibmFtZSI6IlNoaW5lU2hhbyIsImVtYWlsIjoieGlhb3NoYW9xcUBnbWFpbC5jb20iLCJnZW5kZXIiOiJNYW4iLCJhdmF0YXIiOiIvdXBsb2FkL2F2YXRhci5wbmcifSwiaXNzIjoiU2hpbmVTaGFvIiwic3ViIjoieGlhb3NoYW9xcUBnbWFpbC5jb20iLCJhdWQiOlsiX0F1ZGllbmNlXyJdLCJleHAiOjE2NzM3MDk2MzEsIm5iZiI6MTY3MzcwMjQzMSwiaWF0IjoxNjczNzAyNDMxLCJqdGkiOiIxIn0.pXTxq-KsYgWTUtKkE8SjMqpEqEiQNSj-JFt3UEFHM7A"
+
+	tokenString, err := GenerateToken(&models.UserLogin{
+		Password: "123456",
+		Email:    "xiaoshaoqq@gmail.com",
+	})
+
+	if err != nil {
+
+	}
+
 	user, ok := ParseToken(tokenString)
 	if !ok {
 		t.Errorf("ParseToken: %v %v", user, ok)
