@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"go_python_serve/app/middleware"
+	"go_python_serve/app/models"
 	"go_python_serve/app/routes"
 	"net/http"
 	"os"
@@ -31,6 +32,12 @@ func RunServer(config ServerConfig) {
 
 	log := logrus.New()
 	// hooks, config,...
+
+	// 连接mysql数据库
+	models.InitMysqlDB()
+
+	// 连接redis
+	models.InitRedis()
 
 	// r := gin.Default()
 	r := gin.New()

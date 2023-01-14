@@ -63,8 +63,6 @@ func initConfig() {
 		}
 		log.Printf("载入配置成功")
 		// c.WatchConfig(configChange)
-
-		config.GetLogger()
 	}
 }
 
