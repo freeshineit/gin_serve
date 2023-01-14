@@ -8,6 +8,8 @@
     <title>Login</title>
     <link href="/static/style/common.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+    <script src="/static/js/axios.js"></script>
+
     <style>
         .container {
             display: flex;
@@ -52,11 +54,13 @@
                 const password = passwordEle.value
 
                 if (email && password) {
-                    axios.post("/api/login", {
+                    Axios.post("/api/login", {
                         email,
                         password
                     }).then(res => {
-                        console.log(res)
+                        if (res.code === 0) {
+                            location.href = '/'
+                        }
                     })
                 }
 

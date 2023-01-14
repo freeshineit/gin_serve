@@ -16,11 +16,9 @@ type MyCustomClaims struct {
 // Example creating a token using a custom claims type. The RegisteredClaims is embedded
 // in the custom type to allow for easy encoding, parsing and validation of registered claims.
 func TestExampleNewWithClaims(t *testing.T) {
-	ss, err := GenerateToken(&models.User{
-		Name:   "ShineShao",
-		Gender: "Man",
-		Avatar: "/upload/avatar.png",
-		Email:  "xiaoshaoqq@gmail.com",
+	ss, err := GenerateToken(&models.UserLogin{
+		Password: "123456",
+		Email:    "xiaoshaoqq@gmail.com",
 	})
 
 	fmt.Printf("%v %v", ss, err)

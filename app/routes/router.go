@@ -47,7 +47,7 @@ func SetupRoutes(router *gin.Engine) *gin.Engine {
 	}
 
 	// /api/v1
-	apiV1Group := router.Group("/api/v1", middleware.AuthJWT())
+	apiV1Group := router.Group("/api/v1", middleware.JwtAuth())
 	{
 		// // 表单提交
 		// apiGroup.POST("/form_post", api.FormPost)
@@ -82,7 +82,7 @@ func SetupRoutes(router *gin.Engine) *gin.Engine {
 	}
 
 	// /api/v2
-	apiV2Group := router.Group("/api/v2", middleware.AuthJWT())
+	apiV2Group := router.Group("/api/v2", middleware.JwtAuth())
 	{
 
 		// // 表单提交

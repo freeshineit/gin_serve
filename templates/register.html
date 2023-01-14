@@ -63,7 +63,7 @@
                     data: fd
                 }).then((res) => {
                     console.log(res.data);
-                    const urls = res.data.data.urls || [];
+                    const urls = res.data.urls || [];
                     console.log(urls)
                     avatar = urls[0]
                 })
@@ -86,14 +86,17 @@
                 const gender = genderEle.value
 
                 if (email && password && password === confirmPassword && name && avatar && gender) {
-                    axios.post("/api/register", {
+                    Axios.post("/api/register", {
                         name,
                         email,
                         password,
+                        confirm_password: confirmPassword,
                         avatar,
                         gender
                     }).then(res => {
-                        console.log(res)
+                        if (res.code === 0) {
+                            location.href = "/login"
+                        }
                     })
                 }
 

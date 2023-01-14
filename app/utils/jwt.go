@@ -10,16 +10,16 @@ import (
 )
 
 type JwtAuthClaim struct {
-	User *models.User
+	User *models.UserLogin
 	jwt.RegisteredClaims
 }
 
 const TokenExpireDuration = 2 * time.Hour //过期时间
 
 // GenerateToken generate jwt token.
-func GenerateToken(u *models.User) (string, error) {
+func GenerateToken(u *models.UserLogin) (string, error) {
 
-	fmt.Print(u)
+	// fmt.Print(u)
 
 	claims := JwtAuthClaim{
 		User: u,
@@ -40,7 +40,7 @@ func GenerateToken(u *models.User) (string, error) {
 }
 
 // ParseToken parse jwt token
-func ParseToken(tokenStr string) (user *models.User, Valid bool) {
+func ParseToken(tokenStr string) (user *models.UserLogin, Valid bool) {
 
 	token, err := jwt.ParseWithClaims(tokenStr, &JwtAuthClaim{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte(config.Secret), nil
@@ -63,3 +63,5 @@ func ParseToken(tokenStr string) (user *models.User, Valid bool) {
 		return nil, false
 	}
 }
+
+// func
