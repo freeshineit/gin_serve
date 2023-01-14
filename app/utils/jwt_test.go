@@ -17,10 +17,10 @@ type MyCustomClaims struct {
 // in the custom type to allow for easy encoding, parsing and validation of registered claims.
 func TestExampleNewWithClaims(t *testing.T) {
 	ss, err := GenerateToken(&models.User{
-		Name:   "string name",
-		Gender: "string gender",
-		Avatar: "string avatar",
-		Email:  "string email",
+		Name:   "ShineShao",
+		Gender: "Man",
+		Avatar: "/upload/avatar.png",
+		Email:  "xiaoshaoqq@gmail.com",
 	})
 
 	fmt.Printf("%v %v", ss, err)
@@ -30,7 +30,7 @@ func TestExampleNewWithClaims(t *testing.T) {
 // Example creating a token using a custom claims type.  The StandardClaim is embedded
 // in the custom type to allow for easy encoding, parsing and validation of standard claims.
 func TestExampleParseWithClaims(t *testing.T) {
-	tokenString := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyIjp7IklkIjoiIiwibmFtZSI6InN0cmluZyBuYW1lIiwiZW1haWwiOiJzdHJpbmcgZW1haWwiLCJnZW5kZXIiOiJzdHJpbmcgZ2VuZGVyIiwiYXZhdGFyIjoic3RyaW5nIGF2YXRhciJ9LCJpc3MiOiJTaGluZVNoYW8iLCJzdWIiOiJ4aWFvc2hhb3FxQGdtYWlsLmNvbSIsImF1ZCI6WyJfQXVkaWVuY2VfIl0sImV4cCI6MTY3MzYyNzU2MywibmJmIjoxNjczNjIwMzYzLCJpYXQiOjE2NzM2MjAzNjMsImp0aSI6IjEifQ.yL8gc7yF-vgVelT-YIwLr4DPOAig6OroKQm-T2picNg"
+	tokenString := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyIjp7IklkIjoiIiwibmFtZSI6IlNoaW5lU2hhbyIsImVtYWlsIjoieGlhb3NoYW9xcUBnbWFpbC5jb20iLCJnZW5kZXIiOiJNYW4iLCJhdmF0YXIiOiIvdXBsb2FkL2F2YXRhci5wbmcifSwiaXNzIjoiU2hpbmVTaGFvIiwic3ViIjoieGlhb3NoYW9xcUBnbWFpbC5jb20iLCJhdWQiOlsiX0F1ZGllbmNlXyJdLCJleHAiOjE2NzM3MDk2MzEsIm5iZiI6MTY3MzcwMjQzMSwiaWF0IjoxNjczNzAyNDMxLCJqdGkiOiIxIn0.pXTxq-KsYgWTUtKkE8SjMqpEqEiQNSj-JFt3UEFHM7A"
 	user, ok := ParseToken(tokenString)
 	if !ok {
 		t.Errorf("ParseToken: %v %v", user, ok)
