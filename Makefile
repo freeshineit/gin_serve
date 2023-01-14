@@ -1,7 +1,7 @@
 #一定不能用4个空格代替tab
 
 GOCMD=go
-GOBUILD=$(GOCMD) build -i -v -ldflags '-w -s'
+GOBUILD=$(GOCMD) build -v -ldflags '-w -s'
 GOCLEAN=$(GOCMD) clean
 GOTEST=$(GOCMD) test ./...
 GOGET=$(GOCMD) get -u -v
