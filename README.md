@@ -19,6 +19,9 @@ go run cmd/app.go --port=3000
 # build
 make build
 
+# help
+./bin/app --help
+
 # run production 
 ./bin/app --port=3000 --mode=release
 
