@@ -3,8 +3,8 @@ package app
 import (
 	"context"
 	"errors"
+	"go_python_serve/app/config"
 	"go_python_serve/app/middleware"
-	"go_python_serve/app/models"
 	"go_python_serve/app/routes"
 	"net/http"
 	"os"
@@ -16,28 +16,23 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-type ServerConfig struct {
-	Port string
-	Mode string
-}
+func RunServer(conf config.ServerConfig) {
 
-func RunServer(config ServerConfig) {
-
-	if config.Mode == "release" {
+	if conf.Mode == "release" {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
-	// viper config.yaml
-	// config.SetConfig()
+	// viper /app/config/config.yaml
+	// read /cmd/app.go
 
 	log := logrus.New()
 	// hooks, config,...
 
 	// 连接mysql数据库
-	models.InitMysqlDB()
+	config.SetupDatabaseConnection()
 
 	// 连接redis
-	models.InitRedis()
+	config.SetupRedisConnection()
 
 	// r := gin.Default()
 	r := gin.New()
@@ -50,11 +45,11 @@ func RunServer(config ServerConfig) {
 	routes.SetupRoutes(r)
 
 	srv := &http.Server{
-		Addr:    ":" + config.Port,
+		Addr:    ":" + conf.Port,
 		Handler: r,
 	}
 
-	log.Printf("listen: http://localhost:%s\n", config.Port)
+	log.Printf("listen: http://localhost:%s\n", conf.Port)
 	// Initializing the server in a goroutine so that
 	// it won't block the graceful shutdown handling below
 	go func() {

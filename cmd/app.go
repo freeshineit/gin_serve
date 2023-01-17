@@ -23,7 +23,7 @@ var rootCmd = &cobra.Command{
 
 		log.Printf("app version %s", app.Version)
 
-		app.RunServer(app.ServerConfig{
+		app.RunServer(config.ServerConfig{
 			Port: port,
 			Mode: mode,
 		})
