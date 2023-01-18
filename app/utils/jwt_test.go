@@ -30,14 +30,14 @@ func TestExampleNewWithClaims(t *testing.T) {
 func TestExampleParseWithClaims(t *testing.T) {
 	// tokenString := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyIjp7IklkIjoiIiwibmFtZSI6IlNoaW5lU2hhbyIsImVtYWlsIjoieGlhb3NoYW9xcUBnbWFpbC5jb20iLCJnZW5kZXIiOiJNYW4iLCJhdmF0YXIiOiIvdXBsb2FkL2F2YXRhci5wbmcifSwiaXNzIjoiU2hpbmVTaGFvIiwic3ViIjoieGlhb3NoYW9xcUBnbWFpbC5jb20iLCJhdWQiOlsiX0F1ZGllbmNlXyJdLCJleHAiOjE2NzM3MDk2MzEsIm5iZiI6MTY3MzcwMjQzMSwiaWF0IjoxNjczNzAyNDMxLCJqdGkiOiIxIn0.pXTxq-KsYgWTUtKkE8SjMqpEqEiQNSj-JFt3UEFHM7A"
 
-	tokenString, err := GenerateToken(&models.UserLogin{
+	tokenString, _ := GenerateToken(&models.UserLogin{
 		Password: "123456",
 		Email:    "xiaoshaoqq@gmail.com",
 	})
 
-	if err != nil {
+	// if err != nil {
 
-	}
+	// }
 
 	user, ok := ParseToken(tokenString)
 	if !ok {
