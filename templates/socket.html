@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Socket</title>
+    <link href="/static/style/common.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+    <script src="/static/js/axios.js"></script>
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 100vw;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .w-320 {
+            width: 320px;
+        }
+
+        #login_form>input {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="w-320">
+
+        </div>
+    </div>
+    <script>
+        ; (function () {
+            var ws = new WebSocket("ws://localhost:8080/ws/ping");
+            //连接打开时触发 
+            ws.onopen = function (evt) {
+                console.log("Connection open ...");
+                ws.send("Hello WebSockets!");
+            };
+            //接收到消息时触发  
+            ws.onmessage = function (evt) {
+                console.log("Received Message: " + evt.data);
+            };
+            //连接关闭时触发  
+            ws.onclose = function (evt) {
+                console.log("Connection closed.");
+            };
+        })();
+    </script>
+</body>
+
+</html>
