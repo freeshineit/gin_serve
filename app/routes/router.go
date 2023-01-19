@@ -34,20 +34,28 @@ func SetupRoutes(router *gin.Engine) *gin.Engine {
 		})
 
 		// 注册需要带权限的路由
-		RegisterWithAuthGroup(apiGroup.Group("", middleware.JwtAuth()))
+		RegisterGroup(apiGroup)
 	}
 
 	// /api/v1
 	apiV1Group := router.Group("/api/v1", middleware.JwtAuth())
 	{
-
-		RegisterV1Group(RegisterWithAuthGroup(apiV1Group))
+		// register.go
+		RegisterV1Group(apiV1Group)
 	}
 
 	// /api/v2
 	apiV2Group := router.Group("/api/v2", middleware.JwtAuth())
 	{
-		RegisterV2Group(RegisterWithAuthGroup(apiV2Group))
+		// register.go
+		RegisterV2Group(apiV2Group)
+	}
+
+	// socket /ws
+	socketGroup := router.Group("/ws", middleware.JwtAuth())
+	{
+		// register.go
+		RegisterWsGroup(socketGroup)
 	}
 
 	return router
