@@ -4,11 +4,9 @@ import (
 	"go_python_serve/app/api"
 	v1 "go_python_serve/app/api/v1"
 	v2 "go_python_serve/app/api/v2"
-	"go_python_serve/app/models"
-	"net/http"
+	"go_python_serve/app/api/ws"
 
 	"github.com/gin-gonic/gin"
-	"github.com/gorilla/websocket"
 )
 
 // register with auth api /api/xxx
@@ -36,21 +34,9 @@ func RegisterV2Group(router *gin.RouterGroup) *gin.RouterGroup {
 	return router
 }
 
-var upGrader = websocket.Upgrader{
-	CheckOrigin: func(r *http.Request) bool {
-		return true
-	},
-}
-
 // register socket api /api/ws/xxx
 func RegisterWsGroup(router *gin.RouterGroup) *gin.RouterGroup {
 
-	router.GET("/ping", func(c *gin.Context) {
-		c.JSON(http.StatusOK, models.BuildOKResponse(gin.H{
-			"message": "message",
-			"nick":    "nick",
-		}))
-	})
-
+	router.GET("/ping", ws.Ping)
 	return router
 }

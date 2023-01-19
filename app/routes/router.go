@@ -52,7 +52,7 @@ func SetupRoutes(router *gin.Engine) *gin.Engine {
 	}
 
 	// socket /ws
-	socketGroup := router.Group("/ws", middleware.JwtAuth())
+	socketGroup := router.Group("/ws")
 	{
 		// register.go
 		RegisterWsGroup(socketGroup)

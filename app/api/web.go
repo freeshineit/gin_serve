@@ -32,3 +32,9 @@ func RegisterPage(c *gin.Context) {
 func ListPage(c *gin.Context) {
 	c.HTML(http.StatusOK, "list.html", gin.H{})
 }
+
+// socket page
+// router [/socket.html]
+func SocketPage(c *gin.Context) {
+	c.HTML(http.StatusOK, "socket.html", gin.H{})
+}
