@@ -9,7 +9,7 @@ import (
 
 func List(c *gin.Context) {
 	c.JSON(http.StatusOK, models.BuildOKResponse(gin.H{
-		"message": "message",
-		"nick":    "nick",
+		"message": "v1 api",
+		"nick":    "v1 api",
 	}))
 }
