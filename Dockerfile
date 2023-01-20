@@ -8,4 +8,5 @@ COPY ./public /usr/app/bin/public
 COPY ./templates /usr/app/bin/templates
 # COPY ./config/config.yaml /usr/app/bin/config
 EXPOSE 3000
-ENTRYPOINT ./bin/app --port=3000 --mode=release
+EXPOSE 3001
+ENTRYPOINT ./bin/app --port=3000 --mode=release --proxy-port=3001 
