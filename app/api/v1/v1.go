@@ -1,7 +1,7 @@
 package v1
 
 import (
-	"go_python_serve/app/models"
+	"gin_server/app/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

@@ -2,7 +2,7 @@ package utils
 
 import (
 	"fmt"
-	"go_python_serve/app/models"
+	"gin_server/app/models"
 	"testing"
 
 	"github.com/golang-jwt/jwt/v4"

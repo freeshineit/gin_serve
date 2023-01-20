@@ -2,8 +2,8 @@ package middleware
 
 import (
 	"errors"
-	"go_python_serve/app/models"
-	"go_python_serve/app/utils"
+	"gin_server/app/models"
+	"gin_server/app/utils"
 	"net/http"
 	"strings"
 

@@ -1,7 +1,7 @@
 package api
 
 import (
-	"go_python_serve/app/models"
+	"gin_server/app/models"
 	"log"
 	"net/http"
 	"os"

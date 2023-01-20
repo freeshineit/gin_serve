@@ -1,10 +1,10 @@
 package routes
 
 import (
-	"go_python_serve/app/api"
-	v1 "go_python_serve/app/api/v1"
-	v2 "go_python_serve/app/api/v2"
-	"go_python_serve/app/api/ws"
+	"gin_server/app/api"
+	v1 "gin_server/app/api/v1"
+	v2 "gin_server/app/api/v2"
+	"gin_server/app/api/ws"
 
 	"github.com/gin-gonic/gin"
 )

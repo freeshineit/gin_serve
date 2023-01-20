@@ -1,10 +1,10 @@
 package app
 
 import (
-	"go_python_serve/app/config"
-	"go_python_serve/app/middleware"
-	"go_python_serve/app/routes"
-	"go_python_serve/utils"
+	"gin_server/app/config"
+	"gin_server/app/middleware"
+	"gin_server/app/routes"
+	"gin_server/utils"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

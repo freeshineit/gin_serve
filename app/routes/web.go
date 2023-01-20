@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"go_python_serve/app/api"
+	"gin_server/app/api"
 
 	"github.com/gin-gonic/gin"
 )

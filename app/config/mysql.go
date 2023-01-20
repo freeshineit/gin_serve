@@ -2,7 +2,7 @@ package config
 
 import (
 	"fmt"
-	"go_python_serve/app/models"
+	"gin_server/app/models"
 	"log"
 
 	"gorm.io/driver/mysql"

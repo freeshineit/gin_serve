@@ -2,8 +2,8 @@ package proxy
 
 import (
 	"fmt"
-	"go_python_serve/app/config"
-	"go_python_serve/utils"
+	"gin_server/app/config"
+	"gin_server/utils"
 	"log"
 	"net/http"
 	"net/http/httputil"

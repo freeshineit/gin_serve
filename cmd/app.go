@@ -1,14 +1,14 @@
 package main
 
 import (
-	"go_python_serve/app"
-	"go_python_serve/proxy"
+	"gin_server/app"
+	"gin_server/proxy"
 	"log"
 
 	"github.com/spf13/cobra"
 	"golang.org/x/sync/errgroup"
 
-	"go_python_serve/app/config"
+	"gin_server/app/config"
 )
 
 var cfgFile string

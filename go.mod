@@ -1,4 +1,4 @@
-module go_python_serve
+module gin_server
 
 go 1.19
 
