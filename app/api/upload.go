@@ -1,7 +1,7 @@
 package api
 
 import (
-	"gin_server/app/models"
+	"gin_serve/app/models"
 	"log"
 	"net/http"
 	"os"

@@ -1,7 +1,7 @@
 package v2
 
 import (
-	"gin_server/app/models"
+	"gin_serve/app/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

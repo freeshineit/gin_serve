@@ -1,4 +1,4 @@
-module gin_server
+module gin_serve
 
 go 1.19
 

@@ -2,8 +2,8 @@ package utils
 
 import (
 	"fmt"
-	"gin_server/app/config"
-	"gin_server/app/models"
+	"gin_serve/app/config"
+	"gin_serve/app/models"
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"

@@ -2,8 +2,8 @@ package middleware
 
 import (
 	"errors"
-	"gin_server/app/models"
-	"gin_server/app/utils"
+	"gin_serve/app/models"
+	"gin_serve/app/utils"
 	"net/http"
 	"strings"
 

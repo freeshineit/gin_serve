@@ -26,9 +26,9 @@ make build
 ./bin/app --port=3000 --mode=release --proxy-port=3001 
 
 # docker deploy app
-docker build -t gin_server:v0.1 .
+docker build -t gin_serve:v0.1 .
 # run docker
-docker run -it -p 3000:3000 --rm --name gin_server gin_server:v0.1
+docker run -it -p 3000:3000 --rm --name gin_serve gin_serve:v0.1
 ```
 
 ## golang

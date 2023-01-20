@@ -1,14 +1,14 @@
 package main
 
 import (
-	"gin_server/app"
-	"gin_server/proxy"
+	"gin_serve/app"
+	"gin_serve/proxy"
 	"log"
 
 	"github.com/spf13/cobra"
 	"golang.org/x/sync/errgroup"
 
-	"gin_server/app/config"
+	"gin_serve/app/config"
 )
 
 var cfgFile string

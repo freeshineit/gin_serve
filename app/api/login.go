@@ -1,8 +1,8 @@
 package api
 
 import (
-	"gin_server/app/models"
-	"gin_server/app/utils"
+	"gin_serve/app/models"
+	"gin_serve/app/utils"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

@@ -2,8 +2,8 @@ package proxy
 
 import (
 	"fmt"
-	"gin_server/app/config"
-	"gin_server/utils"
+	"gin_serve/app/config"
+	"gin_serve/utils"
 	"log"
 	"net/http"
 	"net/http/httputil"
