@@ -14,7 +14,7 @@ air
 
 ## development
 # http://localhost:3000
-go run cmd/app.go --port=3000
+go run cmd/app.go --port=3000 --proxy-port=3001 
 
 # build
 make build
@@ -23,7 +23,7 @@ make build
 ./bin/app --help
 
 # run production 
-./bin/app --port=3000 --mode=release
+./bin/app --port=3000 --mode=release --proxy-port=3001 
 
 # docker deploy app
 docker build -t go_app:v0.1 .
