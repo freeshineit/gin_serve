@@ -13,8 +13,9 @@ var Secret = "qwertyuiopasdfghjklzxcvbnm,.1234"
 var OneDayOfHours = 60 * 60 * 24
 
 type ServerConfig struct {
-	Port string
-	Mode string
+	Port      string
+	Mode      string
+	ProxyPort string
 }
 
 type LoggerConfig struct {

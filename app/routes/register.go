@@ -34,9 +34,8 @@ func RegisterV2Group(router *gin.RouterGroup) *gin.RouterGroup {
 	return router
 }
 
-// register socket api /api/ws/xxx
+// register socket api /ws/xxx
 func RegisterWsGroup(router *gin.RouterGroup) *gin.RouterGroup {
-
 	router.GET("/ping", ws.Ping)
 	return router
 }

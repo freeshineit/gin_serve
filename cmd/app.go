@@ -2,14 +2,20 @@ package main
 
 import (
 	"go_python_serve/app"
+	"go_python_serve/proxy"
 	"log"
 
 	"github.com/spf13/cobra"
+	"golang.org/x/sync/errgroup"
 
 	"go_python_serve/app/config"
 )
 
 var cfgFile string
+
+var (
+	g errgroup.Group
+)
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -20,13 +26,29 @@ var rootCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		port := cmd.Flag("port").Value.String()
 		mode := cmd.Flag("mode").Value.String()
+		proxyPort := cmd.Flag("proxy-port").Value.String()
 
 		log.Printf("app version %s", app.Version)
 
-		app.RunServer(config.ServerConfig{
-			Port: port,
-			Mode: mode,
+		ServerConfig := config.ServerConfig{
+			Port:      port,
+			Mode:      mode,
+			ProxyPort: proxyPort,
+		}
+
+		g.Go(func() error {
+			return app.RunServer(ServerConfig)
+
 		})
+
+		g.Go(func() error {
+			return proxy.ProxyServer(ServerConfig)
+		})
+
+		if err := g.Wait(); err != nil {
+			log.Fatal(err)
+		}
+
 	},
 }
 
@@ -45,6 +67,7 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default: ./app/config/config.toml)")
 
 	rootCmd.Flags().StringP("port", "p", "8080", "default server port 8080")
+	rootCmd.Flags().StringP("proxy-port", "x", "8081", "default  proxy server port 8081")
 	rootCmd.Flags().StringP("mode", "m", "debug", "default  server running in 'debug' mode")
 }
 
