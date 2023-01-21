@@ -13,6 +13,10 @@ import (
 func RegisterGroup(router *gin.RouterGroup) *gin.RouterGroup {
 
 	router.POST("/file_upload", api.FileUpload)
+	router.GET("/user/:id", api.GetUserByID)
+	router.POST("/user", api.CreateUser)
+	router.PUT("/user/:id", api.UpdateUser)
+	router.DELETE("/user/:id", api.DeleteUser)
 
 	return router
 }
