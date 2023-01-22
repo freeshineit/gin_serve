@@ -4,6 +4,7 @@ import (
 	"gin_serve/app/config"
 	"gin_serve/app/middleware"
 	"gin_serve/app/routes"
+	"gin_serve/docs/swagger"
 	"gin_serve/utils"
 	"net/http"
 
@@ -36,6 +37,8 @@ func RunServer(conf config.ServerConfig) error {
 	// 中间件
 	middleware.SetMiddleware(r)
 
+	swagger.InitSwagger(r)
+
 	// set up routes
 	routes.SetupRoutes(r)
 
@@ -44,7 +47,7 @@ func RunServer(conf config.ServerConfig) error {
 		Handler: r,
 	}
 
-	log.Printf("listen: http://localhost:%s\n", conf.Port)
+	log.Printf("listen: \033[1;31;40mhttp://localhost:%s\033[0m\n", conf.Port)
 
 	err := utils.ListenAndServe(srv)
 
