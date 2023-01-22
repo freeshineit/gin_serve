@@ -4,7 +4,7 @@ import (
 	"gin_serve/app/config"
 	"gin_serve/app/middleware"
 	"gin_serve/app/routes"
-	"gin_serve/docs/swagger"
+	"gin_serve/swagger"
 	"gin_serve/utils"
 	"net/http"
 
