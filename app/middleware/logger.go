@@ -18,8 +18,10 @@ import (
 // "Mozilla/4.08 [en] (Win98; I ;Nav)"
 var timeFormat = "02/01/2006:15:04:05 -0700"
 
+var logger = logrus.New() // logrus.FieldLogger
+
 // Logger is the logrus logger handler
-func Logger(logger logrus.FieldLogger, notLogged ...string) gin.HandlerFunc {
+func Logger(notLogged ...string) gin.HandlerFunc {
 
 	hostname, err := os.Hostname()
 	if err != nil {

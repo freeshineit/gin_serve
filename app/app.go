@@ -6,10 +6,10 @@ import (
 	"gin_serve/app/routes"
 	"gin_serve/swagger"
 	"gin_serve/utils"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
 )
 
 func RunServer(conf config.ServerConfig) error {
@@ -21,7 +21,6 @@ func RunServer(conf config.ServerConfig) error {
 	// viper /app/config/config.yaml
 	// read /cmd/app.go
 
-	log := logrus.New()
 	// hooks, config,...
 
 	// 连接mysql数据库
@@ -32,11 +31,12 @@ func RunServer(conf config.ServerConfig) error {
 
 	// r := gin.Default()
 	r := gin.New()
-	r.Use(middleware.Logger(log), gin.Recovery())
+	r.Use(middleware.Logger(), gin.Recovery())
 
 	// 中间件
 	middleware.SetMiddleware(r)
 
+	// api docs
 	swagger.InitSwagger(r)
 
 	// set up routes
