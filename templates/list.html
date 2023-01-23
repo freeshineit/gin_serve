@@ -8,6 +8,8 @@
     <title>List</title>
     <link href="/static/style/common.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+    <script src="/static/js/axios.js"></script>
+
     <style>
         .container {
             display: flex;
@@ -50,17 +52,33 @@
         <div class="w-500">
             <div class="input-wrapper">
                 <input id="todo" placeholder="Input" />
-                <button class="btn btn-primary">添加</button>
+                <button class="btn btn-primary" id="add_button">添加</button>
             </div>
-            <ul class="list-wrapper">
-                <li>1</li>
-                <li>2</li>
-                <li>3</li>
-            </ul>
+            <ul class="list-wrapper" id="list"></ul>
         </div>
     </div>
     <script>
         (function () {
+            const addBtn = document.getElementById("add_button")
+            let list = []
+            addBtn.addEventListener('click', (e) => {
+                e.stopPropagation()
+                const todo = document.getElementById('todo')
+                if (todo.value.trim() != '') {
+                    list.push(`<li>${todo.value}</li>`)
+
+                    Axios.post("/api/v1/todo", {
+                        content: todo.value,
+                        status: 0
+                    }).then(res => {
+                        console.log(res)
+                    })
+
+                    todo.value = ''
+                    document.getElementById('list').innerHTML = list.join("")
+                }
+
+            }, false)
 
         })();
     </script>
