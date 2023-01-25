@@ -2,7 +2,7 @@ package models
 
 const (
 	Todo_STATUS_DEFAULT int = 0
-	Todo_STATUS_DELETE  int = 1
+	Todo_STATUS_CHECKED int = 1
 )
 
 type Todo struct {

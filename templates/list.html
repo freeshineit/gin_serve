@@ -39,10 +39,28 @@
             height: 30px;
             line-height: 20px;
             padding: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .list-wrapper li:hover {
             background-color: aliceblue;
+        }
+
+        .list-wrapper li .op {
+            display: flex;
+            align-items: center;
+        }
+
+        .list-wrapper li input {
+            width: 20px;
+            height: 20px;
+        }
+
+        .list-wrapper li #todo_delete {
+            margin-left: 10px;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -61,25 +79,57 @@
         (function () {
             const addBtn = document.getElementById("add_button")
             let list = []
+
+
+            Axios.get("/api/v1/todos").then(res => {
+                res.data.map(todo => {
+                    genList(todo)
+                })
+                document.getElementById('list').innerHTML = list.join("")
+            })
+
             addBtn.addEventListener('click', (e) => {
                 e.stopPropagation()
                 const todo = document.getElementById('todo')
                 if (todo.value.trim() != '') {
-                    list.push(`<li>${todo.value}</li>`)
-
                     Axios.post("/api/v1/todo", {
                         content: todo.value,
                         status: 0
                     }).then(res => {
-                        console.log(res)
+                        genList(res.data)
+                        todo.value = ''
+                        document.getElementById('list').innerHTML = list.join("")
                     })
-
-                    todo.value = ''
-                    document.getElementById('list').innerHTML = list.join("")
                 }
 
             }, false)
 
+            document.getElementById("list").addEventListener("click", (e) => {
+                // checked
+                if (e.target.tagName === 'INPUT') {
+                    const id = e.target.dataset.id
+                    Axios.put(`/api/v1/todo/${id}/status`)
+                } else if (e.target.tagName === "A") {
+                    const id = e.target.dataset.id
+                    // Axios.put(`/api/v1/todo/${id}`, {
+                    //     status: 1
+                    // }).then(res => {
+                    //     console.log(res)
+                    // })
+                }
+
+            }, false)
+
+
+            function genList(todo) {
+                list.push(`<li>
+                        ${todo.content}
+                            <div class="op">
+                            <input type="checkbox" ${todo.status == 1 ? "checked" : null} data-id="${todo.id}"/>
+                            <a id="todo_delete" data-id="${todo.id}">delete</a>
+                            </div>
+                        </li>`)
+            }
         })();
     </script>
 </body>

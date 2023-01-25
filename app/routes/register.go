@@ -27,11 +27,12 @@ func RegisterV1Group(router *gin.RouterGroup) *gin.RouterGroup {
 	// /api/v1/list
 	router.GET("/list", v1.List)
 
-	router.POST("/todo", v1.CreateTodo)       // /api/v1/todo [post]
-	router.DELETE("/todo/:id", v1.DeleteTodo) // /api/v1/todo/:id [delete]
-	router.PUT("/todo/:id", v1.PutTodo)       // /api/v1/todo/:id [put]
-	router.GET("/todo/:id", v1.GetTodo)       // /api/v1/todo/:id [get]
-	router.GET("/todos", v1.GetTodos)         // /api/v1/todos [get]
+	router.POST("/todo", v1.CreateTodo)                // /api/v1/todo [post]
+	router.DELETE("/todo/:id", v1.DeleteTodo)          // /api/v1/todo/:id [delete]
+	router.PUT("/todo/:id/content", v1.PutTodoContent) // /api/v1/todo/:id [put]
+	router.PUT("/todo/:id/status", v1.PutTodoStatus)   // /api/v1/todo/:id [put]
+	router.GET("/todo/:id", v1.GetTodo)                // /api/v1/todo/:id [get]
+	router.GET("/todos", v1.GetTodos)                  // /api/v1/todos [get]
 
 	return router
 }

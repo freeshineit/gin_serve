@@ -47,8 +47,8 @@ func GetTodos(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Success 200 {string} models.BuildOKResponse(gin.H{"message": "v1 api","nick":    "v1 api",})
-// @Router /v1/todo/:id [put]
-func PutTodo(c *gin.Context) {
+// @Router /v1/todo/:id/content [put]
+func PutTodoContent(c *gin.Context) {
 	id := c.Param("id")
 
 	var todo models.Todo
@@ -66,6 +66,28 @@ func PutTodo(c *gin.Context) {
 		if t.Id == todo.Id {
 			// Todos.
 			Todos[i] = todo
+			c.JSON(http.StatusOK, models.BuildOKResponse("update success"))
+			return
+		}
+	}
+
+	c.JSON(http.StatusOK, models.BuildOKResponse("update fail"))
+}
+
+// @Router /v1/todo/:id/status [put]
+func PutTodoStatus(c *gin.Context) {
+	id := c.Param("id")
+
+	for i, t := range Todos {
+		if t.Id == id {
+			if Todos[i].Status == 0 {
+				Todos[i].Status = 1
+			} else if Todos[i].Status == 1 {
+				Todos[i].Status = 0
+			} else {
+				c.JSON(http.StatusOK, models.BuildOKResponse("update fail"))
+				return
+			}
 			c.JSON(http.StatusOK, models.BuildOKResponse("update success"))
 			return
 		}
