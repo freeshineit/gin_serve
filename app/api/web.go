@@ -16,25 +16,25 @@ func IndexPage(c *gin.Context) {
 }
 
 // login page
-// router [/login.html]
+// router [/login]
 func LoginPage(c *gin.Context) {
 	c.HTML(http.StatusOK, "login.html", gin.H{})
 }
 
 // register page
-// router [/register.html]
+// router [/register]
 func RegisterPage(c *gin.Context) {
 	c.HTML(http.StatusOK, "register.html", gin.H{})
 }
 
 // list page
-// router [/list.html]
+// router [/list]
 func ListPage(c *gin.Context) {
 	c.HTML(http.StatusOK, "list.html", gin.H{})
 }
 
 // socket page
-// router [/socket.html]
+// router [/socket]
 func SocketPage(c *gin.Context) {
 	c.HTML(http.StatusOK, "socket.html", gin.H{})
 }
