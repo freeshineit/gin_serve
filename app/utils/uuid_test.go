@@ -13,6 +13,4 @@ func TestUuid(t *testing.T) {
 	uuidStr := GenTodoUuId()
 
 	fmt.Println(uuidStr)
-
-	t.Errorf("uuid: %s", uuidStr)
 }
