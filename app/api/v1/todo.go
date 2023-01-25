@@ -2,8 +2,8 @@ package v1
 
 import (
 	"gin_serve/app/models"
+	"gin_serve/app/utils"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -49,10 +49,29 @@ func GetTodos(c *gin.Context) {
 // @Success 200 {string} models.BuildOKResponse(gin.H{"message": "v1 api","nick":    "v1 api",})
 // @Router /v1/todo/:id [put]
 func PutTodo(c *gin.Context) {
-	// c.JSON(http.StatusOK, models.BuildOKResponse(gin.H{
-	// 	"message": "v1 api",
-	// 	"nick":    "v1 api",
-	// }))
+	id := c.Param("id")
+
+	var todo models.Todo
+
+	// 绑定不成功
+	if err := c.ShouldBind(&todo); err != nil {
+		c.JSON(http.StatusOK, models.BuildErrorResponse("fail", err))
+		return
+	}
+
+	todo.Id = id
+
+	for i, t := range Todos {
+
+		if t.Id == todo.Id {
+			// Todos.
+			Todos[i] = todo
+			c.JSON(http.StatusOK, models.BuildOKResponse("update success"))
+			return
+		}
+	}
+
+	c.JSON(http.StatusOK, models.BuildOKResponse("update fail"))
 }
 
 // @BasePath /api
@@ -69,16 +88,16 @@ func DeleteTodo(c *gin.Context) {
 
 	id := c.Param("id")
 
-	id_num, err := strconv.Atoi(id)
+	// id_num, err := strconv.Atoi(id)
 
-	if err != nil {
-		c.JSON(http.StatusOK, models.BuildErrorResponse("fail", "id must be int"))
-		return
-	}
+	// if err != nil {
+	// 	c.JSON(http.StatusOK, models.BuildErrorResponse("fail", "id must be int"))
+	// 	return
+	// }
 
 	for i, todo := range Todos {
 
-		if todo.Id == id_num {
+		if todo.Id == id {
 			// Todos.
 			Todos = append(Todos[:i], Todos[i+1:]...)
 			c.JSON(http.StatusOK, models.BuildOKResponse(""))
@@ -105,9 +124,11 @@ func CreateTodo(c *gin.Context) {
 
 	// 绑定不成功
 	if err := c.ShouldBind(&todo); err != nil {
-		c.JSON(http.StatusOK, models.BuildErrorResponse("fail", err))
+		c.JSON(http.StatusOK, models.BuildErrorResponse("create fail", err))
 		return
 	}
+
+	todo.Id = utils.GenTodoUuId()
 
 	Todos = append(Todos, todo)
 

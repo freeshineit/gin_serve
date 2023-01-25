@@ -6,7 +6,7 @@ const (
 )
 
 type Todo struct {
-	Id      int    `json:"id" form:"id"`
+	Id      string `json:"id" form:"id"`
 	Status  int    `json:"status" form:"status"`
 	Content string `json:"content" form:"content" binding:"required"`
 }
