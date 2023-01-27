@@ -66,7 +66,7 @@ func ProxyServer(conf config.ServerConfig) error {
 		Handler: r,
 	}
 
-	log.Printf("proxy server listen: \033[1;32;40mhttp://localhost:%s\033[0m\n", conf.ProxyPort)
+	log.Printf("proxy server listen: %s\n", utils.ColorBlueString("http://localhost:"+conf.ProxyPort))
 
 	err := utils.ListenAndServe(srv)
 

@@ -47,7 +47,7 @@ func RunServer(conf config.ServerConfig) error {
 		Handler: r,
 	}
 
-	log.Printf("listen: \033[1;32;40mhttp://localhost:%s\033[0m\n", conf.Port)
+	log.Printf("listen: %s\n", utils.ColorBlueString("http://localhost:"+conf.Port))
 
 	err := utils.ListenAndServe(srv)
 
