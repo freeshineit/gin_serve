@@ -41,21 +41,21 @@ func SetupRoutes(router *gin.Engine) *gin.Engine {
 	apiV1Group := router.Group("/api/v1", middleware.JwtAuth())
 	{
 		// register.go
-		RegisterV1Group(apiV1Group)
+		RegisterV1GroupWithAuth(apiV1Group)
 	}
 
 	// /api/v2
 	apiV2Group := router.Group("/api/v2", middleware.JwtAuth())
 	{
 		// register.go
-		RegisterV2Group(apiV2Group)
+		RegisterV2GroupWithAuth(apiV2Group)
 	}
 
 	// socket /ws
 	socketGroup := router.Group("/ws")
 	{
 		// register.go
-		RegisterWsGroup(socketGroup)
+		RegisterWsGroupWithAuth(socketGroup)
 	}
 
 	return router

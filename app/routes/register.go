@@ -22,7 +22,7 @@ func RegisterGroup(router *gin.RouterGroup) *gin.RouterGroup {
 }
 
 // register v1 api /api/v1/xxx
-func RegisterV1Group(router *gin.RouterGroup) *gin.RouterGroup {
+func RegisterV1GroupWithAuth(router *gin.RouterGroup) *gin.RouterGroup {
 
 	// /api/v1/list
 	router.GET("/list", v1.List)
@@ -38,7 +38,7 @@ func RegisterV1Group(router *gin.RouterGroup) *gin.RouterGroup {
 }
 
 // register v2 api /api/v2/xxx
-func RegisterV2Group(router *gin.RouterGroup) *gin.RouterGroup {
+func RegisterV2GroupWithAuth(router *gin.RouterGroup) *gin.RouterGroup {
 
 	// /api/v2/list
 	router.GET("/list", v2.List)
@@ -46,7 +46,7 @@ func RegisterV2Group(router *gin.RouterGroup) *gin.RouterGroup {
 }
 
 // register socket api /ws/xxx
-func RegisterWsGroup(router *gin.RouterGroup) *gin.RouterGroup {
+func RegisterWsGroupWithAuth(router *gin.RouterGroup) *gin.RouterGroup {
 	router.GET("/ping", ws.Ping)
 	return router
 }
