@@ -47,6 +47,8 @@ var Axios = (function () {
         return response.data;
       } else if (status == 500) {
         return response.data;
+      } else if (status === 401) {
+        location.href = "/login";
       }
     },
     (err) => {

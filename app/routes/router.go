@@ -1,10 +1,7 @@
 package routes
 
 import (
-	"gin_serve/app/api"
 	"gin_serve/app/middleware"
-	"gin_serve/app/models"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -18,29 +15,17 @@ func SetupRoutes(router *gin.Engine) *gin.Engine {
 	SetRoutesPage(router)
 
 	apiGroup := router.Group("/api")
-
 	{
-		apiGroup.POST("/register", api.Register)
-		apiGroup.POST("/login", api.Login)
-		apiGroup.POST("/logout", api.Logout)
-
-		apiGroup.GET("/query", func(c *gin.Context) {
-			// message := c.Query("message")
-			// nick := c.DefaultQuery("nick", "anonymous")
-			c.JSON(http.StatusOK, models.BuildOKResponse(gin.H{
-				"message": "message",
-				"nick":    "nick",
-			}))
-		})
-
-		// 注册需要带权限的路由
 		RegisterGroup(apiGroup)
+		// 注册需要带权限的路由
+		RegisterGroupWithAuth(apiGroup)
 	}
 
 	// /api/v1
-	apiV1Group := router.Group("/api/v1", middleware.JwtAuth())
+	apiV1Group := router.Group("/api/v1")
 	{
 		// register.go
+		RegisterV1Group(apiV1Group)
 		RegisterV1GroupWithAuth(apiV1Group)
 	}
 
@@ -48,6 +33,7 @@ func SetupRoutes(router *gin.Engine) *gin.Engine {
 	apiV2Group := router.Group("/api/v2", middleware.JwtAuth())
 	{
 		// register.go
+		RegisterV2Group(apiV2Group)
 		RegisterV2GroupWithAuth(apiV2Group)
 	}
 
@@ -55,7 +41,8 @@ func SetupRoutes(router *gin.Engine) *gin.Engine {
 	socketGroup := router.Group("/ws")
 	{
 		// register.go
-		RegisterWsGroupWithAuth(socketGroup)
+		RegisterWsGroup(socketGroup)
+		RegisterV2GroupWithAuth(socketGroup)
 	}
 
 	return router

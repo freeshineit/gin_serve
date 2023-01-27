@@ -38,3 +38,7 @@ func ListPage(c *gin.Context) {
 func SocketPage(c *gin.Context) {
 	c.HTML(http.StatusOK, "socket.html", gin.H{})
 }
+
+func AuthPage(c *gin.Context) {
+	c.Redirect(http.StatusFound, "/login")
+}
