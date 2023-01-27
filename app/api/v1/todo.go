@@ -51,21 +51,22 @@ func GetTodos(c *gin.Context) {
 func PutTodoContent(c *gin.Context) {
 	id := c.Param("id")
 
-	var todo models.Todo
+	type Content struct {
+		Content string `json:"content" form:"content" binding:"required"`
+	}
 
-	// 绑定不成功
-	if err := c.ShouldBind(&todo); err != nil {
+	var con Content
+
+	// 绑定
+	if err := c.ShouldBind(&con); err != nil {
 		c.JSON(http.StatusOK, models.BuildErrorResponse("fail", err))
 		return
 	}
 
-	todo.Id = id
-
 	for i, t := range Todos {
-
-		if t.Id == todo.Id {
+		if t.Id == id {
 			// Todos.
-			Todos[i] = todo
+			Todos[i].Content = con.Content
 			c.JSON(http.StatusOK, models.BuildOKResponse("update success"))
 			return
 		}
