@@ -96,7 +96,8 @@
                         content: todo.value,
                         status: 0
                     }).then(res => {
-                        genList(res.data)
+                        list.unshift(genLiTag(res.data))
+
                         todo.value = ''
                         document.getElementById('list').innerHTML = list.join("")
                     })
@@ -112,7 +113,6 @@
                 } else if (e.target.tagName === "A") {
                     const id = e.target.dataset.id
                     Axios.delete(`/api/v1/todo/${id}`).then(res => {
-                        console.log(res)
                         if (res.code == 0) {
                             getList()
                         }
@@ -127,21 +127,21 @@
                     if (res.code == 0) {
                         list = []
                         res.data.map(todo => {
-                            genList(todo)
+                            list.push(genLiTag(todo))
                         })
                         document.getElementById('list').innerHTML = list.join("")
                     }
                 })
             }
 
-            function genList(todo) {
-                list.push(`<li>
+            function genLiTag(todo) {
+                return `<li>
                         ${todo.content}
                             <div class="op">
                             <input type="checkbox" ${todo.status == 1 ? "checked" : null} data-id="${todo.id}"/>
                             <a id="todo_delete" data-id="${todo.id}">delete</a>
                             </div>
-                        </li>`)
+                        </li>`
             }
         })();
     </script>

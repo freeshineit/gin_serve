@@ -145,7 +145,7 @@ func CreateTodo(c *gin.Context) {
 
 	todo.Id = utils.GenTodoUuId()
 
-	Todos = append(Todos, todo)
+	Todos = append([]models.Todo{todo}, Todos...)
 
 	c.JSON(http.StatusOK, models.BuildOKResponse(todo))
 }
