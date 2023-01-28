@@ -19,10 +19,10 @@ var Axios = (function () {
       }
       return config;
     },
-    (err) => {
-      err.message = "服务器异常，请联系管理员！";
+    (error) => {
+      // error.message = "服务器异常，请联系管理员！";
       // 错误抛到业务代码
-      return Promise.reject(err);
+      return Promise.reject(error);
     }
   );
 
@@ -47,13 +47,15 @@ var Axios = (function () {
         return response.data;
       } else if (status == 500) {
         return response.data;
-      } else if (status === 401) {
-        location.href = "/login";
       }
     },
-    (err) => {
-      err.message = "请求超时或服务器异常，请检查网络或联系管理员！";
-      return Promise.reject(err);
+    (error) => {
+      if (error.response.status === 401) {
+        location.href = "/login";
+      }
+
+      // err.message = "请求超时或服务器异常，请检查网络或联系管理员！";
+      return Promise.reject(error);
     }
   );
 
