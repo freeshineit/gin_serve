@@ -77,16 +77,16 @@
     </div>
     <script>
         (function () {
+            Axios.get("/api/auth")
+        })();
+    </script>
+    <script>
+        (function () {
             const addBtn = document.getElementById("add_button")
             let list = []
 
 
-            Axios.get("/api/v1/todos").then(res => {
-                res.data.map(todo => {
-                    genList(todo)
-                })
-                document.getElementById('list').innerHTML = list.join("")
-            })
+            getList()
 
             addBtn.addEventListener('click', (e) => {
                 e.stopPropagation()
@@ -111,15 +111,28 @@
                     Axios.put(`/api/v1/todo/${id}/status`)
                 } else if (e.target.tagName === "A") {
                     const id = e.target.dataset.id
-                    // Axios.put(`/api/v1/todo/${id}`, {
-                    //     status: 1
-                    // }).then(res => {
-                    //     console.log(res)
-                    // })
+                    Axios.delete(`/api/v1/todo/${id}`).then(res => {
+                        console.log(res)
+                        if (res.code == 0) {
+                            getList()
+                        }
+                    })
                 }
 
             }, false)
 
+
+            function getList() {
+                Axios.get("/api/v1/todos").then(res => {
+                    if (res.code == 0) {
+                        list = []
+                        res.data.map(todo => {
+                            genList(todo)
+                        })
+                        document.getElementById('list').innerHTML = list.join("")
+                    }
+                })
+            }
 
             function genList(todo) {
                 list.push(`<li>

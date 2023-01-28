@@ -108,15 +108,7 @@ func PutTodoStatus(c *gin.Context) {
 // @Success 200 {string} models.BuildOKResponse()
 // @Router /v1/todo/:id [delete]
 func DeleteTodo(c *gin.Context) {
-
 	id := c.Param("id")
-
-	// id_num, err := strconv.Atoi(id)
-
-	// if err != nil {
-	// 	c.JSON(http.StatusOK, models.BuildErrorResponse("fail", "id must be int"))
-	// 	return
-	// }
 
 	for i, todo := range Todos {
 
