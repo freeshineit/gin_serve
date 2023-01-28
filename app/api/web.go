@@ -40,5 +40,5 @@ func SocketPage(c *gin.Context) {
 }
 
 func AuthPage(c *gin.Context) {
-	c.Redirect(http.StatusFound, "/login")
+	// c.Redirect(http.StatusFound, "/login")
 }
