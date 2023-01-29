@@ -4,8 +4,8 @@ import (
 	"gin_serve/app/config"
 	"gin_serve/app/middleware"
 	"gin_serve/app/routes"
+	"gin_serve/helpers"
 	"gin_serve/swagger"
-	"gin_serve/utils"
 	"log"
 	"net/http"
 
@@ -47,9 +47,9 @@ func RunServer(conf config.ServerConfig) error {
 		Handler: r,
 	}
 
-	log.Printf("listen: %s\n", utils.ColorBlueString("http://localhost:"+conf.Port))
+	log.Printf("listen: %s\n", helpers.ColorBlueString("http://localhost:"+conf.Port))
 
-	err := utils.ListenAndServe(srv)
+	err := helpers.ListenAndServe(srv)
 
 	if err != nil {
 		log.Fatal("Server forced to shutdown:", err)

@@ -3,7 +3,7 @@ package proxy
 import (
 	"fmt"
 	"gin_serve/app/config"
-	"gin_serve/utils"
+	"gin_serve/helpers"
 	"log"
 	"net/http"
 	"net/http/httputil"
@@ -34,7 +34,7 @@ func Proxy(c *gin.Context) {
 		}
 
 		//
-		req.Header = utils.MergeMap(c.Request.Header, header1)
+		req.Header = helpers.MergeMap(c.Request.Header, header1)
 		// req.Header = c.Request.Header
 		req.Host = remote.Host
 		req.URL.Scheme = remote.Scheme
@@ -66,9 +66,9 @@ func ProxyServer(conf config.ServerConfig) error {
 		Handler: r,
 	}
 
-	log.Printf("proxy server listen: %s\n", utils.ColorBlueString("http://localhost:"+conf.ProxyPort))
+	log.Printf("proxy server listen: %s\n", helpers.ColorBlueString("http://localhost:"+conf.ProxyPort))
 
-	err := utils.ListenAndServe(srv)
+	err := helpers.ListenAndServe(srv)
 
 	if err != nil {
 		log.Fatal("Proxy server forced to shutdown:", err)
