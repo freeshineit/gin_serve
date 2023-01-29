@@ -2,12 +2,16 @@ package middleware
 
 import (
 	"fmt"
+	"gin_serve/app/config"
 	"math"
 	"net/http"
 	"os"
+	"path"
 	"time"
 
 	"github.com/gin-gonic/gin"
+	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
+	"github.com/rifflock/lfshook"
 	"github.com/sirupsen/logrus"
 )
 
@@ -18,12 +22,13 @@ import (
 // "Mozilla/4.08 [en] (Win98; I ;Nav)"
 var timeFormat = "02/01/2006:15:04:05 -0700"
 
-var logger = logrus.New() // logrus.FieldLogger
-
 // Logger is the logrus logger handler
 func Logger(notLogged ...string) gin.HandlerFunc {
 
+	var logger = logrus.New() // logrus.FieldLogger
+
 	hostname, err := os.Hostname()
+
 	if err != nil {
 		hostname = "unknow"
 	}
@@ -38,8 +43,65 @@ func Logger(notLogged ...string) gin.HandlerFunc {
 		}
 	}
 
+	loggerConfig, err := config.GetLoggerConfig()
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fileName := path.Join(loggerConfig.Dir+loggerConfig.HttpPath, time.Now().Format("20060102"))
+
+	//写入文件
+	httpSrc, err := os.OpenFile(fileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+
+	if err != nil {
+		fmt.Println("logger file open error: ", err)
+	}
+
+	// 设置输出
+	logger.Out = httpSrc
+
+	// 设置日志级别
+	logger.SetLevel(logrus.DebugLevel)
+
+	// 设置 rotatelogs
+	logWriter, err := rotatelogs.New(
+		// 分割后的文件名称
+		// "%Y%m%d.log",
+		fileName+".log",
+
+		// 生成软链，指向最新日志文件
+		rotatelogs.WithLinkName(fileName),
+
+		// 设置最大保存时间(7天)
+		rotatelogs.WithMaxAge(7*24*time.Hour),
+
+		// 设置日志切割时间间隔(1天)
+		rotatelogs.WithRotationTime(24*time.Hour),
+	)
+
+	if err != nil {
+		fmt.Println("rotatelogs logger error: ", err)
+	}
+
+	writeMap := lfshook.WriterMap{
+		logrus.InfoLevel:  logWriter,
+		logrus.FatalLevel: logWriter,
+		logrus.DebugLevel: logWriter,
+		logrus.WarnLevel:  logWriter,
+		logrus.ErrorLevel: logWriter,
+		logrus.PanicLevel: logWriter,
+	}
+
+	lfHook := lfshook.NewHook(writeMap, &logrus.JSONFormatter{
+		TimestampFormat: "2006-01-02 15:04:05",
+	})
+
+	// 新增 Hook
+	logger.AddHook(lfHook)
+
 	return func(c *gin.Context) {
-		// other handler can change c.Path so:
+		// // other handler can change c.Path so:
 		path := c.Request.URL.Path
 		start := time.Now()
 		c.Next()
@@ -82,5 +144,6 @@ func Logger(notLogged ...string) gin.HandlerFunc {
 				entry.Info(msg)
 			}
 		}
+
 	}
 }
