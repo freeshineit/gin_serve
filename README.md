@@ -1,4 +1,4 @@
-![build](https://github.com/freeshineit/go_python_serve/workflows/build/badge.svg)
+![build](https://github.com/freeshineit/gin_serve/workflows/build/badge.svg)
 
 
 ## Use
