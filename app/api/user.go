@@ -9,10 +9,10 @@ import (
 
 func GetUserByID(c *gin.Context) {
 
-	id := c.Param("id")
+	id := c.GetUint("id")
 
 	c.JSON(http.StatusOK, models.BuildOKResponse(models.User{
-		Id:     id,
+		ID:     id,
 		Name:   "XiaoShao",
 		Email:  "xiaoshaoqq@gmail.com",
 		Gender: "M",
@@ -21,10 +21,11 @@ func GetUserByID(c *gin.Context) {
 }
 
 func DeleteUser(c *gin.Context) {
-	id := c.Param("id")
+	// id := c.Param("id")
+	id := c.GetUint("id")
 
 	c.JSON(http.StatusOK, models.BuildOKResponse(models.User{
-		Id:     id,
+		ID:     id,
 		Name:   "XiaoShao",
 		Email:  "xiaoshaoqq@gmail.com",
 		Gender: "M",
@@ -33,10 +34,11 @@ func DeleteUser(c *gin.Context) {
 }
 
 func UpdateUser(c *gin.Context) {
-	id := c.Param("id")
+	// id := c.Param("id")
+	id := c.GetUint("id")
 
 	c.JSON(http.StatusOK, models.BuildOKResponse(models.User{
-		Id:     id,
+		ID:     id,
 		Name:   "XiaoShao",
 		Email:  "xiaoshaoqq@gmail.com",
 		Gender: "M",
@@ -47,7 +49,7 @@ func UpdateUser(c *gin.Context) {
 func CreateUser(c *gin.Context) {
 
 	c.JSON(http.StatusOK, models.BuildOKResponse(models.User{
-		Id:     "9999",
+		ID:     9999,
 		Name:   "XiaoShao",
 		Email:  "xiaoshaoqq@gmail.com",
 		Gender: "M",

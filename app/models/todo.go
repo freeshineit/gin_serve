@@ -10,7 +10,8 @@ const (
 )
 
 type Todo struct {
-	Id      string           `json:"id" form:"id"`
+	ID      uint             `json:"id" form:"id" gorm:"primary_key:auto_increment"`
+	UserID  uint             `json:"user_id" form:"user_id" gorm:"-"`
 	Status  Todo_Status_Type `json:"status" form:"status"`
 	Content string           `json:"content" form:"content" binding:"required"`
 }
