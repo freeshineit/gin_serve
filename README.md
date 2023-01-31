@@ -30,6 +30,13 @@ make build
 docker build -t gin_serve:v0.1 .
 # run docker
 docker run -it -p 3000:3000 --rm --name gin_serve gin_serve:v0.1
+
+
+# generate api docs
+swag init -g ./cmd/app.go
+
+http://localhost:8080/swagger/index.html
+
 ```
 
 ## golang
