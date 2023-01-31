@@ -3,7 +3,6 @@ package config
 import (
 	"fmt"
 	"gin_serve/app/models"
-	"log"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -17,7 +16,7 @@ func SetupDatabaseConnection() *gorm.DB {
 	databaseConfig, err := GetDatabaseConfig()
 
 	if err != nil {
-		panic("Mysql connect fail...")
+		panic("Failed to load mysql config")
 	}
 
 	Db, err := gorm.Open(mysql.New(mysql.Config{
@@ -35,10 +34,8 @@ func SetupDatabaseConnection() *gorm.DB {
 	}), &gorm.Config{})
 
 	if err != nil {
-		log.Fatal("Mysql connect fail...", err)
-		panic("Mysql connect fail...")
-	} else {
-		log.Println("Mysql connect success...")
+		// log.Fatal("Mysql connect fail...", err)
+		panic("Failed to create a connection to mysql")
 	}
 
 	// gorm 根据model 创建表
@@ -47,17 +44,13 @@ func SetupDatabaseConnection() *gorm.DB {
 	return Db
 }
 
-func GetMysqlConfig() {
-	panic("unimplemented")
-}
-
 // close mysql connection
-func CloseMysqlConnection(db *gorm.DB) {
+func CloseMysqlConnection(db *gorm.DB) error {
 	dbSql, err := db.DB()
 
 	if err != nil {
-		panic("Failed close mysql ")
+		panic("Failed to close connection from database ")
 	}
 
-	dbSql.Close()
+	return dbSql.Close()
 }
