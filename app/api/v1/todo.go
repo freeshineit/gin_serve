@@ -2,54 +2,71 @@ package v1
 
 import (
 	"gin_serve/app/models"
-	"gin_serve/app/utils"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
 var Todos = make([]models.Todo, 0)
 
-// @BasePath /api
-// List
-// @Summary ping example
+// Get todo by id
+// @Summary	Todo
 // @Schemes
-// @Description do ping
-// @Tags example
-// @Accept json
-// @Produce json
-// @Success 200 {string} models.BuildOKResponse(gin.H{"message": "v1 api","nick":    "v1 api",})
-// @Router /v1/todo [get]
+// @Description	do ping
+// @Tags	    example
+// @Accept	    json
+// @Produce		json
+// @Param       id     path   int  true   "todo id"
+// @Success		200	{string}	models.BuildOKResponse(gin.H{"message": "v1 api","nick": "v1 api",})
+// @Router		/api/v1/todo/{id} [get]
 func GetTodo(c *gin.Context) {
-	c.JSON(http.StatusOK, models.BuildOKResponse(Todos))
+	id := c.Param("id")
+
+	id64, err := strconv.ParseUint(id, 10, 32)
+
+	if err != nil {
+		c.JSON(http.StatusOK, models.BuildErrorResponse("fail", "id convert failed"))
+		return
+	}
+
+	for _, t := range Todos {
+		if t.ID == uint(id64) {
+			// Todos.
+			c.JSON(http.StatusOK, models.BuildOKResponse(t))
+			return
+		}
+	}
+
+	c.JSON(http.StatusOK, models.BuildErrorResponse("fail", "id not exist"))
 }
 
-// @BasePath /api
-// List
-// @Summary ping example
+// Get todo list
+// @Summary	Todo
 // @Schemes
-// @Description do ping
-// @Tags example
-// @Accept json
-// @Produce json
-// @Success 200 {string} models.BuildOKResponse(gin.H{"message": "v1 api","nick":    "v1 api",})
-// @Router /v1/todo/:id [get]
+// @Description	Get todo list
+// @Tags	    example
+// @Accept		json
+// @Produce		json
+// @Success		200	{string}	models.BuildOKResponse(gin.H{"message": "v1 api","nick":    "v1 api",})
+// @Router		/api/v1/todos [get]
 func GetTodos(c *gin.Context) {
 	c.JSON(http.StatusOK, models.BuildOKResponse(Todos))
 }
 
-// @BasePath /api
-// List
-// @Summary ping example
+// Update todo content by id
+// @Summary	Todo
 // @Schemes
-// @Description do ping
-// @Tags example
-// @Accept json
-// @Produce json
-// @Success 200 {string} models.BuildOKResponse(gin.H{"message": "v1 api","nick":    "v1 api",})
-// @Router /v1/todo/:id/content [put]
+// @Description	Update todo content by id
+// @Tags		example
+// @Accept		json
+// @Produce		json
+// @Success		200	{string}	models.BuildOKResponse(gin.H{"message": "v1 api","nick":    "v1 api",})
+// @Router		/api/v1/todo/{id}/content [put]
 func PutTodoContent(c *gin.Context) {
-	id := c.Param("id")
+	// id := c.Param("id")
+
+	id := c.GetUint("id")
 
 	type Content struct {
 		Content string `json:"content" form:"content" binding:"required"`
@@ -64,7 +81,7 @@ func PutTodoContent(c *gin.Context) {
 	}
 
 	for i, t := range Todos {
-		if t.Id == id {
+		if t.ID == id {
 			// Todos.
 			Todos[i].Content = con.Content
 			c.JSON(http.StatusOK, models.BuildOKResponse("update success"))
@@ -75,12 +92,20 @@ func PutTodoContent(c *gin.Context) {
 	c.JSON(http.StatusOK, models.BuildOKResponse("update fail"))
 }
 
-// @Router /v1/todo/:id/status [put]
+// Update todo status by id
+// @Summary	Todo
+// @Schemes
+// @Description	Update todo status by id
+// @Tags		example
+// @Accept		json
+// @Produce		json
+// @Success		200	{string}	models.BuildOKResponse(gin.H{"message": "v1 api","nick":    "v1 api",})
+// @Router		/api/v1/todo/{id}/status [put]
 func PutTodoStatus(c *gin.Context) {
-	id := c.Param("id")
+	id := c.GetUint("id")
 
 	for i, t := range Todos {
-		if t.Id == id {
+		if t.ID == id {
 			if Todos[i].Status == 0 {
 				Todos[i].Status = 1
 			} else if Todos[i].Status == 1 {
@@ -97,22 +122,21 @@ func PutTodoStatus(c *gin.Context) {
 	c.JSON(http.StatusOK, models.BuildOKResponse("update fail"))
 }
 
-// @BasePath /api
-// List
-// @Summary ping example
+// Delete todo by id
+// @Summary	Todo
 // @Schemes
-// @Description do ping
-// @Tags example
-// @Accept json
-// @Produce json
-// @Success 200 {string} models.BuildOKResponse()
-// @Router /v1/todo/:id [delete]
+// @Description Delete todo by id
+// @Tags		example
+// @Accept		json
+// @Produce		json
+// @Success		200	{string}	models.BuildOKResponse()
+// @Router		/v1/todo/{id} [delete]
 func DeleteTodo(c *gin.Context) {
-	id := c.Param("id")
+	id := c.GetUint("id")
 
 	for i, todo := range Todos {
 
-		if todo.Id == id {
+		if todo.ID == id {
 			// Todos.
 			Todos = append(Todos[:i], Todos[i+1:]...)
 			c.JSON(http.StatusOK, models.BuildOKResponse(""))
@@ -123,29 +147,28 @@ func DeleteTodo(c *gin.Context) {
 	c.JSON(http.StatusOK, models.BuildErrorResponse("fail", "id: not exist"))
 }
 
-// @BasePath /api
-// create todo
-// @Summary ping example
+// Create todo
+// @Summary	Todo
 // @Schemes
-// @Description do ping
-// @Tags example
-// @Accept json
-// @Produce json
-// @Success 200 {string} models.BuildOKResponse(todo)
-// @Router /v1/todo [post]
+// @Description	Create todo
+// @Tags		example
+// @Accept		json
+// @Produce		json
+// @Success		200	{string}	models.BuildOKResponse(todo)
+// @Router		/api/v1/todo [post]
 func CreateTodo(c *gin.Context) {
 
 	var todo models.Todo
 
 	// 绑定不成功
 	if err := c.ShouldBind(&todo); err != nil {
-		c.JSON(http.StatusOK, models.BuildErrorResponse("create fail", err))
+		c.JSON(http.StatusCreated, models.BuildErrorResponse("create fail", err))
 		return
 	}
 
-	todo.Id = utils.GenTodoUuId()
+	todo.ID = 1 //utils.GenTodoUuId()
 
 	Todos = append([]models.Todo{todo}, Todos...)
 
-	c.JSON(http.StatusOK, models.BuildOKResponse(todo))
+	c.JSON(http.StatusCreated, models.BuildOKResponse(todo))
 }

@@ -8,7 +8,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// 注册
+// Register
+// @Summary	Account
+// @Schemes
+// @Description	register
+// @Tags	    example
+// @Accept	    json
+// @Produce		json
+// @Success		200	{string}	models.BuildOKResponse(gin.H{"message": "v1 api","nick": "v1 api",})
+// @Router		/api/register [post]
 func Register(c *gin.Context) {
 	var user models.UserLogin
 
@@ -27,7 +35,16 @@ func Register(c *gin.Context) {
 	c.JSON(http.StatusOK, models.BuildOKResponse(token))
 }
 
-// 登录
+// Login
+// @Summary	Account
+// @Schemes
+// @Description	login
+// @Tags	    example
+// @Accept	    json
+// @Produce		json
+// @Param       id     path   int  true   "todo id"
+// @Success		200	{string}	models.BuildOKResponse(gin.H{"message": "v1 api","nick": "v1 api",})
+// @Router		/api/login [post]
 func Login(c *gin.Context) {
 	var user models.UserLogin
 
@@ -48,7 +65,16 @@ func Login(c *gin.Context) {
 	c.JSON(http.StatusOK, models.BuildOKResponse(token))
 }
 
-// 登出
+// Logout
+// @Summary	Account
+// @Schemes
+// @Description	logout
+// @Tags	    example
+// @Accept	    json
+// @Produce		json
+// @Param       id     path   int  true   "todo id"
+// @Success		200	{string}	models.BuildOKResponse(gin.H{"message": "v1 api","nick": "v1 api",})
+// @Router		/api/logout [post]
 func Logout(c *gin.Context) {
 	var user models.User
 
@@ -60,13 +86,21 @@ func Logout(c *gin.Context) {
 	c.JSON(http.StatusOK, models.BuildOKResponse(user))
 }
 
-// token 刷新
+// Refresh login token
+// @Summary	Account
+// @Schemes
+// @Description	Refresh login token
+// @Tags	    example
+// @Accept	    json
+// @Produce		json
+// @Success		200	{string}	models.BuildOKResponse(gin.H{"message": "v1 api","nick": "v1 api",})
+// @Router		/api/refresh [post]
 func Refresh(c *gin.Context) {
 	var user models.User
 
 	if err := c.ShouldBind(&user); err != nil {
 		c.JSON(http.StatusOK, models.BuildErrorResponse[any]("use should bind error", err))
-
+		return
 	}
 
 	c.JSON(http.StatusOK, models.BuildOKResponse(user))
