@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"fmt"
 	"gin_serve/app/config"
 	"gin_serve/app/models"
 	"time"
@@ -53,7 +52,7 @@ func ParseToken(tokenStr string) (user *models.UserLogin, Valid bool) {
 
 	claims, ok := token.Claims.(*JwtAuthClaim)
 
-	fmt.Println(claims, claims.User, ok)
+	// fmt.Println(claims, claims.User, ok)
 
 	if ok && token.Valid {
 		return claims.User, token.Valid
