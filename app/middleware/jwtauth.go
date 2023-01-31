@@ -1,8 +1,6 @@
 package middleware
 
 import (
-	"errors"
-	"gin_serve/app/models"
 	"gin_serve/app/utils"
 	"net/http"
 	"strings"
@@ -18,7 +16,7 @@ func JwtAuth() gin.HandlerFunc {
 		token := c.Request.Header.Get("Authorization")
 
 		if len(token) == 0 {
-			c.JSON(http.StatusUnauthorized, models.BuildErrorResponse("no token", errors.New("no token")))
+			c.JSON(http.StatusUnauthorized, utils.BuildErrorResponse("no token", "no token"))
 			c.Abort()
 			return
 		}
@@ -28,7 +26,7 @@ func JwtAuth() gin.HandlerFunc {
 		user, ok := utils.ParseToken(token)
 
 		if !ok {
-			c.JSON(http.StatusUnauthorized, models.BuildErrorResponse("token is expired", errors.New("token is expired")))
+			c.JSON(http.StatusUnauthorized, utils.BuildErrorResponse("token is expired", "token is expired"))
 			c.Abort()
 			return
 		}

@@ -1,7 +1,7 @@
 package api
 
 import (
-	"gin_serve/app/models"
+	"gin_serve/app/utils"
 	"log"
 	"net/http"
 	"os"
@@ -43,7 +43,7 @@ func FileUpload(c *gin.Context) {
 		filesURL = append(filesURL, "images/upload/"+file.Filename)
 	}
 
-	c.JSON(http.StatusOK, models.BuildOKResponse(gin.H{
+	c.JSON(http.StatusOK, utils.BuildResponse("success", gin.H{
 		"urls": filesURL,
 	}))
 }
