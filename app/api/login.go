@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"gin_serve/app/models"
 	"gin_serve/app/utils"
 	"net/http"
@@ -19,21 +20,17 @@ import (
 // @Failure     400   {object}    utils.Response
 // @Router		/api/register [post]
 func Register(c *gin.Context) {
-	var user models.UserLogin
+
+	var user models.UserRegister
 
 	if err := c.ShouldBind(&user); err != nil {
-		c.JSON(http.StatusOK, utils.BuildErrorResponse("fail", err.Error()))
+		c.JSON(http.StatusBadRequest, utils.BuildErrorResponse(1, "register failed!", err.Error()))
 		return
 	}
 
-	token, err := utils.GenerateToken(&user)
+	fmt.Println(user)
 
-	if err != nil {
-		c.JSON(http.StatusOK, utils.BuildErrorResponse("fail", err.Error()))
-		return
-	}
-
-	c.JSON(http.StatusOK, utils.BuildResponse("success", token))
+	c.JSON(http.StatusCreated, utils.BuildResponse("success", ""))
 }
 
 // Login
@@ -51,14 +48,14 @@ func Login(c *gin.Context) {
 	var user models.UserLogin
 
 	if err := c.ShouldBind(&user); err != nil {
-		c.JSON(http.StatusBadRequest, utils.BuildErrorResponse("use should bind error", err.Error()))
+		c.JSON(http.StatusBadRequest, utils.BuildErrorResponse(1, "use should bind error", err.Error()))
 		return
 	}
 
 	token, err := utils.GenerateToken(&user)
 
 	if err != nil {
-		c.JSON(http.StatusBadRequest, utils.BuildErrorResponse("token generate fail", err.Error()))
+		c.JSON(http.StatusBadRequest, utils.BuildErrorResponse(1, "token generate fail", err.Error()))
 		return
 	}
 
@@ -80,7 +77,7 @@ func Logout(c *gin.Context) {
 	var user models.User
 
 	if err := c.ShouldBind(&user); err != nil {
-		c.JSON(http.StatusOK, utils.BuildErrorResponse("use should bind error", err.Error()))
+		c.JSON(http.StatusOK, utils.BuildErrorResponse(1, "use should bind error", err.Error()))
 		return
 	}
 
@@ -101,7 +98,7 @@ func Refresh(c *gin.Context) {
 	var user models.User
 
 	if err := c.ShouldBind(&user); err != nil {
-		c.JSON(http.StatusOK, utils.BuildErrorResponse("use should bind error", err.Error()))
+		c.JSON(http.StatusOK, utils.BuildErrorResponse(1, "use should bind error", err.Error()))
 		return
 	}
 

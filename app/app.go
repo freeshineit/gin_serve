@@ -3,6 +3,7 @@ package app
 import (
 	"gin_serve/app/config"
 	"gin_serve/app/middleware"
+	"gin_serve/app/models"
 	"gin_serve/app/routes"
 	"gin_serve/helpers"
 	"gin_serve/swagger"
@@ -26,7 +27,9 @@ func RunServer(conf config.ServerConfig) error {
 	// hooks, config,...
 
 	// 连接mysql数据库
-	config.SetupDatabaseConnection()
+	db := config.SetupDatabaseConnection()
+
+	models.GormAutoMigration(db)
 
 	// 连接redis
 	config.SetupRedisConnection()

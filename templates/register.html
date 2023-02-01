@@ -39,6 +39,7 @@
                 <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password">
                 <input type="file" id="avatar" name="avatar" placeholder="Avatar" accept="image/*">
                 <input type="text" id="gender" name="gender" placeholder="Gender">
+                <input type="number" id="age" name="gender" placeholder="Age">
                 <button type="submit" class="btn btn-primary btn-block">Register</button>
             </form>
         </div>
@@ -78,12 +79,14 @@
                 const passwordEle = document.getElementById('password')
                 const confirmPasswordEle = document.getElementById('confirm_password')
                 const genderEle = document.getElementById('gender')
+                const ageEle = document.getElementById('age')
 
                 const name = nameEle.value
                 const email = emailEle.value
                 const password = passwordEle.value
                 const confirmPassword = confirmPasswordEle.value
                 const gender = genderEle.value
+                const age = ageEle.value
 
                 if (email && password && password === confirmPassword && name && avatar && gender) {
                     Axios.post("/api/register", {
@@ -92,11 +95,12 @@
                         password,
                         confirm_password: confirmPassword,
                         avatar,
-                        gender
+                        gender,
+                        age
                     }).then(res => {
-                        if (res.code === 0) {
-                            location.href = "/login"
-                        }
+                        // if (res.code === 0) {
+                        //     location.href = "/login"
+                        // }
                     })
                 }
 

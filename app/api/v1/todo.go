@@ -28,7 +28,7 @@ func GetTodo(c *gin.Context) {
 	aid, err := strconv.Atoi(id)
 
 	if err != nil {
-		c.JSON(http.StatusOK, utils.BuildErrorResponse("fail", "id convert failed"))
+		c.JSON(http.StatusOK, utils.BuildErrorResponse(1, "fail", "id convert failed"))
 		return
 	}
 
@@ -40,7 +40,7 @@ func GetTodo(c *gin.Context) {
 		}
 	}
 
-	c.JSON(http.StatusOK, utils.BuildErrorResponse("fail", "id not exist"))
+	c.JSON(http.StatusOK, utils.BuildErrorResponse(1, "fail", "id not exist"))
 }
 
 // Get todo list
@@ -70,7 +70,7 @@ func PutTodoContent(c *gin.Context) {
 	aid, err := strconv.Atoi(id)
 
 	if err != nil {
-		c.JSON(http.StatusOK, utils.BuildErrorResponse("fail", "id convert failed"))
+		c.JSON(http.StatusOK, utils.BuildErrorResponse(1, "fail", "id convert failed"))
 		return
 	}
 
@@ -82,7 +82,7 @@ func PutTodoContent(c *gin.Context) {
 
 	// 绑定
 	if err := c.ShouldBind(&con); err != nil {
-		c.JSON(http.StatusOK, utils.BuildErrorResponse("fail", err.Error()))
+		c.JSON(http.StatusOK, utils.BuildErrorResponse(1, "fail", err.Error()))
 		return
 	}
 
@@ -95,7 +95,7 @@ func PutTodoContent(c *gin.Context) {
 		}
 	}
 
-	c.JSON(http.StatusOK, utils.BuildErrorResponse("fail", "id not exist"))
+	c.JSON(http.StatusOK, utils.BuildErrorResponse(1, "fail", "id not exist"))
 }
 
 // Update todo status by id
@@ -113,7 +113,7 @@ func PutTodoStatus(c *gin.Context) {
 	aid, err := strconv.Atoi(id)
 
 	if err != nil {
-		c.JSON(http.StatusOK, utils.BuildErrorResponse("fail", "id convert failed"))
+		c.JSON(http.StatusOK, utils.BuildErrorResponse(1, "fail", "id convert failed"))
 		return
 	}
 
@@ -124,7 +124,7 @@ func PutTodoStatus(c *gin.Context) {
 			} else if Todos[i].Status == 1 {
 				Todos[i].Status = 0
 			} else {
-				c.JSON(http.StatusOK, utils.BuildErrorResponse("update fail", "id not exist"))
+				c.JSON(http.StatusOK, utils.BuildErrorResponse(1, "update fail", "id not exist"))
 				return
 			}
 			c.JSON(http.StatusOK, utils.BuildResponse("success", "update success"))
@@ -132,7 +132,7 @@ func PutTodoStatus(c *gin.Context) {
 		}
 	}
 
-	c.JSON(http.StatusOK, utils.BuildErrorResponse("fail", "update fail"))
+	c.JSON(http.StatusOK, utils.BuildErrorResponse(1, "fail", "update fail"))
 }
 
 // Delete todo by id
@@ -149,7 +149,7 @@ func DeleteTodo(c *gin.Context) {
 	aid, err := strconv.Atoi(id)
 
 	if err != nil {
-		c.JSON(http.StatusOK, utils.BuildErrorResponse("fail", "id convert failed"))
+		c.JSON(http.StatusOK, utils.BuildErrorResponse(1, "fail", "id convert failed"))
 		return
 	}
 
@@ -163,7 +163,7 @@ func DeleteTodo(c *gin.Context) {
 		}
 	}
 
-	c.JSON(http.StatusOK, utils.BuildErrorResponse("fail", "id not exist"))
+	c.JSON(http.StatusOK, utils.BuildErrorResponse(1, "fail", "id not exist"))
 }
 
 // Create todo
@@ -180,7 +180,7 @@ func CreateTodo(c *gin.Context) {
 	var todo models.Todo
 
 	if err := c.ShouldBind(&todo); err != nil {
-		c.JSON(http.StatusBadRequest, utils.BuildErrorResponse("create fail", err.Error()))
+		c.JSON(http.StatusBadRequest, utils.BuildErrorResponse(1, "create fail", err.Error()))
 		return
 	}
 

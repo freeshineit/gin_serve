@@ -16,7 +16,7 @@ func JwtAuth() gin.HandlerFunc {
 		token := c.Request.Header.Get("Authorization")
 
 		if len(token) == 0 {
-			c.JSON(http.StatusUnauthorized, utils.BuildErrorResponse("no token", "no token"))
+			c.JSON(http.StatusUnauthorized, utils.BuildErrorResponse(1, "no token", "no token"))
 			c.Abort()
 			return
 		}
@@ -26,7 +26,7 @@ func JwtAuth() gin.HandlerFunc {
 		user, ok := utils.ParseToken(token)
 
 		if !ok {
-			c.JSON(http.StatusUnauthorized, utils.BuildErrorResponse("token is expired", "token is expired"))
+			c.JSON(http.StatusUnauthorized, utils.BuildErrorResponse(1, "token is expired", "token is expired"))
 			c.Abort()
 			return
 		}

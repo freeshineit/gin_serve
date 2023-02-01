@@ -1,6 +1,13 @@
 package models
 
-// gormAutoMigration gotm autoMigrate
-func gormAutoMigration() {
-	// Db.AutoMigrate(&User{})
+import "gorm.io/gorm"
+
+// gormAutoMigration gorm autoMigrate
+func GormAutoMigration(Db *gorm.DB) {
+	// auto migrate
+	Db.AutoMigrate(
+		&User{},
+		&LoginRecord{},
+		&Todo{},
+	)
 }

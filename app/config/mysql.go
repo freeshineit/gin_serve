@@ -2,7 +2,6 @@ package config
 
 import (
 	"fmt"
-	"gin_serve/app/models"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -37,9 +36,6 @@ func SetupDatabaseConnection() *gorm.DB {
 		// log.Fatal("Mysql connect fail...", err)
 		panic("Failed to create a connection to mysql")
 	}
-
-	// gorm 根据model 创建表
-	Db.AutoMigrate(&models.User{})
 
 	return Db
 }

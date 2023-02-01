@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"gin_serve/app/models"
 	"gin_serve/app/utils"
 	"net/http"
@@ -49,11 +50,14 @@ func UpdateUser(c *gin.Context) {
 
 func CreateUser(c *gin.Context) {
 
-	c.JSON(http.StatusOK, utils.BuildResponse("success", models.User{
-		ID:     9999,
-		Name:   "XiaoShao",
-		Email:  "xiaoshaoqq@gmail.com",
-		Gender: "M",
-		Avatar: "/",
-	}))
+	var user models.UserRegister
+
+	if err := c.ShouldBind(&user); err != nil {
+		c.JSON(http.StatusBadRequest, utils.BuildErrorResponse(1, "register failed!", err.Error()))
+		return
+	}
+
+	fmt.Println(user)
+
+	c.JSON(http.StatusOK, utils.BuildResponse("success", ""))
 }
