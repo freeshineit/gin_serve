@@ -51,14 +51,14 @@ func Login(c *gin.Context) {
 	var user models.UserLogin
 
 	if err := c.ShouldBind(&user); err != nil {
-		c.JSON(http.StatusOK, utils.BuildErrorResponse("use should bind error", err.Error()))
+		c.JSON(http.StatusBadRequest, utils.BuildErrorResponse("use should bind error", err.Error()))
 		return
 	}
 
 	token, err := utils.GenerateToken(&user)
 
 	if err != nil {
-		c.JSON(http.StatusOK, utils.BuildErrorResponse("token generate fail", err.Error()))
+		c.JSON(http.StatusBadRequest, utils.BuildErrorResponse("token generate fail", err.Error()))
 		return
 	}
 

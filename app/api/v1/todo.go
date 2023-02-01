@@ -3,6 +3,7 @@ package v1
 import (
 	"gin_serve/app/models"
 	"gin_serve/app/utils"
+	"math/rand"
 	"net/http"
 	"strconv"
 
@@ -178,13 +179,13 @@ func CreateTodo(c *gin.Context) {
 
 	var todo models.Todo
 
-	// 绑定不成功
 	if err := c.ShouldBind(&todo); err != nil {
 		c.JSON(http.StatusBadRequest, utils.BuildErrorResponse("create fail", err.Error()))
 		return
 	}
 
-	todo.ID = 1 //
+	r := rand.New(rand.NewSource(99))
+	todo.ID = uint(r.Uint32()) //
 
 	Todos = append([]models.Todo{todo}, Todos...)
 
