@@ -16,9 +16,9 @@ import (
 // @Accept			multipart/form-data
 // @Produce		json
 // @Param		file	formData	file true	"this is a test file"
-// @Success		200		{object}	utils.BuildResponse
-// @Failure		400		{object}	utils.BuildErrorResponse
-// @Failure		404		{object}	utils.BuildErrorResponse
+// @Success		200		{object}	utils.Response
+// @Failure		400		{object}	utils.Response
+// @Failure		404		{object}	utils.Response
 // @Router		/api/file_upload [post]
 func FileUpload(c *gin.Context) {
 

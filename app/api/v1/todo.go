@@ -19,7 +19,7 @@ var Todos = make([]models.Todo, 0)
 // @Accept	    json
 // @Produce		json
 // @Param       id   path   int  true   "todo id"
-// @Success		200	 {object}	utils.BuildResponse
+// @Success		200	 {object}	utils.Response
 // @Router		/api/v1/todo/{id} [get]
 func GetTodo(c *gin.Context) {
 	id := c.Param("id")
@@ -49,7 +49,7 @@ func GetTodo(c *gin.Context) {
 // @Tags	    example
 // @Accept		json
 // @Produce		json
-// @Success		200	 {object}	utils.BuildResponse
+// @Success		200	 {object}	utils.Response
 // @Router		/api/v1/todos [get]
 func GetTodos(c *gin.Context) {
 	c.JSON(http.StatusOK, utils.BuildResponse("success", Todos))
@@ -62,7 +62,7 @@ func GetTodos(c *gin.Context) {
 // @Tags		example
 // @Accept		json
 // @Produce		json
-// @Success		200	 {object}	utils.BuildResponse
+// @Success		200	 {object}	utils.Response
 // @Router		/api/v1/todo/{id}/content [put]
 func PutTodoContent(c *gin.Context) {
 	id := c.Param("id")
@@ -104,7 +104,7 @@ func PutTodoContent(c *gin.Context) {
 // @Tags		example
 // @Accept		json
 // @Produce		json
-// @Success		200	 {object}	utils.BuildResponse
+// @Success		200	 {object}	utils.Response
 // @Router		/api/v1/todo/{id}/status [put]
 func PutTodoStatus(c *gin.Context) {
 
@@ -141,7 +141,7 @@ func PutTodoStatus(c *gin.Context) {
 // @Tags		example
 // @Accept		json
 // @Produce		json
-// @Success		200	 {object}	utils.BuildResponse
+// @Success		200	 {object}  utils.Response
 // @Router		/v1/todo/{id} [delete]
 func DeleteTodo(c *gin.Context) {
 	id := c.Param("id")
@@ -172,7 +172,7 @@ func DeleteTodo(c *gin.Context) {
 // @Tags		example
 // @Accept		json
 // @Produce		json
-// @Success		200	 {object}	utils.BuildResponse
+// @Success		200	 {object}	utils.Response
 // @Router		/api/v1/todo [post]
 func CreateTodo(c *gin.Context) {
 

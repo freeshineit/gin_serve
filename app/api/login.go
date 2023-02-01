@@ -15,8 +15,8 @@ import (
 // @Tags	    example
 // @Accept	    json
 // @Produce		json
-// @Success		200	  {object}	  utils.BuildResponse
-// @Failure     400   {object}    utils.BuildErrorResponse
+// @Success		200	  {object}	  utils.Response
+// @Failure     400   {object}    utils.Response
 // @Router		/api/register [post]
 func Register(c *gin.Context) {
 	var user models.UserLogin
@@ -44,8 +44,8 @@ func Register(c *gin.Context) {
 // @Accept	    json
 // @Produce		json
 // @Param       id     path   int  true   "todo id"
-// @Success		200	  {object}	utils.BuildResponse
-// @Failure     400   {object}    utils.BuildErrorResponse
+// @Success		200	  {object}	  utils.Response
+// @Failure     400   {object}    utils.Response
 // @Router		/api/login [post]
 func Login(c *gin.Context) {
 	var user models.UserLogin
@@ -73,8 +73,8 @@ func Login(c *gin.Context) {
 // @Accept	    json
 // @Produce		json
 // @Param       id    path   int  true   "todo id"
-// @Success		200	  {object}	utils.BuildResponse
-// @Failure     400   {object}    utils.BuildErrorResponse
+// @Success		200	  {object}	utils.Response
+// @Failure     400   {object}  utils.Response
 // @Router		/api/logout [post]
 func Logout(c *gin.Context) {
 	var user models.User
@@ -94,8 +94,8 @@ func Logout(c *gin.Context) {
 // @Tags	    example
 // @Accept	    json
 // @Produce		json
-// @Success		200	  {object}	utils.BuildResponse
-// @Failure     400   {object}    utils.BuildErrorResponse
+// @Success		200	  {object}	  utils.Response
+// @Failure     400   {object}    utils.Response
 // @Router		/api/refresh [post]
 func Refresh(c *gin.Context) {
 	var user models.User
