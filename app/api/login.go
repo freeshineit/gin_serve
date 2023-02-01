@@ -15,13 +15,12 @@ import (
 // @Tags	    example
 // @Accept	    json
 // @Produce		json
-// @Success		200	{object}	utils.BuildResponse("success", "token xxxxx....")
-// @Failure     1   {object}    utils.BuildErrorResponse "fail" "登录失败!!"
+// @Success		200	  {object}	  utils.BuildResponse
+// @Failure     400   {object}    utils.BuildErrorResponse
 // @Router		/api/register [post]
 func Register(c *gin.Context) {
 	var user models.UserLogin
 
-	// 绑定不成功
 	if err := c.ShouldBind(&user); err != nil {
 		c.JSON(http.StatusOK, utils.BuildErrorResponse("fail", err.Error()))
 		return
@@ -45,7 +44,8 @@ func Register(c *gin.Context) {
 // @Accept	    json
 // @Produce		json
 // @Param       id     path   int  true   "todo id"
-// @Success		200	{string}	utils.BuildResponse("success", "token .....")
+// @Success		200	  {object}	utils.BuildResponse
+// @Failure     400   {object}    utils.BuildErrorResponse
 // @Router		/api/login [post]
 func Login(c *gin.Context) {
 	var user models.UserLogin
@@ -72,8 +72,9 @@ func Login(c *gin.Context) {
 // @Tags	    example
 // @Accept	    json
 // @Produce		json
-// @Param       id     path   int  true   "todo id"
-// @Success		200	{string}	utils.BuildResponse("success", nil)
+// @Param       id    path   int  true   "todo id"
+// @Success		200	  {object}	utils.BuildResponse
+// @Failure     400   {object}    utils.BuildErrorResponse
 // @Router		/api/logout [post]
 func Logout(c *gin.Context) {
 	var user models.User
@@ -93,7 +94,8 @@ func Logout(c *gin.Context) {
 // @Tags	    example
 // @Accept	    json
 // @Produce		json
-// @Success		200	{string}	utils.BuildResponse("success", user)
+// @Success		200	  {object}	utils.BuildResponse
+// @Failure     400   {object}    utils.BuildErrorResponse
 // @Router		/api/refresh [post]
 func Refresh(c *gin.Context) {
 	var user models.User

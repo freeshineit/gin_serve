@@ -17,7 +17,7 @@ import (
 //	@Tags			example
 //	@Accept			json
 //	@Produce		json
-//	@Success		200	{string}	utils.BuildResponse(0, "success", gin.H{"message": "v1 api","nick":    "v1 api",})
+//	@Success		200	 {object}	utils.BuildResponse
 //	@Router			/v1/list [get]
 func List(c *gin.Context) {
 	c.JSON(http.StatusOK, utils.BuildResponse("success", gin.H{

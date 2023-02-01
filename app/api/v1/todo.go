@@ -18,13 +18,13 @@ var Todos = make([]models.Todo, 0)
 // @Tags	    example
 // @Accept	    json
 // @Produce		json
-// @Param       id     path   int  true   "todo id"
-// @Success		200	{string}	utils.BuildResponse("success", todo)
+// @Param       id   path   int  true   "todo id"
+// @Success		200	 {object}	utils.BuildResponse
 // @Router		/api/v1/todo/{id} [get]
 func GetTodo(c *gin.Context) {
 	id := c.Param("id")
 
-	id64, err := strconv.ParseUint(id, 10, 32)
+	aid, err := strconv.Atoi(id)
 
 	if err != nil {
 		c.JSON(http.StatusOK, utils.BuildErrorResponse("fail", "id convert failed"))
@@ -32,7 +32,7 @@ func GetTodo(c *gin.Context) {
 	}
 
 	for _, t := range Todos {
-		if t.ID == uint(id64) {
+		if t.ID == uint(aid) {
 			// Todos.
 			c.JSON(http.StatusOK, utils.BuildResponse("success", t))
 			return
@@ -49,7 +49,7 @@ func GetTodo(c *gin.Context) {
 // @Tags	    example
 // @Accept		json
 // @Produce		json
-// @Success		200	{string}	utils.BuildResponse("success", gin.H{"message": "v1 api","nick":    "v1 api",})
+// @Success		200	 {object}	utils.BuildResponse
 // @Router		/api/v1/todos [get]
 func GetTodos(c *gin.Context) {
 	c.JSON(http.StatusOK, utils.BuildResponse("success", Todos))
@@ -62,12 +62,16 @@ func GetTodos(c *gin.Context) {
 // @Tags		example
 // @Accept		json
 // @Produce		json
-// @Success		200	{string}	utils.BuildResponse("success",gin.H{"message": "v1 api","nick":    "v1 api",})
+// @Success		200	 {object}	utils.BuildResponse
 // @Router		/api/v1/todo/{id}/content [put]
 func PutTodoContent(c *gin.Context) {
-	// id := c.Param("id")
+	id := c.Param("id")
+	aid, err := strconv.Atoi(id)
 
-	id := c.GetUint("id")
+	if err != nil {
+		c.JSON(http.StatusOK, utils.BuildErrorResponse("fail", "id convert failed"))
+		return
+	}
 
 	type Content struct {
 		Content string `json:"content" form:"content" binding:"required"`
@@ -82,7 +86,7 @@ func PutTodoContent(c *gin.Context) {
 	}
 
 	for i, t := range Todos {
-		if t.ID == id {
+		if t.ID == uint(aid) {
 			// Todos.
 			Todos[i].Content = con.Content
 			c.JSON(http.StatusOK, utils.BuildResponse[any]("success", nil))
@@ -100,13 +104,20 @@ func PutTodoContent(c *gin.Context) {
 // @Tags		example
 // @Accept		json
 // @Produce		json
-// @Success		200	{string}	utils.BuildResponse("success", gin.H{"message": "v1 api","nick":    "v1 api",})
+// @Success		200	 {object}	utils.BuildResponse
 // @Router		/api/v1/todo/{id}/status [put]
 func PutTodoStatus(c *gin.Context) {
-	id := c.GetUint("id")
+
+	id := c.Param("id")
+	aid, err := strconv.Atoi(id)
+
+	if err != nil {
+		c.JSON(http.StatusOK, utils.BuildErrorResponse("fail", "id convert failed"))
+		return
+	}
 
 	for i, t := range Todos {
-		if t.ID == id {
+		if t.ID == uint(aid) {
 			if Todos[i].Status == 0 {
 				Todos[i].Status = 1
 			} else if Todos[i].Status == 1 {
@@ -130,14 +141,20 @@ func PutTodoStatus(c *gin.Context) {
 // @Tags		example
 // @Accept		json
 // @Produce		json
-// @Success		200	{string}	utils.BuildResponse("success", "")
+// @Success		200	 {object}	utils.BuildResponse
 // @Router		/v1/todo/{id} [delete]
 func DeleteTodo(c *gin.Context) {
-	id := c.GetUint("id")
+	id := c.Param("id")
+	aid, err := strconv.Atoi(id)
+
+	if err != nil {
+		c.JSON(http.StatusOK, utils.BuildErrorResponse("fail", "id convert failed"))
+		return
+	}
 
 	for i, todo := range Todos {
 
-		if todo.ID == id {
+		if todo.ID == uint(aid) {
 			// Todos.
 			Todos = append(Todos[:i], Todos[i+1:]...)
 			c.JSON(http.StatusOK, utils.BuildResponse("success", "delete success"))
@@ -155,7 +172,7 @@ func DeleteTodo(c *gin.Context) {
 // @Tags		example
 // @Accept		json
 // @Produce		json
-// @Success		200	{string}	utils.BuildResponse("success", todo)
+// @Success		200	 {object}	utils.BuildResponse
 // @Router		/api/v1/todo [post]
 func CreateTodo(c *gin.Context) {
 
@@ -163,11 +180,11 @@ func CreateTodo(c *gin.Context) {
 
 	// 绑定不成功
 	if err := c.ShouldBind(&todo); err != nil {
-		c.JSON(http.StatusCreated, utils.BuildErrorResponse("create fail", err.Error()))
+		c.JSON(http.StatusBadRequest, utils.BuildErrorResponse("create fail", err.Error()))
 		return
 	}
 
-	todo.ID = 1 //utils.GenTodoUuId()
+	todo.ID = 1 //
 
 	Todos = append([]models.Todo{todo}, Todos...)
 

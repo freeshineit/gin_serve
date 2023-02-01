@@ -40,20 +40,12 @@ var Axios = (function () {
         localStorage.setItem("__token__", response.data.data);
       }
 
-      if (status < 200 || (status >= 300 && status != 401 && status != 500)) {
-        // 处理http错误，抛到业务代码
-        return response.data;
-      } else if (status == 200) {
-        return response.data;
-      } else if (status == 500) {
-        return response.data;
-      }
+      return response.data;
     },
     (error) => {
       if (error.response.status === 401) {
         location.href = "/login";
       }
-
       // err.message = "请求超时或服务器异常，请检查网络或联系管理员！";
       return Promise.reject(error);
     }

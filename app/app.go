@@ -10,6 +10,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+
+	_ "gin_serve/app/utils"
 )
 
 func RunServer(conf config.ServerConfig) error {

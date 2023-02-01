@@ -14,7 +14,7 @@ type EmptyObj struct{}
 // build response success
 // examples
 // BuildResponse[any](1, "success", map[string]string{"name": "xxx"})
-func BuildResponse[T interface{}](message string, data T) Response[T] {
+func BuildResponse[T any](message string, data T) Response[T] {
 
 	res := Response[T]{
 		Code:    0,
