@@ -1,8 +1,6 @@
 package routes
 
 import (
-	"gin_serve/app/middleware"
-
 	"github.com/gin-gonic/gin"
 )
 
@@ -30,7 +28,7 @@ func SetupRoutes(router *gin.Engine) *gin.Engine {
 	}
 
 	// /api/v2
-	apiV2Group := router.Group("/api/v2", middleware.JwtAuth())
+	apiV2Group := router.Group("/api/v2")
 	{
 		// register.go
 		RegisterV2Group(apiV2Group)

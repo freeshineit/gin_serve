@@ -6,11 +6,16 @@ import (
 	v2 "gin_serve/app/api/v2"
 	"gin_serve/app/api/ws"
 	"gin_serve/app/middleware"
+	"gin_serve/app/services"
 	"gin_serve/app/utils"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
+
+var jwtService = services.NewJWTService()
+
+var jwtAuthMiddleware = middleware.JwtAuth(jwtService)
 
 // register with auth api /api/xxx
 func RegisterGroup(router *gin.RouterGroup) *gin.RouterGroup {
@@ -32,7 +37,7 @@ func RegisterGroup(router *gin.RouterGroup) *gin.RouterGroup {
 
 // register with auth api /api/xxx
 func RegisterGroupWithAuth(router *gin.RouterGroup) *gin.RouterGroup {
-	authRouter := router.Group("/", middleware.JwtAuth())
+	authRouter := router.Group("/", jwtAuthMiddleware)
 
 	authRouter.POST("/file_upload", api.FileUpload)
 	authRouter.GET("/user/:id", api.GetUserByID)
@@ -53,7 +58,7 @@ func RegisterV1Group(router *gin.RouterGroup) *gin.RouterGroup {
 // register v1 api /api/v1/xxx with auth
 func RegisterV1GroupWithAuth(router *gin.RouterGroup) *gin.RouterGroup {
 
-	authRouter := router.Group("/", middleware.JwtAuth())
+	authRouter := router.Group("/", jwtAuthMiddleware)
 
 	// /api/v1/list
 	authRouter.GET("/list", v1.List)
@@ -75,7 +80,7 @@ func RegisterV2Group(router *gin.RouterGroup) *gin.RouterGroup {
 
 // register v2 api /api/v2/xxx with auth
 func RegisterV2GroupWithAuth(router *gin.RouterGroup) *gin.RouterGroup {
-	authRouter := router.Group("/", middleware.JwtAuth())
+	authRouter := router.Group("/", jwtAuthMiddleware)
 
 	// /api/v2/list
 	authRouter.GET("/list", v2.List)
@@ -90,7 +95,7 @@ func RegisterWsGroup(router *gin.RouterGroup) *gin.RouterGroup {
 
 // register socket api /ws/xxx with auth
 func RegisterWsGroupWithAuth(router *gin.RouterGroup) *gin.RouterGroup {
-	router.Group("/", middleware.JwtAuth())
+	router.Group("/", jwtAuthMiddleware)
 
 	return router
 }
