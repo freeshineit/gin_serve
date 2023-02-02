@@ -6,16 +6,13 @@ import (
 	v2 "gin_serve/app/api/v2"
 	"gin_serve/app/api/ws"
 	"gin_serve/app/middleware"
-	"gin_serve/app/services"
 	"gin_serve/app/utils"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
-var jwtService = services.NewJWTService()
-
-var jwtAuthMiddleware = middleware.JwtAuth(jwtService)
+var jwtAuthMiddleware = middleware.JwtAuth()
 
 // register with auth api /api/xxx
 func RegisterGroup(router *gin.RouterGroup) *gin.RouterGroup {

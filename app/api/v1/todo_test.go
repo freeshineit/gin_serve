@@ -4,7 +4,7 @@ package v1
 // 	"bytes"
 // 	"encoding/json"
 // 	"fmt"
-// 	"gin_serve/app/models"
+// 	"gin_serve/app/model"
 // 	"net/http"
 // 	"net/http/httptest"
 // 	"testing"
@@ -25,7 +25,7 @@ package v1
 // 	r.DELETE("/api/v1/todo/:id", DeleteTodo)
 
 // 	// create
-// 	todo := models.Todo{
+// 	todo := model.Todo{
 // 		Content: "this is test",
 // 	}
 

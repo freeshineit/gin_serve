@@ -2,7 +2,8 @@ package api
 
 import (
 	"fmt"
-	"gin_serve/app/models"
+	"gin_serve/app/dto"
+	"gin_serve/app/model"
 	"gin_serve/app/utils"
 	"net/http"
 
@@ -13,7 +14,7 @@ func GetUserByID(c *gin.Context) {
 
 	id := c.GetUint("id")
 
-	c.JSON(http.StatusOK, utils.BuildResponse("success", models.User{
+	c.JSON(http.StatusOK, utils.BuildResponse("success", model.User{
 		ID:     id,
 		Name:   "XiaoShao",
 		Email:  "xiaoshaoqq@gmail.com",
@@ -26,7 +27,7 @@ func DeleteUser(c *gin.Context) {
 	// id := c.Param("id")
 	id := c.GetUint("id")
 
-	c.JSON(http.StatusOK, utils.BuildResponse("success", models.User{
+	c.JSON(http.StatusOK, utils.BuildResponse("success", model.User{
 		ID:     id,
 		Name:   "XiaoShao",
 		Email:  "xiaoshaoqq@gmail.com",
@@ -39,7 +40,7 @@ func UpdateUser(c *gin.Context) {
 	// id := c.Param("id")
 	id := c.GetUint("id")
 
-	c.JSON(http.StatusOK, utils.BuildResponse("success", models.User{
+	c.JSON(http.StatusOK, utils.BuildResponse("success", model.User{
 		ID:     id,
 		Name:   "XiaoShao",
 		Email:  "xiaoshaoqq@gmail.com",
@@ -50,7 +51,7 @@ func UpdateUser(c *gin.Context) {
 
 func CreateUser(c *gin.Context) {
 
-	var user models.UserRegister
+	var user dto.UserCreateDTO
 
 	if err := c.ShouldBind(&user); err != nil {
 		c.JSON(http.StatusBadRequest, utils.BuildErrorResponse(1, "register failed!", err.Error()))

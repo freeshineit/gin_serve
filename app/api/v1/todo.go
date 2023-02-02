@@ -1,7 +1,7 @@
 package v1
 
 import (
-	"gin_serve/app/models"
+	"gin_serve/app/model"
 	"gin_serve/app/utils"
 	"math/rand"
 	"net/http"
@@ -10,7 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var Todos = make([]models.Todo, 0)
+var Todos = make([]model.Todo, 0)
 
 // Get todo by id
 // @Summary	Todo
@@ -177,7 +177,7 @@ func DeleteTodo(c *gin.Context) {
 // @Router		/api/v1/todo [post]
 func CreateTodo(c *gin.Context) {
 
-	var todo models.Todo
+	var todo model.Todo
 
 	if err := c.ShouldBind(&todo); err != nil {
 		c.JSON(http.StatusBadRequest, utils.BuildErrorResponse(1, "create fail", err.Error()))
@@ -187,7 +187,7 @@ func CreateTodo(c *gin.Context) {
 	r := rand.New(rand.NewSource(99))
 	todo.ID = uint(r.Uint32()) //
 
-	Todos = append([]models.Todo{todo}, Todos...)
+	Todos = append([]model.Todo{todo}, Todos...)
 
 	c.JSON(http.StatusCreated, utils.BuildResponse("success", todo))
 }

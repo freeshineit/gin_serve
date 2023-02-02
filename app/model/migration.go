@@ -1,4 +1,4 @@
-package models
+package model
 
 import "gorm.io/gorm"
 
@@ -7,7 +7,7 @@ func GormAutoMigration(Db *gorm.DB) {
 	// auto migrate
 	Db.AutoMigrate(
 		&User{},
-		&LoginRecord{},
+		// &LoginRecord{},
 		&Todo{},
 	)
 }

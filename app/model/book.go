@@ -1,4 +1,4 @@
-package models
+package model
 
 type Book struct {
 	ID          uint   `json:"id" form:'id' gorm:"primary_key:auto_increment"`

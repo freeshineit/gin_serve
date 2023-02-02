@@ -2,7 +2,8 @@ package api
 
 import (
 	"fmt"
-	"gin_serve/app/models"
+	"gin_serve/app/dto"
+	"gin_serve/app/model"
 	"gin_serve/app/utils"
 	"net/http"
 
@@ -21,7 +22,7 @@ import (
 // @Router		/api/register [post]
 func Register(c *gin.Context) {
 
-	var user models.UserRegister
+	var user dto.RegisterDTO
 
 	if err := c.ShouldBind(&user); err != nil {
 		c.JSON(http.StatusBadRequest, utils.BuildErrorResponse(1, "register failed!", err.Error()))
@@ -45,14 +46,14 @@ func Register(c *gin.Context) {
 // @Failure     400   {object}    utils.Response
 // @Router		/api/login [post]
 func Login(c *gin.Context) {
-	var user models.UserLogin
+	var user dto.LoginDTO
 
 	if err := c.ShouldBind(&user); err != nil {
 		c.JSON(http.StatusBadRequest, utils.BuildErrorResponse(1, "use should bind error", err.Error()))
 		return
 	}
 
-	token, err := utils.GenerateToken(&user)
+	token, err := utils.GenerateToken(user.Email)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, utils.BuildErrorResponse(1, "token generate fail", err.Error()))
@@ -74,7 +75,7 @@ func Login(c *gin.Context) {
 // @Failure     400   {object}  utils.Response
 // @Router		/api/logout [post]
 func Logout(c *gin.Context) {
-	var user models.User
+	var user model.User
 
 	if err := c.ShouldBind(&user); err != nil {
 		c.JSON(http.StatusOK, utils.BuildErrorResponse(1, "use should bind error", err.Error()))
@@ -95,7 +96,7 @@ func Logout(c *gin.Context) {
 // @Failure     400   {object}    utils.Response
 // @Router		/api/refresh [post]
 func Refresh(c *gin.Context) {
-	var user models.User
+	var user model.User
 
 	if err := c.ShouldBind(&user); err != nil {
 		c.JSON(http.StatusOK, utils.BuildErrorResponse(1, "use should bind error", err.Error()))
