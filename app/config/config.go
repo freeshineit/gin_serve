@@ -18,31 +18,11 @@ type ServerConfig struct {
 	ProxyPort string
 }
 
-type LoggerConfig struct {
-	Dir       string
-	HttpPath  string
-	ErrorPath string
-}
-
-type DatabaseConfig struct {
-	Host          string
-	Port          string
-	Database      string
-	User          string
-	Password      string
-	ConnectionMax int32
-}
-
-type RedisConfig struct {
-	Host     string
-	Port     int32
-	Db       int32
-	Password string
-}
 type Config struct {
 	Logger   LoggerConfig
 	Database DatabaseConfig
 	Redis    RedisConfig
+	JWT      JWTConfig
 	Name     string
 }
 
@@ -82,32 +62,4 @@ func (c *Config) InitConfig() error {
 	}
 
 	return nil
-}
-
-func GetLoggerConfig() (LoggerConfig, error) {
-	return LoggerConfig{
-		Dir:       Conf.GetString("logger.dir"),
-		HttpPath:  Conf.GetString("logger.http_path"),
-		ErrorPath: Conf.GetString("logger.error_path"),
-	}, nil //
-}
-
-func GetDatabaseConfig() (DatabaseConfig, error) {
-	return DatabaseConfig{
-		Host:          Conf.GetString("database.mysql.host"),
-		Port:          Conf.GetString("database.mysql.port"),
-		Database:      Conf.GetString("database.mysql.database"),
-		User:          Conf.GetString("database.mysql.user"),
-		Password:      Conf.GetString("database.mysql.password"),
-		ConnectionMax: Conf.GetInt32("database.mysql.connection_max"),
-	}, nil
-}
-
-func GetRedisConfig() (RedisConfig, error) {
-	return RedisConfig{
-		Host:     Conf.GetString("cache.redis.host"),
-		Port:     Conf.GetInt32("cache.redis.port"),
-		Db:       Conf.GetInt32("cache.redis.db"),
-		Password: Conf.GetString("cache.redis.password"),
-	}, nil
 }

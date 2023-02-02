@@ -1,6 +1,7 @@
 package config
 
 import (
+	"errors"
 	"fmt"
 
 	"gorm.io/driver/mysql"
@@ -49,4 +50,42 @@ func CloseMysqlConnection(db *gorm.DB) error {
 	}
 
 	return dbSql.Close()
+}
+
+type DatabaseConfig struct {
+	Host          string
+	Port          string
+	Database      string
+	User          string
+	Password      string
+	ConnectionMax int32
+}
+
+func GetDatabaseConfig() (DatabaseConfig, error) {
+
+	host := Conf.GetString("database.mysql.host")
+	port := Conf.GetString("database.mysql.port")
+	database := Conf.GetString("database.mysql.database")
+	user := Conf.GetString("database.mysql.user")
+	password := Conf.GetString("database.mysql.password")
+	connection_max := Conf.GetInt32("database.mysql.connection_max")
+
+	if host == "" || port == "" || database == "" || user == "" || password == "" {
+		return DatabaseConfig{
+			Host:     host,
+			Port:     port,
+			Database: database,
+			User:     user,
+			Password: password,
+		}, errors.New("database config missing parameter")
+	}
+
+	return DatabaseConfig{
+		Host:          host,
+		Port:          port,
+		Database:      database,
+		User:          user,
+		Password:      password,
+		ConnectionMax: connection_max,
+	}, nil
 }
