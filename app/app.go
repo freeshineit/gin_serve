@@ -3,6 +3,7 @@ package app
 import (
 	"gin_serve/app/config"
 	"gin_serve/app/middleware"
+	"gin_serve/app/model"
 	"gin_serve/app/routes"
 	"gin_serve/helpers"
 	"gin_serve/swagger"
@@ -10,6 +11,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+
+	_ "gin_serve/app/utils"
 )
 
 func RunServer(conf config.ServerConfig) error {
@@ -18,18 +21,11 @@ func RunServer(conf config.ServerConfig) error {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
-	// viper /app/config/config.yaml
-	// read /cmd/app.go
-
-	// hooks, config,...
-
-	// 连接mysql数据库
 	config.SetupDatabaseConnection()
-
-	// 连接redis
 	config.SetupRedisConnection()
 
-	// r := gin.Default()
+	model.GormAutoMigration(config.DB)
+
 	r := gin.New()
 	r.Use(middleware.Logger(), gin.Recovery())
 
@@ -56,6 +52,10 @@ func RunServer(conf config.ServerConfig) error {
 	}
 
 	log.Println("Server exiting")
+
+	// close
+	defer config.CloseMysqlConnection(config.DB)
+	defer config.CloseRedisConnection(config.RedisClient)
 
 	return err
 }

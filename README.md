@@ -5,7 +5,8 @@
 
 ```bash
 
-# 初始化 mysql , redis 等 （前提是docker已经安装并启动） 前提是已经安装docker
+# 初始化 mysql , redis 等 （前提是已经安装docker） 
+# initialization docker container, mysql, redis...
 docker-compose -f docker-compose.yaml up -d
 
 # run development
@@ -29,6 +30,13 @@ make build
 docker build -t gin_serve:v0.1 .
 # run docker
 docker run -it -p 3000:3000 --rm --name gin_serve gin_serve:v0.1
+
+
+# generate api docs
+swag init -g ./cmd/app.go
+
+http://localhost:8080/swagger/index.html
+
 ```
 
 ## golang

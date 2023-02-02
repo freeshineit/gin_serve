@@ -1,0 +1,1 @@
+[数据传输对象 (data transfer object，DTO)]https://zh.wikipedia.org/zh-cn/%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93%E5%AF%B9%E8%B1%A1

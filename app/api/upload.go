@@ -1,7 +1,7 @@
 package api
 
 import (
-	"gin_serve/app/models"
+	"gin_serve/app/utils"
 	"log"
 	"net/http"
 	"os"
@@ -10,7 +10,16 @@ import (
 )
 
 // FileUpload file upload
-// /api/file_upload
+// @Summary		Upload file
+// @Description	Upload file
+// @ID				file.upload
+// @Accept			multipart/form-data
+// @Produce		json
+// @Param		file	formData	file true	"this is a test file"
+// @Success		200		{object}	utils.Response
+// @Failure		400		{object}	utils.Response
+// @Failure		404		{object}	utils.Response
+// @Router		/api/file_upload [post]
 func FileUpload(c *gin.Context) {
 
 	filesURL := make([]string, 0)
@@ -43,7 +52,7 @@ func FileUpload(c *gin.Context) {
 		filesURL = append(filesURL, "images/upload/"+file.Filename)
 	}
 
-	c.JSON(http.StatusOK, models.BuildOKResponse(gin.H{
+	c.JSON(http.StatusOK, utils.BuildResponse("success", gin.H{
 		"urls": filesURL,
 	}))
 }

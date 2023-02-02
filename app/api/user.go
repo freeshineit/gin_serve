@@ -1,7 +1,10 @@
 package api
 
 import (
-	"gin_serve/app/models"
+	"fmt"
+	"gin_serve/app/dto"
+	"gin_serve/app/model"
+	"gin_serve/app/utils"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -9,10 +12,10 @@ import (
 
 func GetUserByID(c *gin.Context) {
 
-	id := c.Param("id")
+	id := c.GetUint("id")
 
-	c.JSON(http.StatusOK, models.BuildOKResponse(models.User{
-		Id:     id,
+	c.JSON(http.StatusOK, utils.BuildResponse("success", model.User{
+		ID:     id,
 		Name:   "XiaoShao",
 		Email:  "xiaoshaoqq@gmail.com",
 		Gender: "M",
@@ -21,10 +24,11 @@ func GetUserByID(c *gin.Context) {
 }
 
 func DeleteUser(c *gin.Context) {
-	id := c.Param("id")
+	// id := c.Param("id")
+	id := c.GetUint("id")
 
-	c.JSON(http.StatusOK, models.BuildOKResponse(models.User{
-		Id:     id,
+	c.JSON(http.StatusOK, utils.BuildResponse("success", model.User{
+		ID:     id,
 		Name:   "XiaoShao",
 		Email:  "xiaoshaoqq@gmail.com",
 		Gender: "M",
@@ -33,10 +37,11 @@ func DeleteUser(c *gin.Context) {
 }
 
 func UpdateUser(c *gin.Context) {
-	id := c.Param("id")
+	// id := c.Param("id")
+	id := c.GetUint("id")
 
-	c.JSON(http.StatusOK, models.BuildOKResponse(models.User{
-		Id:     id,
+	c.JSON(http.StatusOK, utils.BuildResponse("success", model.User{
+		ID:     id,
 		Name:   "XiaoShao",
 		Email:  "xiaoshaoqq@gmail.com",
 		Gender: "M",
@@ -46,11 +51,14 @@ func UpdateUser(c *gin.Context) {
 
 func CreateUser(c *gin.Context) {
 
-	c.JSON(http.StatusOK, models.BuildOKResponse(models.User{
-		Id:     "9999",
-		Name:   "XiaoShao",
-		Email:  "xiaoshaoqq@gmail.com",
-		Gender: "M",
-		Avatar: "/",
-	}))
+	var user dto.UserRegisterDTO
+
+	if err := c.ShouldBind(&user); err != nil {
+		c.JSON(http.StatusBadRequest, utils.BuildErrorResponse(1, "register failed!", err.Error()))
+		return
+	}
+
+	fmt.Println(user)
+
+	c.JSON(http.StatusOK, utils.BuildResponse("success", ""))
 }

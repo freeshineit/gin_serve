@@ -97,7 +97,6 @@
                         status: 0
                     }).then(res => {
                         list.unshift(genLiTag(res.data))
-
                         todo.value = ''
                         document.getElementById('list').innerHTML = list.join("")
                     })

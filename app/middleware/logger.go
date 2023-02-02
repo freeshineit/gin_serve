@@ -43,11 +43,7 @@ func Logger(notLogged ...string) gin.HandlerFunc {
 		}
 	}
 
-	loggerConfig, err := config.GetLoggerConfig()
-
-	if err != nil {
-		fmt.Println(err)
-	}
+	loggerConfig := config.GetLoggerConfig()
 
 	fileName := path.Join(loggerConfig.Dir+loggerConfig.HttpPath, time.Now().Format("20060102"))
 

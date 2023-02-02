@@ -6,5 +6,6 @@ tmp/
 upload/
 logs/
 bin
+docs
 
 .DS_Store
