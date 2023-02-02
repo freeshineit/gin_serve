@@ -12,8 +12,8 @@ import (
 type UserRepository interface {
 	InsertUser(user model.User) model.User
 	UpdateUser(user model.User) model.User
-	VerifyCredential(email string, password string) (model.User, error)
-	IsDuplicateEmail(email string) (tx *gorm.DB)
+	VerifyCredential(email string) (model.User, error)
+	IsDuplicateEmail(email string) *gorm.DB
 	FindByEmail(email string) model.User
 	ProfileUser(userID string) model.User
 }
@@ -32,6 +32,7 @@ func NewUserRepository(db *gorm.DB) UserRepository {
 func (db *userConnection) InsertUser(user model.User) model.User {
 	// hash password
 	user.Password = hashAndSalt([]byte(user.Password))
+
 	db.connection.Save(&user)
 	return user
 }
@@ -43,9 +44,10 @@ func (db *userConnection) UpdateUser(user model.User) model.User {
 }
 
 // verify credential
-func (db *userConnection) VerifyCredential(email string, password string) (model.User, error) {
+func (db *userConnection) VerifyCredential(email string) (model.User, error) {
 	var user model.User
 	res := db.connection.Where("email=?", email).Take(&user)
+
 	if res.Error == nil {
 		return user, nil
 	}
@@ -54,7 +56,6 @@ func (db *userConnection) VerifyCredential(email string, password string) (model
 
 func (db *userConnection) IsDuplicateEmail(email string) (tx *gorm.DB) {
 	var user model.User
-
 	return db.connection.Where("email = ?", email).Take(&user)
 }
 
@@ -72,7 +73,7 @@ func (db *userConnection) ProfileUser(userID string) model.User {
 }
 
 func hashAndSalt(pwd []byte) string {
-	hash, err := bcrypt.GenerateFromPassword(pwd, bcrypt.MaxCost)
+	hash, err := bcrypt.GenerateFromPassword(pwd, bcrypt.DefaultCost)
 
 	if err != nil {
 		log.Panicln("Failed to hash a password")

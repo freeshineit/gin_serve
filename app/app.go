@@ -11,16 +11,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/go-redis/redis/v8"
-	"gorm.io/gorm"
 
 	_ "gin_serve/app/utils"
-)
-
-var (
-	// 连接mysql数据库
-	DB          *gorm.DB
-	RedisClient *redis.Client
 )
 
 func RunServer(conf config.ServerConfig) error {
@@ -29,10 +21,10 @@ func RunServer(conf config.ServerConfig) error {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
-	DB = config.SetupDatabaseConnection()
-	RedisClient = config.SetupRedisConnection()
+	config.SetupDatabaseConnection()
+	config.SetupRedisConnection()
 
-	model.GormAutoMigration(DB)
+	model.GormAutoMigration(config.DB)
 
 	r := gin.New()
 	r.Use(middleware.Logger(), gin.Recovery())
@@ -62,8 +54,8 @@ func RunServer(conf config.ServerConfig) error {
 	log.Println("Server exiting")
 
 	// close
-	defer config.CloseMysqlConnection(DB)
-	defer config.CloseRedisConnection(RedisClient)
+	defer config.CloseMysqlConnection(config.DB)
+	defer config.CloseRedisConnection(config.RedisClient)
 
 	return err
 }

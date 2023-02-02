@@ -8,10 +8,10 @@ import (
 	"gorm.io/gorm"
 )
 
+var DB *gorm.DB
+
 // setup database connection
 func SetupDatabaseConnection() *gorm.DB {
-
-	var err error
 
 	databaseConfig, err := GetDatabaseConfig()
 
@@ -19,7 +19,7 @@ func SetupDatabaseConnection() *gorm.DB {
 		panic("Failed to load mysql config")
 	}
 
-	Db, err := gorm.Open(mysql.New(mysql.Config{
+	DB, err = gorm.Open(mysql.New(mysql.Config{
 		DSN: fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 			databaseConfig.User,
 			databaseConfig.Password,
@@ -38,7 +38,7 @@ func SetupDatabaseConnection() *gorm.DB {
 		panic("Failed to create a connection to mysql")
 	}
 
-	return Db
+	return DB
 }
 
 // close mysql connection

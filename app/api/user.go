@@ -51,7 +51,7 @@ func UpdateUser(c *gin.Context) {
 
 func CreateUser(c *gin.Context) {
 
-	var user dto.UserCreateDTO
+	var user dto.UserRegisterDTO
 
 	if err := c.ShouldBind(&user); err != nil {
 		c.JSON(http.StatusBadRequest, utils.BuildErrorResponse(1, "register failed!", err.Error()))
