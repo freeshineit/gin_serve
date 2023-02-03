@@ -1,30 +1,31 @@
 package app
 
 import (
-	"gin_serve/app/config"
 	"gin_serve/app/middleware"
 	"gin_serve/app/model"
 	"gin_serve/app/routes"
-	"gin_serve/helpers"
+	"gin_serve/config"
+	"gin_serve/helper"
 	"gin_serve/swagger"
 	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-
-	_ "gin_serve/app/utils"
 )
 
-func RunServer(conf config.ServerConfig) error {
+// app serve
+func Serve(mode string) error {
 
-	if conf.Mode == "release" {
+	if mode == "release" {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
-	config.SetupDatabaseConnection()
+	port := config.Conf.App.Port
+
+	DB := config.SetupDatabaseConnection()
 	config.SetupRedisConnection()
 
-	model.GormAutoMigration(config.DB)
+	model.GormAutoMigration(DB)
 
 	r := gin.New()
 	r.Use(middleware.Logger(), gin.Recovery())
@@ -32,20 +33,22 @@ func RunServer(conf config.ServerConfig) error {
 	// 中间件
 	middleware.SetMiddleware(r)
 
-	// api docs
-	swagger.InitSwagger(r)
+	if mode != "release" {
+		// api docs
+		swagger.InitSwagger(r)
+	}
 
 	// set up routes
 	routes.SetupRoutes(r)
 
 	srv := &http.Server{
-		Addr:    ":" + conf.Port,
+		Addr:    ":" + port,
 		Handler: r,
 	}
 
-	log.Printf("listen: %s\n", helpers.ColorBlueString("http://localhost:"+conf.Port))
+	log.Printf("listen: %s\n", helper.ColorBlueString("http://localhost:"+port))
 
-	err := helpers.ListenAndServe(srv)
+	err := helper.ListenAndServe(srv)
 
 	if err != nil {
 		log.Fatal("Server forced to shutdown:", err)
@@ -54,7 +57,7 @@ func RunServer(conf config.ServerConfig) error {
 	log.Println("Server exiting")
 
 	// close
-	defer config.CloseMysqlConnection(config.DB)
+	defer config.CloseMysqlConnection(DB)
 	defer config.CloseRedisConnection(config.RedisClient)
 
 	return err

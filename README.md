@@ -15,7 +15,7 @@ air
 
 ## development
 # http://localhost:3000
-go run cmd/app.go --port=3000 --proxy-port=3001 
+go run cmd/all.go --port=3000 --proxy-port=3001 
 
 # build
 make build
@@ -33,7 +33,7 @@ docker run -it -p 3000:3000 --rm --name gin_serve gin_serve:v0.1
 
 
 # generate api docs
-swag init -g ./cmd/app.go
+swag init -g ./cmd/all.go
 
 http://localhost:8080/swagger/index.html
 

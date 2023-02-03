@@ -1,16 +1,13 @@
 
-port = "3030"
-mode = "debug"
-
 [app]
-  env = "debug"
+  port = "8080"
+
+[proxy]
+  port = "8081"
 
 [jwt]
   secret = "xiaoshaoqq@gmail.com,.<>?"
   issuer = "xiaoshaoqq@gmail.com"
-
-[http.server]
-  port = "8080"
 
 [database.mysql]
   host = "localhost"

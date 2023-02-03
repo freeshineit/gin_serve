@@ -1,14 +1,14 @@
 package main
 
 import (
-	"gin_serve/app"
-	"gin_serve/proxy"
+	"gin_serve/cmd/app"
+	"gin_serve/cmd/proxy"
 	"log"
 
 	"github.com/spf13/cobra"
 	"golang.org/x/sync/errgroup"
 
-	"gin_serve/app/config"
+	"gin_serve/config"
 )
 
 var cfgFile string
@@ -24,31 +24,21 @@ var rootCmd = &cobra.Command{
 	Long: `server is a simple restful api server
     use help get more ifo`,
 	Run: func(cmd *cobra.Command, args []string) {
-		port := cmd.Flag("port").Value.String()
 		mode := cmd.Flag("mode").Value.String()
-		proxyPort := cmd.Flag("proxy-port").Value.String()
 
-		log.Printf("app version %s", app.Version)
-
-		ServerConfig := config.ServerConfig{
-			Port:      port,
-			Mode:      mode,
-			ProxyPort: proxyPort,
-		}
+		// log.Printf("server version %s", version)
 
 		g.Go(func() error {
-			return app.RunServer(ServerConfig)
-
+			return app.Serve(mode)
 		})
 
 		g.Go(func() error {
-			return proxy.ProxyServer(ServerConfig)
+			return proxy.Serve(mode)
 		})
 
 		if err := g.Wait(); err != nil {
 			log.Fatal(err)
 		}
-
 	},
 }
 
@@ -66,8 +56,6 @@ func init() {
 	// will be global for your application.
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default: ./app/config/config.toml)")
 
-	rootCmd.Flags().StringP("port", "p", "8080", "default server port 8080")
-	rootCmd.Flags().StringP("proxy-port", "x", "8081", "default  proxy server port 8081")
 	rootCmd.Flags().StringP("mode", "m", "debug", "default  server running in 'debug' mode")
 }
 
@@ -77,14 +65,10 @@ func initConfig() {
 	if cfgFile != "" {
 
 	} else {
-		c := config.Config{
-			Name: cfgFile,
-		}
-
-		if err := c.InitConfig(); err != nil {
+		if err := config.InitConfig(cfgFile); err != nil {
 			panic(err)
 		}
-		log.Printf("载入配置成功")
+		log.Printf("Load config success ...")
 		// c.WatchConfig(configChange)
 	}
 }

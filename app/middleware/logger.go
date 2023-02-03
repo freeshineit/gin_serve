@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"fmt"
-	"gin_serve/app/config"
+	"gin_serve/config"
 	"math"
 	"net/http"
 	"os"
@@ -43,7 +43,7 @@ func Logger(notLogged ...string) gin.HandlerFunc {
 		}
 	}
 
-	loggerConfig := config.GetLoggerConfig()
+	loggerConfig := config.Conf.Logger
 
 	fileName := path.Join(loggerConfig.Dir+loggerConfig.HttpPath, time.Now().Format("20060102"))
 

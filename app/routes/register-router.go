@@ -6,7 +6,7 @@ import (
 	v2 "gin_serve/app/api/v2"
 	"gin_serve/app/api/ws"
 	"gin_serve/app/middleware"
-	"gin_serve/app/utils"
+	"gin_serve/helper"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -23,7 +23,7 @@ func RegisterGroup(router *gin.RouterGroup) *gin.RouterGroup {
 	router.GET("/query", func(c *gin.Context) {
 		// message := c.Query("message")
 		// nick := c.DefaultQuery("nick", "anonymous")
-		c.JSON(http.StatusOK, utils.BuildResponse("success", gin.H{
+		c.JSON(http.StatusOK, helper.BuildResponse("success", gin.H{
 			"message": "message",
 			"nick":    "nick",
 		}))

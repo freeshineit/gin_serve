@@ -1,7 +1,7 @@
-package utils
+package helper
 
 import (
-	"gin_serve/app/config"
+	"gin_serve/config"
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
@@ -16,7 +16,7 @@ type jwtCustomClaim struct {
 // @Example GenerateToken(1)
 func GenerateToken(UserID string) (string, error) {
 
-	jwtConfig := config.GetJWTConfig()
+	jwtConfig := config.Conf.JWT
 
 	claims := jwtCustomClaim{
 		UserID: UserID,
@@ -39,7 +39,7 @@ func GenerateToken(UserID string) (string, error) {
 // Validate Token
 // @Example ValidateToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMTIzNDU2Nzg5MCJ9.HhclBU1hdg0RynbUgnLXtm9rhm0m4yuWJF0jjVaZ_u0")
 func ValidateToken(token string) (*jwt.Token, error) {
-	jwtConfig := config.GetJWTConfig()
+	jwtConfig := config.Conf.JWT
 
 	return jwt.ParseWithClaims(token, &jwtCustomClaim{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte(jwtConfig.Secret), nil

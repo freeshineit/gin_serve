@@ -2,8 +2,8 @@ package proxy
 
 import (
 	"fmt"
-	"gin_serve/app/config"
-	"gin_serve/helpers"
+	"gin_serve/config"
+	"gin_serve/helper"
 	"log"
 	"net/http"
 	"net/http/httputil"
@@ -12,8 +12,37 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Proxy(c *gin.Context) {
+func Serve(mode string) error {
+	r := gin.Default()
 
+	if mode == "release" {
+		gin.SetMode(gin.ReleaseMode)
+	}
+
+	port := config.Conf.Proxy.Port
+
+	// Create a catchall route
+	r.Any("/*proxyPath", Proxy)
+
+	srv := &http.Server{
+		Addr:    ":" + port,
+		Handler: r,
+	}
+
+	log.Printf("proxy server listen: %s\n", helper.ColorBlueString("http://localhost:"+port))
+
+	err := helper.ListenAndServe(srv)
+
+	if err != nil {
+		log.Fatal("Proxy server forced to shutdown:", err)
+	}
+
+	log.Println("Proxy server exiting")
+
+	return err
+}
+
+func Proxy(c *gin.Context) {
 	// curl http://localhost:8081
 	// google 香港
 	remote, err := url.Parse("https://www.google.com.hk")
@@ -34,7 +63,7 @@ func Proxy(c *gin.Context) {
 		}
 
 		//
-		req.Header = helpers.MergeMap(c.Request.Header, header1)
+		req.Header = helper.MergeMap(c.Request.Header, header1)
 		// req.Header = c.Request.Header
 		req.Host = remote.Host
 		req.URL.Scheme = remote.Scheme
@@ -44,37 +73,7 @@ func Proxy(c *gin.Context) {
 		fmt.Println(req.Header)
 	}
 
-	fmt.Println(c.Param("proxyPath"))
+	// fmt.Println(c.Param("proxyPath"))
 
 	proxy.ServeHTTP(c.Writer, c.Request)
-}
-
-func ProxyServer(conf config.ServerConfig) error {
-	r := gin.Default()
-
-	if conf.Mode == "release" {
-		gin.SetMode(gin.ReleaseMode)
-	}
-
-	//Create a catchall route
-	r.Any("/*proxyPath", Proxy)
-
-	// err := r.Run(":" + conf.ProxyPort)
-
-	srv := &http.Server{
-		Addr:    ":" + conf.ProxyPort,
-		Handler: r,
-	}
-
-	log.Printf("proxy server listen: %s\n", helpers.ColorBlueString("http://localhost:"+conf.ProxyPort))
-
-	err := helpers.ListenAndServe(srv)
-
-	if err != nil {
-		log.Fatal("Proxy server forced to shutdown:", err)
-	}
-
-	log.Println("Proxy server exiting")
-
-	return err
 }

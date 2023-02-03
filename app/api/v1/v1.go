@@ -1,7 +1,7 @@
 package v1
 
 import (
-	"gin_serve/app/utils"
+	"gin_serve/helper"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -17,10 +17,10 @@ import (
 //	@Tags			example
 //	@Accept			json
 //	@Produce		json
-//	@Success		200	 {object}	utils.Response
+//	@Success		200	 {object}	helper.Response
 //	@Router			/v1/list [get]
 func List(c *gin.Context) {
-	c.JSON(http.StatusOK, utils.BuildResponse("success", gin.H{
+	c.JSON(http.StatusOK, helper.BuildResponse("success", gin.H{
 		"message": "v1 api",
 		"nick":    "v1 api",
 	}))
