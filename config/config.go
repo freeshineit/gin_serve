@@ -34,6 +34,10 @@ type ProxyConfig struct {
 	Port string
 }
 
+type SocketConfig struct {
+	Port string
+}
+
 type Config struct {
 	Logger   LoggerConfig
 	Database DatabaseConfig
@@ -41,5 +45,6 @@ type Config struct {
 	JWT      JWTConfig
 	App      AppConfig
 	Proxy    ProxyConfig
+	Socket   SocketConfig
 	Name     string
 }

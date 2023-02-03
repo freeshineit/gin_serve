@@ -3,6 +3,7 @@ package main
 import (
 	"gin_serve/cmd/app"
 	"gin_serve/cmd/proxy"
+	cmd "gin_serve/cmd/version"
 	"log"
 
 	"github.com/spf13/cobra"
@@ -49,28 +50,25 @@ func execute() {
 }
 
 func init() {
+
+	rootCmd.AddCommand(cmd.VersionCmd)
+
 	cobra.OnInitialize(initConfig)
 
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default: ./app/config/config.toml)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default: ./config/config.toml)")
 
-	rootCmd.Flags().StringP("mode", "m", "debug", "default  server running in 'debug' mode")
+	rootCmd.Flags().StringP("mode", "m", "debug", "default server running in 'debug' mode")
 }
 
 // initConfig reads in config file and ENV variables if set.
 func initConfig() {
-
-	if cfgFile != "" {
-
-	} else {
-		if err := config.InitConfig(cfgFile); err != nil {
-			panic(err)
-		}
-		log.Printf("Load config success ...")
-		// c.WatchConfig(configChange)
+	if err := config.InitConfig(cfgFile); err != nil {
+		panic(err)
 	}
+	// log.Printf("Load config success ...")
 }
 
 // 执行

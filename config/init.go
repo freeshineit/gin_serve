@@ -29,22 +29,23 @@ func getConfig(v *viper.Viper) *Config {
 		JWT:      getJWTConfig(v),
 		App:      getAppConfig(v),
 		Proxy:    getProxyConfig(v),
+		Socket:   getSocketConfig(v),
 	}
 
 	return Conf
 }
 
 // load config
-func InitConfig(Name string) error {
-
+func InitConfig(nameFile string) error {
 	c := viper.GetViper()
 
-	if Name != "" {
-		c.SetConfigFile(Name)
+	if nameFile != "" {
+		c.SetConfigFile(nameFile)
 	} else {
 		c.AddConfigPath("config")
 		c.SetConfigName("config")
 	}
+
 	c.SetConfigType("toml")
 
 	if err := c.ReadInConfig(); err != nil {
@@ -183,6 +184,18 @@ func getProxyConfig(v *viper.Viper) ProxyConfig {
 	}
 
 	return ProxyConfig{
+		Port: port,
+	}
+}
+
+func getSocketConfig(v *viper.Viper) SocketConfig {
+	port := v.GetString("socket.port")
+
+	if port == "" {
+		port = "8082"
+	}
+
+	return SocketConfig{
 		Port: port,
 	}
 }
