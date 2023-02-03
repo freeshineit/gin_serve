@@ -4,7 +4,7 @@ import (
 	"errors"
 	"gin_serve/app/dto"
 	"gin_serve/app/model"
-	"gin_serve/app/repository"
+	"gin_serve/app/repo"
 	"log"
 
 	"github.com/mashingan/smapping"
@@ -19,15 +19,16 @@ type AuthService interface {
 }
 
 type authService struct {
-	userRepository repository.UserRepository
+	userRepository repo.UserRepository
 }
 
-func NewAuthService(userRep repository.UserRepository) AuthService {
+func NewAuthService(userRep repo.UserRepository) AuthService {
 	return &authService{
 		userRepository: userRep,
 	}
 }
 
+// VerifyCredential be used when verify email and password
 func (service *authService) VerifyCredential(email string, password string) (model.User, error) {
 
 	user, err := service.userRepository.VerifyCredential(email)
@@ -44,6 +45,7 @@ func (service *authService) VerifyCredential(email string, password string) (mod
 	return model.User{}, errors.New("user does not exist")
 }
 
+// CreateUser be used when create user
 func (service *authService) CreateUser(user dto.UserRegisterDTO) model.User {
 	userToCreate := model.User{}
 	err := smapping.FillStruct(&userToCreate, smapping.MapFields(&user))
@@ -56,6 +58,8 @@ func (service *authService) CreateUser(user dto.UserRegisterDTO) model.User {
 
 	return res
 }
+
+// FindByEmail be used when find user
 func (service *authService) FindByEmail(email string) model.User {
 	return service.userRepository.FindByEmail(email)
 }

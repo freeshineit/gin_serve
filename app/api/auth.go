@@ -4,7 +4,7 @@ import (
 	"gin_serve/app/config"
 	"gin_serve/app/dto"
 	"gin_serve/app/model"
-	"gin_serve/app/repository"
+	"gin_serve/app/repo"
 	"gin_serve/app/service"
 	"gin_serve/app/utils"
 	"net/http"
@@ -33,7 +33,7 @@ func Register(ctx *gin.Context) {
 		return
 	}
 
-	authService := service.NewAuthService(repository.NewUserRepository(config.DB))
+	authService := service.NewAuthService(repo.NewUserRepository(config.DB))
 
 	if duplicate := authService.IsDuplicateEmail(user.Email); duplicate {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, utils.BuildErrorResponse(1, "register failed!", "email is exist!"))
@@ -64,7 +64,7 @@ func Login(ctx *gin.Context) {
 		return
 	}
 
-	authService := service.NewAuthService(repository.NewUserRepository(config.DB))
+	authService := service.NewAuthService(repo.NewUserRepository(config.DB))
 
 	u, err := authService.VerifyCredential(user.Email, user.Password)
 
