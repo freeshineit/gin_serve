@@ -16,7 +16,7 @@ func SetupDatabaseConnection() *gorm.DB {
 
 	log.Printf("databaseConfig %v", databaseConfig)
 
-	DB, err := gorm.Open(mysql.New(mysql.Config{
+	db, err := gorm.Open(mysql.New(mysql.Config{
 		DSN: fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 			databaseConfig.User,
 			databaseConfig.Password,
@@ -35,7 +35,9 @@ func SetupDatabaseConnection() *gorm.DB {
 		panic("Failed to create a connection to mysql")
 	}
 
-	return DB
+	DB = db
+
+	return db
 }
 
 // close mysql connection
