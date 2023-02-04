@@ -1,6 +1,9 @@
 package helper
 
-import "strings"
+import (
+	"gin_serve/message"
+	"strings"
+)
 
 type Response struct {
 	Data    interface{} `json:"data"`
@@ -19,11 +22,11 @@ type EmptyObj struct{}
 // build response success
 // examples
 // BuildResponse[any]("success", map[string]string{"name": "xxx"})
-func BuildResponse[T any](message string, data T) Response {
+func BuildResponse[T any](msg string, data T) Response {
 
 	res := Response{
-		Code:    0,
-		Message: message,
+		Code:    message.SuccessCode,
+		Message: msg,
 		Data:    data,
 	}
 
@@ -36,12 +39,12 @@ func BuildResponse[T any](message string, data T) Response {
 // err split `\n`
 // examples
 // BuildErrorResponse(1, "用户名不对", "用户名不对\n密码不对")
-func BuildErrorResponse(code int, message string, err string) ErrorResponse {
+func BuildErrorResponse(code int, msg string, err string) ErrorResponse {
 	errs := strings.Split(err, "\n")
 
 	res := ErrorResponse{
 		Code:    code,
-		Message: message,
+		Message: msg,
 		Error:   errs,
 	}
 
