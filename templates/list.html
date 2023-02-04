@@ -125,7 +125,7 @@
                 Axios.get("/api/v1/todos").then(res => {
                     if (res.code == 0) {
                         list = []
-                        res.data.map(todo => {
+                        res.data.list.map(todo => {
                             list.push(genLiTag(todo))
                         })
                         document.getElementById('list').innerHTML = list.join("")
