@@ -96,11 +96,11 @@
                         confirm_password: confirmPassword,
                         avatar,
                         gender,
-                        age
+                        age: +age
                     }).then(res => {
-                        // if (res.code === 0) {
-                        //     location.href = "/login"
-                        // }
+                        if (res.code === 0) {
+                            location.href = "/login"
+                        }
                     })
                 }
 
