@@ -1,7 +1,7 @@
 package repo
 
 import (
-	"gin_serve/app/dto"
+	"gin_serve/app/model"
 	"log"
 
 	"golang.org/x/crypto/bcrypt"
@@ -10,12 +10,12 @@ import (
 
 // UserRepo is contract what userRepository can do tod db
 type UserRepo interface {
-	InsertUser(user dto.User) dto.User
-	UpdateUser(user dto.User) dto.User
-	VerifyCredential(email string) (dto.User, error)
+	InsertUser(user model.User) model.User
+	UpdateUser(user model.User) model.User
+	VerifyCredential(email string) (model.User, error)
 	IsDuplicateEmail(email string) *gorm.DB
-	FindByEmail(email string) dto.User
-	ProfileUser(userID string) dto.User
+	FindByEmail(email string) model.User
+	ProfileUser(userID string) model.User
 }
 
 type userConnection struct {
@@ -30,7 +30,7 @@ func NewUserRepo(db *gorm.DB) UserRepo {
 }
 
 // InsertUser be used when inert user to database
-func (db *userConnection) InsertUser(user dto.User) dto.User {
+func (db *userConnection) InsertUser(user model.User) model.User {
 	// hash password
 	user.Password = hashAndSalt([]byte(user.Password))
 
@@ -39,13 +39,13 @@ func (db *userConnection) InsertUser(user dto.User) dto.User {
 }
 
 // UpdateUser be used when update user to database
-func (db *userConnection) UpdateUser(user dto.User) dto.User {
-	return dto.User{}
+func (db *userConnection) UpdateUser(user model.User) model.User {
+	return model.User{}
 }
 
 // VerifyCredential be used when verify credential
-func (db *userConnection) VerifyCredential(email string) (dto.User, error) {
-	var user dto.User
+func (db *userConnection) VerifyCredential(email string) (model.User, error) {
+	var user model.User
 	res := db.connection.Where("email=?", email).Take(&user)
 
 	if res.Error == nil {
@@ -57,22 +57,22 @@ func (db *userConnection) VerifyCredential(email string) (dto.User, error) {
 
 // IsDuplicateEmail be used when verify duplicate email
 func (db *userConnection) IsDuplicateEmail(email string) (tx *gorm.DB) {
-	var user dto.User
+	var user model.User
 	res := db.connection.Where("email = ?", email).Take(&user)
 
 	return res
 }
 
 // FindByEmail be used when find user by email form database
-func (db *userConnection) FindByEmail(email string) dto.User {
-	var user dto.User
+func (db *userConnection) FindByEmail(email string) model.User {
+	var user model.User
 	db.connection.Where("email = ?", email).Take(&user)
 	return user
 }
 
 // ProfileUser be used when find user by user id form database
-func (db *userConnection) ProfileUser(userID string) dto.User {
-	var user dto.User
+func (db *userConnection) ProfileUser(userID string) model.User {
+	var user model.User
 	db.connection.Find(&user, userID)
 	return user
 }

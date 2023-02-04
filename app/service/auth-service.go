@@ -3,6 +3,7 @@ package service
 import (
 	"errors"
 	"gin_serve/app/dto"
+	"gin_serve/app/model"
 	"gin_serve/app/repo"
 	"log"
 
@@ -30,12 +31,20 @@ func NewAuthService(userRepo repo.UserRepo) AuthService {
 // VerifyCredential be used when verify email and password
 func (service *authService) VerifyCredential(email string, password string) (dto.User, error) {
 
+	userToCreate := dto.User{}
+
 	user, err := service.userRepos.VerifyCredential(email)
 
 	if err == nil {
 		result := comparePassword(user.Password, password)
 		if result && user.Email == email {
-			return user, nil
+			err := smapping.FillStruct(&userToCreate, smapping.MapFields(&user))
+
+			if err != nil {
+				log.Fatalf("Failed map %v", err)
+			}
+
+			return userToCreate, nil
 		} else {
 			return dto.User{}, errors.New("password error")
 		}
@@ -46,21 +55,34 @@ func (service *authService) VerifyCredential(email string, password string) (dto
 
 // CreateUser be used when create user
 func (service *authService) CreateUser(user dto.UserRegisterDTO) dto.User {
-	userToCreate := dto.User{}
+	userToCreate := model.User{}
+
 	err := smapping.FillStruct(&userToCreate, smapping.MapFields(&user))
 
 	if err != nil {
 		log.Fatalf("Failed map %v", err)
 	}
 
-	res := service.userRepos.InsertUser(userToCreate)
+	userToDTO := dto.User{}
 
-	return res
+	res := service.userRepos.InsertUser(userToCreate)
+	smapping.FillStruct(&userToDTO, smapping.MapFields(&res))
+
+	return userToDTO
 }
 
 // FindByEmail be used when find user
 func (service *authService) FindByEmail(email string) dto.User {
-	return service.userRepos.FindByEmail(email)
+
+	userToDTO := dto.User{}
+	user := service.userRepos.FindByEmail(email)
+	err := smapping.FillStruct(&userToDTO, smapping.MapFields(&user))
+
+	if err != nil {
+		log.Fatalf("Failed map %v", err)
+	}
+
+	return userToDTO
 }
 
 // 判读重复邮箱

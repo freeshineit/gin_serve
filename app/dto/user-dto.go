@@ -1,10 +1,13 @@
 package dto
 
-import "gin_serve/app/model"
-
 type User struct {
-	model.User
 	Model
+	ID     uint64 `json:"id" form:"id" binding:"required"`
+	Name   string `json:"name" form:"name" binding:"required"`
+	Email  string `json:"email" form:"email" binding:"required,email"`
+	Age    uint   `json:"age" form:"age" binding:"required,gte=1,lte=200"`
+	Gender string `json:"gender" form:"gender" binding:"required"`
+	Avatar string `json:"avatar" form:"avatar" binding:"required"`
 }
 
 // UserRegisterDTO is used by when user register
