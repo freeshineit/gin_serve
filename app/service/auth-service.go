@@ -3,7 +3,6 @@ package service
 import (
 	"errors"
 	"gin_serve/app/dto"
-	"gin_serve/app/model"
 	"gin_serve/app/repo"
 	"log"
 
@@ -12,61 +11,62 @@ import (
 )
 
 type AuthService interface {
-	VerifyCredential(email string, password string) (model.User, error)
-	CreateUser(user dto.UserRegisterDTO) model.User
-	FindByEmail(email string) model.User
+	VerifyCredential(email string, password string) (dto.User, error)
+	CreateUser(user dto.UserRegisterDTO) dto.User
+	FindByEmail(email string) dto.User
 	IsDuplicateEmail(email string) bool
 }
 
 type authService struct {
-	userRepository repo.UserRepository
+	userRepos repo.UserRepo
 }
 
-func NewAuthService(userRep repo.UserRepository) AuthService {
+func NewAuthService(userRepo repo.UserRepo) AuthService {
 	return &authService{
-		userRepository: userRep,
+		userRepos: userRepo,
 	}
 }
 
 // VerifyCredential be used when verify email and password
-func (service *authService) VerifyCredential(email string, password string) (model.User, error) {
+func (service *authService) VerifyCredential(email string, password string) (dto.User, error) {
 
-	user, err := service.userRepository.VerifyCredential(email)
+	user, err := service.userRepos.VerifyCredential(email)
 
 	if err == nil {
 		result := comparePassword(user.Password, password)
 		if result && user.Email == email {
 			return user, nil
 		} else {
-			return model.User{}, errors.New("password error")
+			return dto.User{}, errors.New("password error")
 		}
 	}
 
-	return model.User{}, errors.New("user does not exist")
+	return dto.User{}, errors.New("user does not exist")
 }
 
 // CreateUser be used when create user
-func (service *authService) CreateUser(user dto.UserRegisterDTO) model.User {
-	userToCreate := model.User{}
+func (service *authService) CreateUser(user dto.UserRegisterDTO) dto.User {
+	userToCreate := dto.User{}
 	err := smapping.FillStruct(&userToCreate, smapping.MapFields(&user))
 
 	if err != nil {
 		log.Fatalf("Failed map %v", err)
 	}
 
-	res := service.userRepository.InsertUser(userToCreate)
+	res := service.userRepos.InsertUser(userToCreate)
 
 	return res
 }
 
 // FindByEmail be used when find user
-func (service *authService) FindByEmail(email string) model.User {
-	return service.userRepository.FindByEmail(email)
+func (service *authService) FindByEmail(email string) dto.User {
+	return service.userRepos.FindByEmail(email)
 }
 
 // 判读重复邮箱
 func (service *authService) IsDuplicateEmail(email string) bool {
-	res := service.userRepository.IsDuplicateEmail(email)
+	res := service.userRepos.IsDuplicateEmail(email)
+
 	// 重复
 	return res.Error == nil
 }

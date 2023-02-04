@@ -33,7 +33,7 @@ func Register(ctx *gin.Context) {
 		return
 	}
 
-	authService := service.NewAuthService(repo.NewUserRepository(config.DB))
+	authService := service.NewAuthService(repo.NewUserRepo(config.DB))
 
 	if duplicate := authService.IsDuplicateEmail(user.Email); duplicate {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(1, "register failed!", "email is exist!"))
@@ -64,7 +64,7 @@ func Login(ctx *gin.Context) {
 		return
 	}
 
-	authService := service.NewAuthService(repo.NewUserRepository(config.DB))
+	authService := service.NewAuthService(repo.NewUserRepo(config.DB))
 
 	u, err := authService.VerifyCredential(user.Email, user.Password)
 

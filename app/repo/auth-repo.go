@@ -1,36 +1,36 @@
 package repo
 
 import (
-	"gin_serve/app/model"
+	"gin_serve/app/dto"
 	"log"
 
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
-// UserRepository is contract what userRepository can do tod db
-type UserRepository interface {
-	InsertUser(user model.User) model.User
-	UpdateUser(user model.User) model.User
-	VerifyCredential(email string) (model.User, error)
+// UserRepo is contract what userRepository can do tod db
+type UserRepo interface {
+	InsertUser(user dto.User) dto.User
+	UpdateUser(user dto.User) dto.User
+	VerifyCredential(email string) (dto.User, error)
 	IsDuplicateEmail(email string) *gorm.DB
-	FindByEmail(email string) model.User
-	ProfileUser(userID string) model.User
+	FindByEmail(email string) dto.User
+	ProfileUser(userID string) dto.User
 }
 
 type userConnection struct {
 	connection *gorm.DB
 }
 
-// NewUserRepository new user repository
-func NewUserRepository(db *gorm.DB) UserRepository {
+// NewUserRepo new user repository
+func NewUserRepo(db *gorm.DB) UserRepo {
 	return &userConnection{
 		connection: db,
 	}
 }
 
 // InsertUser be used when inert user to database
-func (db *userConnection) InsertUser(user model.User) model.User {
+func (db *userConnection) InsertUser(user dto.User) dto.User {
 	// hash password
 	user.Password = hashAndSalt([]byte(user.Password))
 
@@ -39,13 +39,13 @@ func (db *userConnection) InsertUser(user model.User) model.User {
 }
 
 // UpdateUser be used when update user to database
-func (db *userConnection) UpdateUser(user model.User) model.User {
-	return model.User{}
+func (db *userConnection) UpdateUser(user dto.User) dto.User {
+	return dto.User{}
 }
 
 // VerifyCredential be used when verify credential
-func (db *userConnection) VerifyCredential(email string) (model.User, error) {
-	var user model.User
+func (db *userConnection) VerifyCredential(email string) (dto.User, error) {
+	var user dto.User
 	res := db.connection.Where("email=?", email).Take(&user)
 
 	if res.Error == nil {
@@ -57,20 +57,22 @@ func (db *userConnection) VerifyCredential(email string) (model.User, error) {
 
 // IsDuplicateEmail be used when verify duplicate email
 func (db *userConnection) IsDuplicateEmail(email string) (tx *gorm.DB) {
-	var user model.User
-	return db.connection.Where("email = ?", email).Take(&user)
+	var user dto.User
+	res := db.connection.Where("email = ?", email).Take(&user)
+
+	return res
 }
 
 // FindByEmail be used when find user by email form database
-func (db *userConnection) FindByEmail(email string) model.User {
-	var user model.User
+func (db *userConnection) FindByEmail(email string) dto.User {
+	var user dto.User
 	db.connection.Where("email = ?", email).Take(&user)
 	return user
 }
 
 // ProfileUser be used when find user by user id form database
-func (db *userConnection) ProfileUser(userID string) model.User {
-	var user model.User
+func (db *userConnection) ProfileUser(userID string) dto.User {
+	var user dto.User
 	db.connection.Find(&user, userID)
 	return user
 }

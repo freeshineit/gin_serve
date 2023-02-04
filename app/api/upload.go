@@ -15,11 +15,12 @@ import (
 // @ID				file.upload
 // @Accept			multipart/form-data
 // @Produce		json
-// @Param		file	formData	file true	"this is a test file"
+// @Param		file	formData	file true	"upload image"
 // @Success		200		{object}	helper.Response
 // @Failure		400		{object}	helper.Response
 // @Failure		404		{object}	helper.Response
 // @Router		/api/file_upload [post]
+// @Security    ApiKeyAuth
 func FileUpload(c *gin.Context) {
 
 	filesURL := make([]string, 0)

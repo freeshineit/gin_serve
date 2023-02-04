@@ -22,6 +22,7 @@ var Todos = make([]model.Todo, 0)
 // @Param       id   path   int  true   "todo id"
 // @Success		200	 {object}	helper.Response
 // @Router		/api/v1/todo/{id} [get]
+// @Security    ApiKeyAuth
 func GetTodo(c *gin.Context) {
 	id := c.Param("id")
 
@@ -52,6 +53,7 @@ func GetTodo(c *gin.Context) {
 // @Produce		json
 // @Success		200	 {object}	helper.Response
 // @Router		/api/v1/todos [get]
+// @Security    ApiKeyAuth
 func GetTodos(c *gin.Context) {
 	c.JSON(http.StatusOK, helper.BuildResponse("success", Todos))
 }
@@ -65,6 +67,7 @@ func GetTodos(c *gin.Context) {
 // @Produce		json
 // @Success		200	 {object}	helper.Response
 // @Router		/api/v1/todo/{id}/content [put]
+// @Security    ApiKeyAuth
 func PutTodoContent(c *gin.Context) {
 	id := c.Param("id")
 	aid, err := strconv.Atoi(id)
@@ -107,6 +110,7 @@ func PutTodoContent(c *gin.Context) {
 // @Produce		json
 // @Success		200	 {object}	helper.Response
 // @Router		/api/v1/todo/{id}/status [put]
+// @Security    ApiKeyAuth
 func PutTodoStatus(c *gin.Context) {
 
 	id := c.Param("id")
@@ -144,6 +148,7 @@ func PutTodoStatus(c *gin.Context) {
 // @Produce		json
 // @Success		200	 {object}  helper.Response
 // @Router		/v1/todo/{id} [delete]
+// @Security    ApiKeyAuth
 func DeleteTodo(c *gin.Context) {
 	id := c.Param("id")
 	aid, err := strconv.Atoi(id)
@@ -175,6 +180,7 @@ func DeleteTodo(c *gin.Context) {
 // @Produce		json
 // @Success		200	 {object}	helper.Response
 // @Router		/api/v1/todo [post]
+// @Security    ApiKeyAuth
 func CreateTodo(c *gin.Context) {
 
 	var todo model.Todo

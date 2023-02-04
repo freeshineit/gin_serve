@@ -26,8 +26,7 @@ func JwtAuth() gin.HandlerFunc {
 			return
 		}
 
-		authorization = strings.Fields(authorization)[1]
-		// log.Println("authorization", authorization)
+		authorization = strings.Replace(authorization, "Basic ", "", 1)
 
 		token, err := helper.ValidateToken(authorization)
 

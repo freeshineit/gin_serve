@@ -13,7 +13,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// app serve
 func Serve(mode string) error {
 
 	if mode == "release" {
