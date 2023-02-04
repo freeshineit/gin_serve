@@ -12,9 +12,9 @@ import (
 )
 
 type AuthService interface {
-	VerifyCredential(email string, password string) (dto.User, error)
-	CreateUser(user dto.UserRegisterDTO) dto.User
-	FindByEmail(email string) dto.User
+	VerifyCredential(email string, password string) (dto.UserDTO, error)
+	CreateUser(user dto.UserRegisterDTO) dto.UserDTO
+	FindByEmail(email string) dto.UserDTO
 	IsDuplicateEmail(email string) bool
 }
 
@@ -29,9 +29,9 @@ func NewAuthService(userRepo repo.UserRepo) AuthService {
 }
 
 // VerifyCredential be used when verify email and password
-func (service *authService) VerifyCredential(email string, password string) (dto.User, error) {
+func (service *authService) VerifyCredential(email string, password string) (dto.UserDTO, error) {
 
-	userToCreate := dto.User{}
+	userToCreate := dto.UserDTO{}
 
 	user, err := service.userRepos.VerifyCredential(email)
 
@@ -46,15 +46,15 @@ func (service *authService) VerifyCredential(email string, password string) (dto
 
 			return userToCreate, nil
 		} else {
-			return dto.User{}, errors.New("password error")
+			return dto.UserDTO{}, errors.New("password error")
 		}
 	}
 
-	return dto.User{}, errors.New("user does not exist")
+	return dto.UserDTO{}, errors.New("user does not exist")
 }
 
 // CreateUser be used when create user
-func (service *authService) CreateUser(user dto.UserRegisterDTO) dto.User {
+func (service *authService) CreateUser(user dto.UserRegisterDTO) dto.UserDTO {
 	userToCreate := model.User{}
 
 	err := smapping.FillStruct(&userToCreate, smapping.MapFields(&user))
@@ -63,7 +63,7 @@ func (service *authService) CreateUser(user dto.UserRegisterDTO) dto.User {
 		log.Fatalf("Failed map %v", err)
 	}
 
-	userToDTO := dto.User{}
+	userToDTO := dto.UserDTO{}
 
 	res := service.userRepos.InsertUser(userToCreate)
 	smapping.FillStruct(&userToDTO, smapping.MapFields(&res))
@@ -72,9 +72,9 @@ func (service *authService) CreateUser(user dto.UserRegisterDTO) dto.User {
 }
 
 // FindByEmail be used when find user
-func (service *authService) FindByEmail(email string) dto.User {
+func (service *authService) FindByEmail(email string) dto.UserDTO {
 
-	userToDTO := dto.User{}
+	userToDTO := dto.UserDTO{}
 	user := service.userRepos.FindByEmail(email)
 	err := smapping.FillStruct(&userToDTO, smapping.MapFields(&user))
 
