@@ -6,16 +6,23 @@ import (
 	"gin_serve/app/model"
 	"gin_serve/helper"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
 func GetUserByID(c *gin.Context) {
 
-	id := c.GetUint("id")
+	id := c.Param("id")
+
+	nID, err := strconv.ParseUint(id, 10, 0)
+
+	if err != nil {
+
+	}
 
 	c.JSON(http.StatusOK, helper.BuildResponse("success", model.User{
-		ID:     id,
+		ID:     nID,
 		Name:   "XiaoShao",
 		Email:  "xiaoshaoqq@gmail.com",
 		Gender: "M",
@@ -24,11 +31,17 @@ func GetUserByID(c *gin.Context) {
 }
 
 func DeleteUser(c *gin.Context) {
-	// id := c.Param("id")
-	id := c.GetUint("id")
+
+	id := c.Param("id")
+
+	nID, err := strconv.ParseUint(id, 10, 0)
+
+	if err != nil {
+
+	}
 
 	c.JSON(http.StatusOK, helper.BuildResponse("success", model.User{
-		ID:     id,
+		ID:     nID,
 		Name:   "XiaoShao",
 		Email:  "xiaoshaoqq@gmail.com",
 		Gender: "M",
@@ -37,11 +50,16 @@ func DeleteUser(c *gin.Context) {
 }
 
 func UpdateUser(c *gin.Context) {
-	// id := c.Param("id")
-	id := c.GetUint("id")
+	id := c.Param("id")
+
+	nID, err := strconv.ParseUint(id, 10, 0)
+
+	if err != nil {
+
+	}
 
 	c.JSON(http.StatusOK, helper.BuildResponse("success", model.User{
-		ID:     id,
+		ID:     nID,
 		Name:   "XiaoShao",
 		Email:  "xiaoshaoqq@gmail.com",
 		Gender: "M",
