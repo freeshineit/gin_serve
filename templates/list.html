@@ -108,7 +108,9 @@
                 // checked
                 if (e.target.tagName === 'INPUT') {
                     const id = e.target.dataset.id
-                    Axios.put(`/api/v1/todo/${id}/status`)
+                    const status = e.target.checked ? 1 : 0
+
+                    Axios.put(`/api/v1/todo/${id}/status`, { status })
                 } else if (e.target.tagName === "A") {
                     const id = e.target.dataset.id
                     Axios.delete(`/api/v1/todo/${id}`).then(res => {

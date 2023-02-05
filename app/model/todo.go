@@ -13,8 +13,8 @@ const (
 
 type Todo struct {
 	gorm.Model
-	ID      uint             `json:"id" form:"id" gorm:"primary_key:auto_increment"`
-	UserID  uint             `json:"user_id" form:"user_id" gorm:"type:int;not null"`
-	Status  Todo_Status_Type `json:"status" form:"status" gorm:"type:int;not null"`
-	Content string           `json:"content" form:"content" gorm:"type:text;"`
+	ID      uint              `json:"id" form:"id" gorm:"primary_key:auto_increment"`
+	UserID  uint64            `json:"user_id" form:"user_id" gorm:"type:int;not null"`
+	Status  *Todo_Status_Type `json:"status" form:"status" gorm:"type:int;not null"`
+	Content string            `json:"content" form:"content" gorm:"type:text;"`
 }
