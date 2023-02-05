@@ -8,7 +8,6 @@ import (
 	"gin_serve/config"
 	"gin_serve/helper"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -73,7 +72,7 @@ func Login(ctx *gin.Context) {
 		return
 	}
 
-	token, err := helper.GenerateToken(strconv.Itoa(int(u.ID)))
+	token, err := helper.GenerateToken(u.ID)
 
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(1, "token generate fail", err.Error()))
