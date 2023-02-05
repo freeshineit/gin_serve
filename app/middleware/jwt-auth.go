@@ -2,41 +2,40 @@ package middleware
 
 import (
 	"gin_serve/helper"
+	"gin_serve/message"
 	"net/http"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 )
+
+var TokenClaims = "TokenClaims"
 
 // the jwt middleware
 // JWTAuth jwt中间件
 func JwtAuth() gin.HandlerFunc {
 
-	return func(c *gin.Context) {
-		authorization := c.GetHeader("Authorization")
+	return func(ctx *gin.Context) {
+		// // cookie, _ := c.Cookie("authorization")
+		// // if err != nil {
+		// // 	c.AbortWithStatusJSON(http.StatusUnauthorized, helper.BuildErrorResponse(401, "no token", "no token found"))
+		// // }
+		// // log.Println("cookie", cookie)
 
-		// cookie, _ := c.Cookie("authorization")
-		// if err != nil {
-		// 	c.AbortWithStatusJSON(http.StatusUnauthorized, helper.BuildErrorResponse(401, "no token", "no token found"))
-		// }
-		// log.Println("cookie", cookie)
+		authorization := helper.GetHeaderToken(ctx)
 
-		if len(authorization) == 0 {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, helper.BuildErrorResponse(401, "no token", "no token found"))
+		if authorization == "" {
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, helper.BuildErrorResponse(message.UnauthorizedCode, message.Unauthorized, message.Unauthorized))
 			return
 		}
 
-		authorization = strings.Replace(authorization, "Basic ", "", 1)
-
-		token, err := helper.ValidateToken(authorization)
+		token, tokenClaims, err := helper.ValidateTokenAndClaims(authorization)
 
 		if err == nil && token.Valid {
-			// c.Set("user", user)
-			c.Next()
+			ctx.Set(TokenClaims, tokenClaims)
+			ctx.Next()
 			return
 		} else {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, helper.BuildErrorResponse(401, "token is expired", "token is expired"))
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, helper.BuildErrorResponse(message.UnauthorizedCode, message.UnauthorizedExpired, message.UnauthorizedExpired))
 		}
-
 	}
 }
