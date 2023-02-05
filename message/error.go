@@ -1,10 +1,12 @@
 package message
 
+import "net/http"
+
 const (
 	// Unauthorized
-	UnauthorizedCode    = 401
-	Unauthorized        = "no permission"
-	UnauthorizedExpired = "token is expired"
+	UnauthorizedCode    = http.StatusUnauthorized // 402
+	Unauthorized        = "no permission"         // no permission
+	UnauthorizedExpired = "token is expired"      // token is expired
 	// bad
-
+	BadRequestCode = http.StatusBadRequest // 400
 )
