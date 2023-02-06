@@ -8,6 +8,8 @@
 # 初始化 mysql , redis 等 （前提是已经安装docker） 
 # initialization docker container, mysql, redis...
 docker-compose -f docker-compose.yaml up -d
+# or
+make db
 
 # run development
 # https://github.com/cosmtrek/air Live reload for Go apps

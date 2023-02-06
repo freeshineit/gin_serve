@@ -19,17 +19,11 @@ services:
     ports:
       - 3306:3306
 
-    # 网络和ip
-    # networks:
-    #   extnetwork:
-    #     ipv4_address: 192.168.0.2
-
     privileged: true
     restart: always
 
   redis:
     image: redis:6
-
     container_name: redis_container
 
     ports:
@@ -41,15 +35,5 @@ services:
 
     command: redis-server /etc/redis/redis.conf
 
-    # networks:
-    #   extnetwork:
-    #     ipv4_address: 192.168.0.3
-
     privileged: true
     restart: always
-
-networks:
-  extnetwork:
-    ipam:
-      config:
-        - subnet: 192.168.0.0/16

@@ -29,3 +29,6 @@ build:
 clean:
 	$(GOCLEAN)
 	@rm -f $(BINARY)
+
+db: 
+	docker-compose -f docker-compose.yaml up -d
