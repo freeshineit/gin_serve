@@ -2,9 +2,9 @@ package routes
 
 import (
 	"gin_serve/app/api"
+	socket "gin_serve/app/api/socket"
 	v1 "gin_serve/app/api/v1"
 	v2 "gin_serve/app/api/v2"
-	"gin_serve/app/api/ws"
 	"gin_serve/app/middleware"
 	"gin_serve/helper"
 	"net/http"
@@ -86,13 +86,12 @@ func RegisterV2GroupWithAuth(router *gin.RouterGroup) *gin.RouterGroup {
 
 // register socket api /ws/xxx
 func RegisterWsGroup(router *gin.RouterGroup) *gin.RouterGroup {
-	router.GET("/ping", ws.Ping)
+	router.GET("/ping", socket.Ping)
 	return router
 }
 
 // register socket api /ws/xxx with auth
 func RegisterWsGroupWithAuth(router *gin.RouterGroup) *gin.RouterGroup {
-	router.Group("/", jwtAuthMiddleware)
-
+	// router.Group("/", jwtAuthMiddleware)
 	return router
 }

@@ -14,8 +14,11 @@ docker-compose -f docker-compose.yaml up -d
 air
 
 ## development
-# http://localhost:3000
-go run cmd/main.go --port=3000 --proxy-port=3001 
+# http://localhost:8080
+# http://localhost:8081
+# http://localhost:8082
+# http://localhost:8080/swagger/index.html
+go run cmd/main.go
 
 # build
 make build
@@ -24,12 +27,12 @@ make build
 ./bin/app --help
 
 # run production 
-./bin/app --port=3000 --mode=release --proxy-port=3001 
+./bin/app --mode=release
 
 # docker deploy app
 docker build -t gin_serve:v0.1 .
 # run docker
-docker run -it -p 3000:3000 --rm --name gin_serve gin_serve:v0.1
+docker run -it -p 3000:3000 -p 3001:3001 -p 3002:3002 --rm --name gin_serve gin_serve:v0.1
 
 
 # generate api docs

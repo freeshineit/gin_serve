@@ -45,15 +45,15 @@ func Serve(mode string) error {
 		Handler: r,
 	}
 
-	log.Printf("listen: %s\n", helper.ColorBlueString("http://localhost:"+port))
+	log.Printf("app server listen: %s\n", helper.ColorBlueString("http://localhost:"+port))
 
 	err := helper.ListenAndServe(srv)
 
 	if err != nil {
-		log.Fatal("Server forced to shutdown:", err)
+		log.Fatal("App server forced to shutdown:", err)
 	}
 
-	log.Println("Server exiting")
+	log.Println("App server exiting")
 
 	// close
 	defer config.CloseMysqlConnection(DB)

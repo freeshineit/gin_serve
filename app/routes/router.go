@@ -34,7 +34,10 @@ func SetupRoutes(router *gin.Engine) *gin.Engine {
 		RegisterV2Group(apiV2Group)
 		RegisterV2GroupWithAuth(apiV2Group)
 	}
+	return router
+}
 
+func SetupSocketRoutes(router *gin.Engine) *gin.Engine {
 	// socket /ws
 	socketGroup := router.Group("/ws")
 	{

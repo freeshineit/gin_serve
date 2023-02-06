@@ -3,6 +3,7 @@ package main
 import (
 	"gin_serve/cmd/app"
 	"gin_serve/cmd/proxy"
+	"gin_serve/cmd/socket"
 	cmd "gin_serve/cmd/version"
 	"log"
 
@@ -35,6 +36,10 @@ var rootCmd = &cobra.Command{
 
 		g.Go(func() error {
 			return proxy.Serve(mode)
+		})
+
+		g.Go(func() error {
+			return socket.Serve(mode)
 		})
 
 		if err := g.Wait(); err != nil {
