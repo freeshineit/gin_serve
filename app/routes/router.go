@@ -43,7 +43,7 @@ func SetupSocketRoutes(router *gin.Engine) *gin.Engine {
 	{
 		// register.go
 		RegisterWsGroup(socketGroup)
-		RegisterV2GroupWithAuth(socketGroup)
+		RegisterWsGroupWithAuth(socketGroup)
 	}
 
 	return router
