@@ -10,4 +10,5 @@ COPY ./templates /usr/app/bin/templates
 # COPY ./config/config.yaml /usr/app/bin/config
 EXPOSE 3000
 EXPOSE 3001
-ENTRYPOINT ./bin/app --port=3000 --mode=release --proxy-port=3001 
+EXPOSE 3002
+ENTRYPOINT ./bin/app --mode=release
