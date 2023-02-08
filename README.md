@@ -10,7 +10,7 @@ docker network create my_net
 # 初始化 mysql , redis 等 （前提是已经安装docker） 
 # initialization docker container, mysql, redis...
 docker-compose -f db-docker-compose.yaml up -d
-# or
+# or (Makefile)
 make db
 
 # run development
@@ -24,7 +24,7 @@ air
 # http://localhost:8080/swagger/index.html
 go run cmd/main.go
 
-# build
+# build (Makefile)
 make build
 
 # help
@@ -41,7 +41,7 @@ docker build -t gin_serve:latest .
 # run docker
 docker run -it -p 3000:3000 -p 3001:3001 -p 3002:3002 --rm --net my_net --name gin_serve_api_service gin_serve:latest
 
-# or
+# or (Makefile)
 make api
 
 
