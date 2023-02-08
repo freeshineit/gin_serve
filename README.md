@@ -4,6 +4,8 @@
 ## Use
 
 ```bash
+# create docker network
+docker network create my_net
 
 # 初始化 mysql , redis 等 （前提是已经安装docker） 
 # initialization docker container, mysql, redis...
@@ -30,7 +32,6 @@ make build
 
 # run production 
 ./bin/app --mode=release
-
 
 # docker deploy app
 docker build -t gin_serve:latest .
