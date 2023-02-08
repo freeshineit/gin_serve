@@ -7,7 +7,7 @@
 
 # 初始化 mysql , redis 等 （前提是已经安装docker） 
 # initialization docker container, mysql, redis...
-docker-compose -f docker-compose.yaml up -d
+docker-compose -f db-docker-compose.yaml up -d
 # or
 make db
 
@@ -32,9 +32,12 @@ make build
 ./bin/app --mode=release
 
 # docker deploy app
-docker build -t gin_serve:v0.1 .
+docker build -t gin_serve:latest .
 # run docker
-docker run -it -p 3000:3000 -p 3001:3001 -p 3002:3002 --rm --name gin_serve gin_serve:v0.1
+docker run -it -p 3000:3000 -p 3001:3001 -p 3002:3002 --rm --net my_net --name gin_serve_api_service gin_serve:latest
+
+# or
+make api
 
 
 # generate api docs

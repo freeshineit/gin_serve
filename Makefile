@@ -31,4 +31,10 @@ clean:
 	@rm -f $(BINARY)
 
 db: 
-	docker-compose -f docker-compose.yaml up -d
+# docker network create my_net
+	docker-compose -f db-docker-compose.yaml up -d
+
+api:
+	docker build -t gin_serve:latest .
+# docker network create my_net
+	docker-compose -f api-docker-compose.yaml up -d

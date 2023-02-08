@@ -1,0 +1,17 @@
+version: "3"
+services:
+  gin_serve_api:
+    container_name: gin_serve_api_service
+    image: gin_serve:latest
+        # 端口映射
+    ports:
+      - 3000:3000
+      - 3001:3001
+      - 3002:3002
+      
+    networks:
+      - my_net
+
+networks:
+  my_net:
+    external: true
