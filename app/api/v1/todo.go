@@ -3,7 +3,6 @@ package v1
 import (
 	"gin_serve/app/dto"
 	"gin_serve/app/middleware"
-	"gin_serve/app/model"
 	"gin_serve/app/repo"
 	"gin_serve/app/service"
 	"gin_serve/config"
@@ -105,7 +104,7 @@ func GetTodos(ctx *gin.Context) {
 
 		list, total, _ := service.FindAll(userID, query.Offset, query.Page, 10)
 
-		ctx.JSON(http.StatusCreated, helper.BuildResponse("success", dto.ListDTO[model.Todo]{
+		ctx.JSON(http.StatusCreated, helper.BuildResponse("success", dto.ListDTO[dto.TodoDTO]{
 			List: list,
 			Page: dto.PaginationResponseDTO{
 				Offset: 1,
