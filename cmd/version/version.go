@@ -1,4 +1,4 @@
-package cmd
+package version
 
 import (
 	"fmt"
@@ -7,6 +7,7 @@ import (
 )
 
 var version = "0.1.0"
+
 var VersionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Print the version number of Serve",

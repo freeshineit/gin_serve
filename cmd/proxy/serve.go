@@ -10,7 +10,18 @@ import (
 	"net/url"
 
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/cobra"
 )
+
+var ProxyCmd = &cobra.Command{
+	Use:   "proxy",
+	Short: "Run proxy serve",
+	Long:  ``,
+	Run: func(cmd *cobra.Command, args []string) {
+		mode := cmd.Flag("mode").Value.String()
+		Serve(mode)
+	},
+}
 
 func Serve(mode string) error {
 	r := gin.Default()

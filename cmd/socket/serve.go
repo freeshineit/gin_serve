@@ -9,7 +9,18 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/cobra"
 )
+
+var SocketCmd = &cobra.Command{
+	Use:   "socket",
+	Short: "Run socket serve",
+	Long:  ``,
+	Run: func(cmd *cobra.Command, args []string) {
+		mode := cmd.Flag("mode").Value.String()
+		Serve(mode)
+	},
+}
 
 func Serve(mode string) error {
 
