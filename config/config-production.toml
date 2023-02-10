@@ -12,6 +12,8 @@
   issuer = "xiaoshaoqq@gmail.com"
 
 [database.mysql]
+# docker mysql service
+# Need to be used in docker
   host = "mysql-service"
   port = 3306
   database = "go_app"
@@ -20,6 +22,8 @@
   connection_max = 1000
 
 [cache.redis]
+# Docker redis service
+# Need to be used in docker
   host = "redis-service"
   port = 6379
   db = 5

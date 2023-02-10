@@ -24,7 +24,7 @@ air
 # http://localhost:8080/swagger/index.html
 go run cmd/main.go
 
-# build (Makefile)
+# Run make build to compile app.
 make build
 
 # help
