@@ -1,13 +1,12 @@
 package proxy
 
 import (
-	"fmt"
+	"gin_serve/app/middleware"
+	"gin_serve/app/routes"
 	"gin_serve/config"
 	"gin_serve/helper"
 	"log"
 	"net/http"
-	"net/http/httputil"
-	"net/url"
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cobra"
@@ -24,7 +23,10 @@ var ProxyCmd = &cobra.Command{
 }
 
 func Serve(mode string) error {
-	r := gin.Default()
+
+	r := gin.New()
+
+	r.Use(middleware.Logger(), gin.Recovery())
 
 	if mode == "release" {
 		gin.SetMode(gin.ReleaseMode)
@@ -33,7 +35,7 @@ func Serve(mode string) error {
 	port := config.Conf.Proxy.Port
 
 	// Create a catchall route
-	r.Any("/*proxyPath", Proxy)
+	routes.SetupProxyRoutes(r)
 
 	srv := &http.Server{
 		Addr:    ":" + port,
@@ -51,40 +53,4 @@ func Serve(mode string) error {
 	log.Println("Proxy server exiting")
 
 	return err
-}
-
-func Proxy(c *gin.Context) {
-	// curl http://localhost:8081
-	// google 香港
-	remote, err := url.Parse("https://www.google.com.hk")
-
-	if err != nil {
-		panic(err)
-	}
-
-	proxy := httputil.NewSingleHostReverseProxy(remote)
-	// Define the director func
-	// This is a good place to log, for example
-	proxy.Director = func(req *http.Request) {
-
-		header1 := map[string][]string{
-			// "Accept-Encoding": {"gzip, deflate"},
-			// "Accept-Language": {"en-us"},
-			"User-Agent": {"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36"},
-		}
-
-		//
-		req.Header = helper.MergeMap(c.Request.Header, header1)
-		// req.Header = c.Request.Header
-		req.Host = remote.Host
-		req.URL.Scheme = remote.Scheme
-		req.URL.Host = remote.Host
-		req.URL.Path = c.Param("proxyPath")
-		// set UserAgent
-		fmt.Println(req.Header)
-	}
-
-	// fmt.Println(c.Param("proxyPath"))
-
-	proxy.ServeHTTP(c.Writer, c.Request)
 }

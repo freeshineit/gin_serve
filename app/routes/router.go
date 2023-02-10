@@ -1,6 +1,8 @@
 package routes
 
 import (
+	"gin_serve/app/api/proxy"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -37,6 +39,7 @@ func SetupRoutes(router *gin.Engine) *gin.Engine {
 	return router
 }
 
+// socket router
 func SetupSocketRoutes(router *gin.Engine) *gin.Engine {
 	// socket /ws
 	socketGroup := router.Group("/ws")
@@ -46,5 +49,12 @@ func SetupSocketRoutes(router *gin.Engine) *gin.Engine {
 		RegisterWsGroupWithAuth(socketGroup)
 	}
 
+	return router
+}
+
+// proxy router
+func SetupProxyRoutes(router *gin.Engine) *gin.Engine {
+	// proxy
+	router.Any("/*proxyPath", proxy.Proxy)
 	return router
 }
