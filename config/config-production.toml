@@ -13,7 +13,7 @@
 
 [database.mysql]
 # docker mysql service
-# Need to be used in docker
+# Need to be used in docker, if you use another host, please modify
   host = "mysql-service"
   port = 3306
   database = "go_app"
@@ -23,7 +23,7 @@
 
 [cache.redis]
 # Docker redis service
-# Need to be used in docker
+# Need to be used in docker, if you use another host, please modify
   host = "redis-service"
   port = 6379
   db = 5
