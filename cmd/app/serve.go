@@ -4,6 +4,7 @@ import (
 	"gin_serve/app/middleware"
 	"gin_serve/app/model"
 	"gin_serve/app/routes"
+
 	"gin_serve/config"
 	"gin_serve/helper"
 	"gin_serve/swagger"

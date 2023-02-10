@@ -3,6 +3,7 @@ package socket
 import (
 	"gin_serve/app/middleware"
 	"gin_serve/app/routes"
+
 	"gin_serve/config"
 	"gin_serve/helper"
 	"log"
@@ -31,6 +32,7 @@ func Serve(mode string) error {
 	port := config.Conf.Socket.Port
 
 	r := gin.New()
+
 	r.Use(middleware.Logger(), gin.Recovery())
 
 	routes.SetupSocketRoutes(r)
