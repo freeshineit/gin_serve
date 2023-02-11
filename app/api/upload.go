@@ -12,6 +12,7 @@ import (
 // FileUpload file upload
 // @Summary		Upload file
 // @Description	Upload file
+// @Tags	    Upload
 // @ID				file.upload
 // @Accept			multipart/form-data
 // @Produce		json
