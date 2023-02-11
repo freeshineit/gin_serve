@@ -1,6 +1,7 @@
 package api
 
 import (
+	"gin_serve/config"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -36,7 +37,9 @@ func ListPage(c *gin.Context) {
 // socket page
 // router [/socket]
 func SocketPage(c *gin.Context) {
-	c.HTML(http.StatusOK, "socket.html", gin.H{})
+	c.HTML(http.StatusOK, "socket.html", gin.H{
+		"port": config.Conf.Socket.Port,
+	})
 }
 
 func AuthPage(c *gin.Context) {

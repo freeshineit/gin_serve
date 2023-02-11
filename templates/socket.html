@@ -37,7 +37,7 @@
     </div>
     <script>
         ; (function () {
-            var ws = new WebSocket("ws://localhost:8082/ws/ping");
+            var ws = new WebSocket("ws://localhost:{{.port}}/ws/ping");
             //连接打开时触发 
             ws.onopen = function (evt) {
                 console.log("Connection open ...");
