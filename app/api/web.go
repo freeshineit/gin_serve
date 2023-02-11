@@ -12,7 +12,8 @@ import (
 // router [/]
 func IndexPage(c *gin.Context) {
 	c.HTML(http.StatusOK, "index.html", gin.H{
-		"title": "this is title",
+		"title":     "Gin Serve",
+		"proxyPort": config.Conf.Proxy.Port,
 	})
 }
 
