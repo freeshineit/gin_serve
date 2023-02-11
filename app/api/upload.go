@@ -20,7 +20,7 @@ import (
 // @Failure		400		{object}	helper.Response
 // @Failure		404		{object}	helper.Response
 // @Router		/api/file_upload [post]
-// @Security    ApiKeyAuth
+// @Security    Bearer
 func FileUpload(c *gin.Context) {
 
 	filesURL := make([]string, 0)

@@ -26,7 +26,7 @@ import (
 // @Produce		json
 // @Success		200	 {object}	helper.Response
 // @Router		/api/v1/todo [post]
-// @Security    ApiKeyAuth
+// @Security    Bearer
 func CreateTodo(ctx *gin.Context) {
 
 	var todo dto.TodoCreateDTO
@@ -59,7 +59,7 @@ func CreateTodo(ctx *gin.Context) {
 // @Param       id   path   int  true   "todo id"
 // @Success		200	 {object}	helper.Response
 // @Router		/api/v1/todo/{id} [get]
-// @Security    ApiKeyAuth
+// @Security    Bearer
 func GetTodo(c *gin.Context) {
 	id := c.Param("id")
 	aid, err := strconv.ParseUint(id, 10, 0)
@@ -87,7 +87,7 @@ func GetTodo(c *gin.Context) {
 // @Param       page   query   int  true   "page"
 // @Success		200	 {object}	helper.Response
 // @Router		/api/v1/todos [get]
-// @Security    ApiKeyAuth
+// @Security    Bearer
 func GetTodos(ctx *gin.Context) {
 	tokenClaims, exists := ctx.Get(middleware.TokenClaims)
 
@@ -131,7 +131,7 @@ func GetTodos(ctx *gin.Context) {
 // @Param       content  body   string  true   "todo content"
 // @Success		200	 {object}	helper.Response
 // @Router		/api/v1/todo/{id}/content [put]
-// @Security    ApiKeyAuth
+// @Security    Bearer
 func PutTodoContent(ctx *gin.Context) {
 	id := ctx.Param("id")
 	tid, err := strconv.ParseUint(id, 10, 0)
@@ -179,7 +179,7 @@ func PutTodoContent(ctx *gin.Context) {
 // @Param       status   body   int  true   "todo status"
 // @Success		200	 {object}	helper.Response
 // @Router		/api/v1/todo/{id}/status [put]
-// @Security    ApiKeyAuth
+// @Security    Bearer
 func PutTodoStatus(ctx *gin.Context) {
 
 	id := ctx.Param("id")
@@ -227,7 +227,7 @@ func PutTodoStatus(ctx *gin.Context) {
 // @Param       id   path   int  true   "todo id"
 // @Success		200	 {object}  helper.Response
 // @Router		/v1/todo/{id} [delete]
-// @Security    ApiKeyAuth
+// @Security    Bearer
 func DeleteTodo(ctx *gin.Context) {
 	id := ctx.Param("id")
 	tid, err := strconv.ParseUint(id, 10, 0)
