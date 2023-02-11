@@ -12,7 +12,7 @@ import (
 )
 
 type TodoService interface {
-	CreateTodo(todo dto.TodoCreateDTO) model.Todo
+	CreateTodo(todo dto.TodoCreateDTO, useID uint64) model.Todo
 	FindById(id uint64) model.Todo
 	UpdateTodoStatus(id uint64, status model.Todo_Status_Type, userId uint64) (bool, error)
 	UpdateTodoContent(id uint64, content string, userId uint64) (bool, error)
@@ -30,13 +30,10 @@ func NewTodoService(todoRepo repo.TodoRepo) TodoService {
 	}
 }
 
-func (service *todoService) CreateTodo(todo dto.TodoCreateDTO) model.Todo {
-	todoToCreate := model.Todo{}
-
-	err := smapping.FillStruct(&todoToCreate, smapping.MapFields(&todo))
-
-	if err != nil {
-		log.Fatalf("Failed map %v", err)
+func (service *todoService) CreateTodo(todo dto.TodoCreateDTO, userID uint64) model.Todo {
+	todoToCreate := model.Todo{
+		Content: todo.Content,
+		UserID:  userID,
 	}
 
 	return service.todoRepos.InsertTodo(todoToCreate)

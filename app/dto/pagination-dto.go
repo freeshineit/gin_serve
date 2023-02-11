@@ -2,8 +2,8 @@ package dto
 
 // Paging be used when paging
 type PaginationRequestDTO struct {
-	Offset int `json:"offset" form:"offset"`
-	Page   int `json:"page" form:"page"`
+	Offset int `json:"offset,default=10" form:"offset,default=10"`
+	Page   int `json:"page,default=1" form:"page,default=1"`
 }
 
 // Paging be used when paging
