@@ -46,7 +46,7 @@ make api
 
 
 # generate api docs
-swag init -g ./cmd/main.go
+swag init -g ./main.go
 
 http://localhost:8080/swagger/index.html
 

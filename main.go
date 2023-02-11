@@ -14,7 +14,6 @@ import "gin_serve/cmd"
 // @license.name  MIT
 // @license.url   https://github.com/freeshineit/gin_serve/blob/main/LICENSE
 
-// @host      localhost:8080
 // @securityDefinitions.apikey ApiKeyAuth
 // @in header
 // @name Authorization
