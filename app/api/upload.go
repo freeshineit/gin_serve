@@ -12,6 +12,7 @@ import (
 // FileUpload file upload
 // @Summary		Upload file
 // @Description	Upload file
+// @Tags	    Upload
 // @ID				file.upload
 // @Accept			multipart/form-data
 // @Produce		json
@@ -20,7 +21,7 @@ import (
 // @Failure		400		{object}	helper.Response
 // @Failure		404		{object}	helper.Response
 // @Router		/api/file_upload [post]
-// @Security    ApiKeyAuth
+// @Security    Bearer
 func FileUpload(c *gin.Context) {
 
 	filesURL := make([]string, 0)

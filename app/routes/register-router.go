@@ -17,6 +17,8 @@ var jwtAuthMiddleware = middleware.JwtAuth()
 // register with auth api /api/xxx
 func RegisterGroup(router *gin.RouterGroup) *gin.RouterGroup {
 	router.POST("/register", api.Register)
+
+	// curl -X POST http://localhost:8080/api/login -H 'accept: application/json' -H 'Content-Type: application/json' -d '{"email": "xiaoshaoqq@gmail.com","password": "123456"}'
 	router.POST("/login", api.Login)
 	router.POST("/logout", api.Logout)
 
@@ -36,13 +38,13 @@ func RegisterGroup(router *gin.RouterGroup) *gin.RouterGroup {
 func RegisterGroupWithAuth(router *gin.RouterGroup) *gin.RouterGroup {
 	authRouter := router.Group("/", jwtAuthMiddleware)
 
-	authRouter.POST("/file_upload", api.FileUpload)
-	authRouter.GET("/user/:id", api.GetUserByID)
-	authRouter.POST("/user", api.CreateUser)
-	authRouter.PUT("/user/:id", api.UpdateUser)
-	authRouter.DELETE("/user/:id", api.DeleteUser)
+	authRouter.POST("/file_upload", api.FileUpload) // /api/file_upload [post]
+	authRouter.GET("/user/:id", api.GetUserByID)    // /api/user/:id [get]
+	authRouter.POST("/user", api.CreateUser)        // /api/user [post]
+	authRouter.PUT("/user/:id", api.UpdateUser)     // /api/user/:id [put]
+	authRouter.DELETE("/user/:id", api.DeleteUser)  // /api/user/:id [delete]
 
-	authRouter.GET("/auth", api.AuthPage)
+	authRouter.GET("/auth", api.AuthPage) // /api/auth [get]
 
 	return authRouter
 }
@@ -58,12 +60,13 @@ func RegisterV1GroupWithAuth(router *gin.RouterGroup) *gin.RouterGroup {
 	authRouter := router.Group("/", jwtAuthMiddleware)
 
 	// /api/v1/list
-	authRouter.GET("/list", v1.List)
+	authRouter.GET("/list", v1.List) // /api/v1/list
 
+	// todo
 	authRouter.POST("/todo", v1.CreateTodo)                // /api/v1/todo [post]
 	authRouter.DELETE("/todo/:id", v1.DeleteTodo)          // /api/v1/todo/:id [delete]
-	authRouter.PUT("/todo/:id/content", v1.PutTodoContent) // /api/v1/todo/:id [put]
-	authRouter.PUT("/todo/:id/status", v1.PutTodoStatus)   // /api/v1/todo/:id [put]
+	authRouter.PUT("/todo/:id/content", v1.PutTodoContent) // /api/v1/todo/:id/content [put]
+	authRouter.PUT("/todo/:id/status", v1.PutTodoStatus)   // /api/v1/todo/:id/status [put]
 	authRouter.GET("/todo/:id", v1.GetTodo)                // /api/v1/todo/:id [get]
 	authRouter.GET("/todos", v1.GetTodos)                  // /api/v1/todos [get]
 
@@ -79,14 +82,13 @@ func RegisterV2Group(router *gin.RouterGroup) *gin.RouterGroup {
 func RegisterV2GroupWithAuth(router *gin.RouterGroup) *gin.RouterGroup {
 	authRouter := router.Group("/", jwtAuthMiddleware)
 
-	// /api/v2/list
-	authRouter.GET("/list", v2.List)
+	authRouter.GET("/list", v2.List) // /api/v2/list
 	return router
 }
 
 // register socket api /ws/xxx
 func RegisterWsGroup(router *gin.RouterGroup) *gin.RouterGroup {
-	router.GET("/ping", socket.Ping)
+	router.GET("/ping", socket.Ping) // /ws/ping
 	return router
 }
 

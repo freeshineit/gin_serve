@@ -15,13 +15,13 @@ import (
 // Register
 // @Summary	Account
 // @Schemes
-// @Description	register
-// @Tags	    example
+// @Description	User register
+// @Tags	    account
 // @Accept	    json
 // @Produce		json
 // @Param       user  body        dto.UserRegisterDTO  true  "UserRegisterDTO JSON"
-// @Success		200	  {object}	  helper.Response
-// @Failure     400   {object}    helper.Response
+// @Success		200	  {object}	  helper.Response  "success"
+// @Failure     400   {object}    helper.Response  "register failed!"
 // @Router		/api/register [post]
 func Register(ctx *gin.Context) {
 
@@ -47,13 +47,13 @@ func Register(ctx *gin.Context) {
 // Login
 // @Summary	Account
 // @Schemes
-// @Description	login
-// @Tags	    example
-// @Accept	    json
+// @Description	User login
+// @Tags	    account
+// @Accept	    application/json
 // @Produce		json
-// @Param       user  body   	  dto.UserLoginDTO  true   "UserLoginDTO json"
-// @Success		200	  {object}	  helper.Response
-// @Failure     400   {object}    helper.Response
+// @Param       user  body   	  dto.UserLoginDTO  true   "UserLoginDTO json"  default(dto.UserLoginDTO{"xiaoshaoqq@gmail.com", "123456"})
+// @Success		200	  {object}	  helper.Response   "success"
+// @Failure     400   {object}    helper.Response   "failed"
 // @Router		/api/login [post]
 func Login(ctx *gin.Context) {
 	var user dto.UserLoginDTO
@@ -85,10 +85,10 @@ func Login(ctx *gin.Context) {
 // Logout
 // @Summary	Account
 // @Schemes
-// @Description	logout
-// @Tags	    example
-// @Success		200	  {object}	helper.Response
-// @Failure     400   {object}  helper.Response
+// @Description	User logout
+// @Tags	    account
+// @Success		200	  {object}	helper.Response  "success"
+// @Failure     400   {object}  helper.Response  "failed"
 // @Router		/api/logout [post]
 func Logout(c *gin.Context) {
 
@@ -99,11 +99,11 @@ func Logout(c *gin.Context) {
 // @Summary	Account
 // @Schemes
 // @Description	Refresh login token
-// @Tags	    example
+// @Tags	    account
 // @Accept	    json
 // @Produce		json
-// @Success		200	  {object}	  helper.Response
-// @Failure     400   {object}    helper.Response
+// @Success		200	  {object}	  helper.Response  "success"
+// @Failure     400   {object}    helper.Response  "failed"
 // @Router		/api/refresh [post]
 func Refresh(c *gin.Context) {
 	var user model.User
