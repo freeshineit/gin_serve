@@ -2,21 +2,16 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {{template "head.html"}}
     <title>Socket</title>
     <link href="/static/style/common.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
     <script src="/static/js/axios.js"></script>
     <style>
         .container {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            width: 100vw;
-            justify-content: center;
-            align-items: center;
+            /* justify-content: center; */
+            /* align-items: center; */
         }
 
         .w-320 {
@@ -30,11 +25,13 @@
 </head>
 
 <body>
+    {{template "header.html"}}
     <div class="container">
         <div class="w-320">
-
+            socket
         </div>
     </div>
+    {{template "footer.html"}}
     <script>
         ; (function () {
             var ws = new WebSocket("ws://localhost:{{.port}}/ws/ping");
