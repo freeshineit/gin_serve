@@ -28,7 +28,16 @@ func Register(ctx *gin.Context) {
 	var user dto.UserRegisterDTO
 
 	if err := ctx.ShouldBind(&user); err != nil {
-		ctx.JSON(http.StatusBadRequest, helper.BuildErrorResponse(1, "register failed!", err.Error()))
+
+		// errs, _ := err.(validator.ValidationErrors)
+
+		// if !ok {
+		// 	ctx.AbortWithStatusJSON(http.StatusBadGateway, "")
+		// }
+
+		// log.Println(errs.Translate(helper.Trans))
+
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(1, "register failed!", err.Error()))
 		return
 	}
 

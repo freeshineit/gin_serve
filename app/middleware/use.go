@@ -8,7 +8,7 @@ import (
 )
 
 func SetMiddleware(router *gin.Engine) {
-	router.Use(cors.New(cors.Config{
+	router.Use(Logger(), gin.Recovery(), cors.New(cors.Config{
 		AllowOrigins:     []string{"https://foo.com"},
 		AllowMethods:     []string{"GET", "POST", "DELETE", "PUT", "PATCH"},
 		AllowHeaders:     []string{"Origin"},

@@ -27,6 +27,8 @@ var AppCmd = &cobra.Command{
 
 func Serve(mode string) error {
 
+	// helper.InitTranslation("zh")
+
 	if mode == "release" {
 		gin.SetMode(gin.ReleaseMode)
 	}
@@ -39,8 +41,6 @@ func Serve(mode string) error {
 	model.GormAutoMigration(DB)
 
 	r := gin.New()
-	r.Use(middleware.Logger(), gin.Recovery())
-
 	// 中间件
 	middleware.SetMiddleware(r)
 

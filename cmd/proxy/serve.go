@@ -26,7 +26,7 @@ func Serve(mode string) error {
 
 	r := gin.New()
 
-	r.Use(middleware.Logger(), gin.Recovery())
+	middleware.SetMiddleware(r)
 
 	if mode == "release" {
 		gin.SetMode(gin.ReleaseMode)
