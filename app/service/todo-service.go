@@ -17,7 +17,7 @@ type TodoService interface {
 	UpdateTodoStatus(id uint64, status model.Todo_Status_Type, userId uint64) (bool, error)
 	UpdateTodoContent(id uint64, content string, userId uint64) (bool, error)
 	DeleteTodo(id uint64, userId uint64) (bool, error)
-	FindAll(userId uint64, limit, page, size int) ([]dto.TodoDTO, int64, error)
+	FindAll(userId uint64, limit, page int) ([]dto.TodoDTO, int64, error)
 }
 
 type todoService struct {
@@ -58,9 +58,9 @@ func (service *todoService) FindById(id uint64) model.Todo {
 	return service.todoRepos.FindById(id)
 }
 
-func (service *todoService) FindAll(userId uint64, limit, page, size int) ([]dto.TodoDTO, int64, error) {
+func (service *todoService) FindAll(userId uint64, limit, page int) ([]dto.TodoDTO, int64, error) {
 
-	mTodos, total, err := service.todoRepos.FindAll(userId, limit, page, size)
+	mTodos, total, err := service.todoRepos.FindAll(userId, limit, page)
 
 	if err != nil {
 		return []dto.TodoDTO{}, 0, err

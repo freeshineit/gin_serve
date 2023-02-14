@@ -121,7 +121,7 @@
 
 
             function getList() {
-                Axios.get("/api/v1/todos").then(res => {
+                Axios.get(`/api/v1/todos?page=1&offset=20`).then(res => {
                     if (res.code == 0) {
                         list = []
                         res.data.list.map(todo => {

@@ -12,7 +12,7 @@ type TodoRepo interface {
 	UpdateTodoContent(id uint64, content string) *gorm.DB
 	DeleteTodo(id uint64) *gorm.DB
 	FindById(id uint64) model.Todo
-	FindAll(userId uint64, limit, page, size int) ([]model.Todo, int64, error)
+	FindAll(userId uint64, limit, page int) ([]model.Todo, int64, error)
 }
 
 type todoConnection struct {
@@ -47,10 +47,10 @@ func (db *todoConnection) FindById(id uint64) model.Todo {
 	return todo
 }
 
-func (db *todoConnection) FindAll(userId uint64, limit, page, size int) ([]model.Todo, int64, error) {
+func (db *todoConnection) FindAll(userId uint64, limit, page int) ([]model.Todo, int64, error) {
 	todos := []model.Todo{}
 	var total int64
-	err := db.connection.Limit(limit).Offset((page-1)*size).Where("user_id = ?", userId).Order("created_at DESC").Find(&todos).Count(&total).Error
+	err := db.connection.Limit(limit).Offset((page-1)*limit).Where("user_id = ?", userId).Order("created_at desc").Find(&todos).Offset(-1).Limit(-1).Count(&total).Error
 	return todos, total, err
 }
 
