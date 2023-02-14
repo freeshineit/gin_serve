@@ -1,19 +1,15 @@
+{{define "socket/index.html"}}
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
 
-    {{template "head.html"}}
+    {{template "globals/head.html"}}
     <title>Socket</title>
-    <link href="/static/style/common.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
     <script src="/static/js/axios.js"></script>
     <style>
-        .container {
-            /* justify-content: center; */
-            /* align-items: center; */
-        }
-
         .w-320 {
             width: 320px;
         }
@@ -25,13 +21,13 @@
 </head>
 
 <body>
-    {{template "header.html"}}
+    {{template "globals/header.html"}}
     <div class="container">
         <div class="w-320">
             socket
         </div>
     </div>
-    {{template "footer.html"}}
+    {{template "globals/footer.html"}}
     <script>
         ; (function () {
             var ws = new WebSocket("ws://localhost:{{.port}}/ws/ping");
@@ -57,3 +53,4 @@
 </body>
 
 </html>
+{{end}}

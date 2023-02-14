@@ -11,7 +11,7 @@ import (
 //
 // router [/]
 func IndexPage(c *gin.Context) {
-	c.HTML(http.StatusOK, "index.html", gin.H{
+	c.HTML(http.StatusOK, "home/index.html", gin.H{
 		"title":     "Gin Serve",
 		"proxyPort": config.Conf.Proxy.Port,
 	})
@@ -20,26 +20,29 @@ func IndexPage(c *gin.Context) {
 // login page
 // router [/login]
 func LoginPage(c *gin.Context) {
-	c.HTML(http.StatusOK, "login.html", gin.H{})
+	c.HTML(http.StatusOK, "auth/login.html", gin.H{})
 }
 
 // register page
 // router [/register]
 func RegisterPage(c *gin.Context) {
-	c.HTML(http.StatusOK, "register.html", gin.H{})
+	c.HTML(http.StatusOK, "auth/register.html", gin.H{})
 }
 
 // list page
 // router [/list]
 func ListPage(c *gin.Context) {
-	c.HTML(http.StatusOK, "list.html", gin.H{})
+	c.HTML(http.StatusOK, "list/index.html", gin.H{
+		"proxyPort": config.Conf.Proxy.Port,
+	})
 }
 
 // socket page
 // router [/socket]
 func SocketPage(c *gin.Context) {
-	c.HTML(http.StatusOK, "socket.html", gin.H{
-		"port": config.Conf.Socket.Port,
+	c.HTML(http.StatusOK, "socket/index.html", gin.H{
+		"port":      config.Conf.Socket.Port,
+		"proxyPort": config.Conf.Proxy.Port,
 	})
 }
 

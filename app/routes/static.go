@@ -8,7 +8,8 @@ import (
 
 func SetStaticFS(r *gin.Engine) {
 	// set html template
-	r.LoadHTMLGlob("./templates/*.html")
+	r.LoadHTMLGlob("./templates/**/*.html")
+	// r.HTMLRender = helper.LoadTemplateFiles("templates", ".html")
 
 	// set server static
 	r.StaticFile("favicon.ico", "./public/favicon.ico")
