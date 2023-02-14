@@ -33,7 +33,7 @@ func Serve(mode string) error {
 
 	r := gin.New()
 
-	middleware.SetMiddleware(r)
+	r.Use(middleware.Logger(), gin.Recovery())
 
 	routes.SetupSocketRoutes(r)
 

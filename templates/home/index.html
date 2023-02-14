@@ -1,0 +1,22 @@
+{{define "home/index.html"}}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{template "globals/_head.html" .}}
+    <title>{{.title}}</title>
+</head>
+
+<body>
+    {{template "globals/_header.html" .}}
+
+    <div class="container">
+        Home
+    </div>
+
+    {{template "globals/_footer.html" .}}
+</body>
+
+</html>
+{{end}}

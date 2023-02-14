@@ -42,9 +42,12 @@ func CreateTodo(ctx *gin.Context) {
 	if exists {
 		service := service.NewTodoService(repo.NewTodoRepo(config.DB))
 		userID := tokenClaims.(*helper.TokenClaim).UserID
-		res := service.CreateTodo(todo, userID)
-		ctx.JSON(http.StatusCreated, helper.BuildResponse("success", res))
-		return
+		t, err := service.CreateTodo(todo, userID)
+		if err == nil {
+			ctx.JSON(http.StatusCreated, helper.BuildResponse("success", t))
+			return
+		}
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(1, "insert fail", err.Error()))
 	} else {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(1, "user no exists", "user no exists"))
 	}

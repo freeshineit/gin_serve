@@ -1,21 +1,17 @@
+{{define "list/index.html"}}
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {{template "globals/_head.html" .}}
     <title>List</title>
-    <link href="/static/style/common.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
     <script src="/static/js/axios.js"></script>
 
     <style>
         .container {
-            display: flex;
-            flex-direction: column;
             align-items: center;
-            justify-content: center;
         }
 
         .w-500 {
@@ -66,6 +62,7 @@
 </head>
 
 <body>
+    {{template "globals/_header.html" .}}
     <div class="container">
         <div class="w-500">
             <div class="input-wrapper">
@@ -75,6 +72,7 @@
             <ul class="list-wrapper" id="list"></ul>
         </div>
     </div>
+    {{template "globals/_footer.html" .}}
     <script>
         (function () {
             Axios.get("/api/auth")
@@ -93,8 +91,7 @@
                 const todo = document.getElementById('todo')
                 if (todo.value.trim() != '') {
                     Axios.post("/api/v1/todo", {
-                        content: todo.value,
-                        status: 0
+                        content: todo.value
                     }).then(res => {
                         list.unshift(genLiTag(res.data))
                         todo.value = ''
@@ -149,3 +146,4 @@
 </body>
 
 </html>
+{{end}}
