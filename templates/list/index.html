@@ -4,7 +4,7 @@
 <html lang="en">
 
 <head>
-    {{template "head.html"}}
+    {{template "globals/_head.html" .}}
     <title>List</title>
     <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
     <script src="/static/js/axios.js"></script>
@@ -62,7 +62,7 @@
 </head>
 
 <body>
-    {{template "header.html"}}
+    {{template "globals/_header.html" .}}
     <div class="container">
         <div class="w-500">
             <div class="input-wrapper">
@@ -72,7 +72,7 @@
             <ul class="list-wrapper" id="list"></ul>
         </div>
     </div>
-    {{template "footer.html"}}
+    {{template "globals/_footer.html" .}}
     <script>
         (function () {
             Axios.get("/api/auth")

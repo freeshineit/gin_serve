@@ -44,8 +44,6 @@ func RegisterGroupWithAuth(router *gin.RouterGroup) *gin.RouterGroup {
 	authRouter.PUT("/user/:id", api.UpdateUser)     // /api/user/:id [put]
 	authRouter.DELETE("/user/:id", api.DeleteUser)  // /api/user/:id [delete]
 
-	authRouter.GET("/auth", api.AuthPage) // /api/auth [get]
-
 	return authRouter
 }
 
