@@ -4,7 +4,7 @@
 <html lang="en">
 
 <head>
-    {{template "_head.html"}}
+    {{template "globals/_head.html"}}
     <title>Register</title>
     <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
     <script src="/static/js/axios.js"></script>
@@ -39,7 +39,7 @@
             </form>
         </div>
     </div>
-    {{template "_footer.html"}}
+    {{template "globals/_footer.html"}}
     <script>
         ; (function () {
             const login_form = document.getElementById('login_form')

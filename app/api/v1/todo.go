@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"fmt"
 	"gin_serve/app/dto"
 	"gin_serve/app/middleware"
 	"gin_serve/app/repo"
@@ -90,7 +91,7 @@ func GetTodo(c *gin.Context) {
 // @Param       offset query   int  false   "offset" default(10)
 // @Param       page   query   int   false  "page"   default(1)
 // @Success		200	 {object}	helper.Response
-// @Router		/api/v1/todos [get]
+// @Router		/api/v1/todos?page=1&offset=10 [get]
 // @Security    Bearer
 func GetTodos(ctx *gin.Context) {
 	tokenClaims, exists := ctx.Get(middleware.TokenClaims)
@@ -104,13 +105,19 @@ func GetTodos(ctx *gin.Context) {
 			log.Println(err.Error())
 		}
 
-		list, total, _ := service.FindAll(userID, query.Offset, query.Page, 10)
+		if query.Offset <= 0 || query.Page <= 0 {
+			log.Printf("query error: %v \n", query)
+			ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(message.BadRequestCode, "fail", fmt.Sprintf("query error: %v", query)))
+			return
+		}
+
+		list, total, _ := service.FindAll(userID, query.Offset, query.Page)
 
 		ctx.JSON(http.StatusCreated, helper.BuildResponse("success", dto.ListDTO[dto.TodoDTO]{
 			List: list,
 			Page: dto.PaginationResponseDTO{
-				Offset: 1,
-				Page:   1,
+				Offset: query.Offset,
+				Page:   query.Page,
 				Total:  total,
 			},
 		}))
