@@ -12,12 +12,12 @@ import (
 )
 
 type TodoService interface {
-	CreateTodo(todo dto.TodoCreateDTO, useID uint64) model.Todo
+	CreateTodo(todo dto.TodoCreateDTO, useID uint64) (dto.TodoDTO, error)
 	FindById(id uint64) model.Todo
 	UpdateTodoStatus(id uint64, status model.Todo_Status_Type, userId uint64) (bool, error)
 	UpdateTodoContent(id uint64, content string, userId uint64) (bool, error)
 	DeleteTodo(id uint64, userId uint64) (bool, error)
-	FindAll(userId uint64, limit, page, size int) ([]dto.TodoDTO, int, error)
+	FindAll(userId uint64, limit, page, size int) ([]dto.TodoDTO, int64, error)
 }
 
 type todoService struct {
@@ -30,22 +30,41 @@ func NewTodoService(todoRepo repo.TodoRepo) TodoService {
 	}
 }
 
-func (service *todoService) CreateTodo(todo dto.TodoCreateDTO, userID uint64) model.Todo {
+func (service *todoService) CreateTodo(todo dto.TodoCreateDTO, userID uint64) (dto.TodoDTO, error) {
 	todoToCreate := model.Todo{
 		Content: todo.Content,
 		UserID:  userID,
 	}
 
-	return service.todoRepos.InsertTodo(todoToCreate)
+	t, err := service.todoRepos.InsertTodo(todoToCreate)
+
+	var todoDTO = dto.TodoDTO{}
+
+	if err == nil {
+		err := smapping.FillStruct(&todoDTO, smapping.MapFields(&t))
+
+		if err != nil {
+			log.Fatalf("Failed map %v", err)
+		}
+
+		return todoDTO, nil
+	}
+
+	return todoDTO, err
+
 }
 
 func (service *todoService) FindById(id uint64) model.Todo {
 	return service.todoRepos.FindById(id)
 }
 
-func (service *todoService) FindAll(userId uint64, limit, page, size int) ([]dto.TodoDTO, int, error) {
+func (service *todoService) FindAll(userId uint64, limit, page, size int) ([]dto.TodoDTO, int64, error) {
 
-	mTodos := service.todoRepos.FindAll(userId, limit, page, size)
+	mTodos, total, err := service.todoRepos.FindAll(userId, limit, page, size)
+
+	if err != nil {
+		return []dto.TodoDTO{}, 0, err
+	}
 
 	var todos []dto.TodoDTO
 	for _, t := range mTodos {
@@ -60,7 +79,7 @@ func (service *todoService) FindAll(userId uint64, limit, page, size int) ([]dto
 		todos = append(todos, todo)
 	}
 
-	return todos, 100, nil
+	return todos, total, nil
 }
 
 func (service *todoService) UpdateTodoStatus(id uint64, status model.Todo_Status_Type, userID uint64) (bool, error) {

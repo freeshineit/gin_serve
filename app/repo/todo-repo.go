@@ -7,12 +7,12 @@ import (
 )
 
 type TodoRepo interface {
-	InsertTodo(user model.Todo) model.Todo
+	InsertTodo(todo model.Todo) (model.Todo, error)
 	UpdateTodoStatus(id uint64, status model.Todo_Status_Type) *gorm.DB
 	UpdateTodoContent(id uint64, content string) *gorm.DB
 	DeleteTodo(id uint64) *gorm.DB
 	FindById(id uint64) model.Todo
-	FindAll(userId uint64, limit, page, size int) []model.Todo
+	FindAll(userId uint64, limit, page, size int) ([]model.Todo, int64, error)
 }
 
 type todoConnection struct {
@@ -26,9 +26,9 @@ func NewTodoRepo(db *gorm.DB) TodoRepo {
 	}
 }
 
-func (db *todoConnection) InsertTodo(todo model.Todo) model.Todo {
-	db.connection.Save(&todo)
-	return todo
+func (db *todoConnection) InsertTodo(todo model.Todo) (model.Todo, error) {
+	res := db.connection.Save(&todo)
+	return todo, res.Error
 }
 
 func (db *todoConnection) UpdateTodoStatus(id uint64, status model.Todo_Status_Type) *gorm.DB {
@@ -47,11 +47,11 @@ func (db *todoConnection) FindById(id uint64) model.Todo {
 	return todo
 }
 
-func (db *todoConnection) FindAll(userId uint64, limit, page, size int) []model.Todo {
+func (db *todoConnection) FindAll(userId uint64, limit, page, size int) ([]model.Todo, int64, error) {
 	todos := []model.Todo{}
-	if err := db.connection.Limit(limit).Offset((page-1)*size).Where("user_id = ?", userId).Order("updated_at DESC").Find(&todos).Error; err != nil {
-	}
-	return todos
+	var total int64
+	err := db.connection.Limit(limit).Offset((page-1)*size).Where("user_id = ?", userId).Order("created_at DESC").Find(&todos).Count(&total).Error
+	return todos, total, err
 }
 
 func (db *todoConnection) DeleteTodo(id uint64) *gorm.DB {

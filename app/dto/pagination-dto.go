@@ -8,9 +8,9 @@ type PaginationRequestDTO struct {
 
 // Paging be used when paging
 type PaginationResponseDTO struct {
-	Offset int `json:"offset" form:"offset"`
-	Page   int `json:"page" form:"page"`
-	Total  int `json:"total" form:"total"`
+	Offset int   `json:"offset" form:"offset"`
+	Page   int   `json:"page" form:"page"`
+	Total  int64 `json:"total" form:"total"`
 }
 
 type ListDTO[T any] struct {
