@@ -45,7 +45,7 @@ func Logger(notLogged ...string) gin.HandlerFunc {
 
 	loggerConfig := config.Conf.Logger
 
-	fileName := path.Join(loggerConfig.Dir+loggerConfig.HttpPath, time.Now().Format("20060102"))
+	fileName := path.Join(loggerConfig.Dir+loggerConfig.Path, time.Now().Format("20060102"))
 
 	//写入文件
 	httpSrc, err := os.OpenFile(fileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
