@@ -34,7 +34,7 @@ db:
 # docker network create my_net
 	docker-compose -f db-docker-compose.yaml up -d
 
-api:
+serve:
 	docker build -t gin_serve:latest .
 # docker network create my_net
-	docker-compose -f api-docker-compose.yaml up -d
+	docker-compose -f serve-docker-compose.yaml up -d
