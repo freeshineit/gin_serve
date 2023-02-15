@@ -6,6 +6,7 @@ import (
 	"gin_serve/cmd/socket"
 	"gin_serve/cmd/version"
 	"log"
+	"os"
 
 	"github.com/spf13/cobra"
 	"golang.org/x/sync/errgroup"
@@ -26,9 +27,10 @@ var rootCmd = &cobra.Command{
 	Long: `server is a simple restful api server
     use help get more ifo`,
 	Run: func(cmd *cobra.Command, args []string) {
-		mode := cmd.Flag("mode").Value.String()
-
-		// log.Printf("server version %s", version)
+		var mode string // = gin.DebugMode
+		if mode = cmd.Flag("mode").Value.String(); mode == "" {
+			mode = os.Getenv("GIN_MODE")
+		}
 
 		g.Go(func() error {
 			return app.Serve(mode)

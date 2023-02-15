@@ -28,12 +28,13 @@ var AppCmd = &cobra.Command{
 func Serve(mode string) error {
 
 	// helper.InitTranslation("zh")
-
 	if mode == "release" {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
 	port := config.Conf.App.Port
+
+	config.SetUpZapLogger(mode == "release")
 
 	DB := config.SetupDatabaseConnection()
 	config.SetupRedisConnection()
