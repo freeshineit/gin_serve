@@ -1,9 +1,12 @@
 package config
 
 type LoggerConfig struct {
-	Dir       string `mapstructure:"dir"`
-	Path      string `mapstructure:"path"`
-	ErrorPath string `mapstructure:"errorPath"`
+	Filename   string `mapstructure:"filename"`
+	MaxSize    int    `mapstructure:"max_size"`
+	MaxBackups int    `mapstructure:"max_backups"`
+	MaxAge     int    `mapstructure:"max_age"`
+	Level      string `mapstructure:"level"`
+	Compress   bool   `mapstructure:"compress"`
 }
 
 type MysqlConfig struct {

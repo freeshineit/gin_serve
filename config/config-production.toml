@@ -30,7 +30,8 @@
   password = "123456"
 
 [logger]
-  dir = "logs/"
-  http_path = "info/"
-  error_path = "error/"
-
+  filename = "logs/log.log"
+  max_size = 50 # 单个日志文件最多存储量 单位(mb)
+  max_backups = 10 # 志备份文件最多数量  
+  max_age = 100 # 日志保留时间，单位: 天 (day)
+  compress= true # 是否压缩日志

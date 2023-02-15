@@ -1,145 +1,156 @@
 package middleware
 
+// Package ginzap provides log handling using zap package.
+// Code structure based on ginrus package.
+// https://github.com/gin-contrib/zap
 import (
-	"fmt"
-	"gin_serve/config"
-	"math"
+	"net"
 	"net/http"
+	"net/http/httputil"
 	"os"
-	"path"
+	"runtime/debug"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
-	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
-	"github.com/rifflock/lfshook"
-	"github.com/sirupsen/logrus"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 )
 
-// 2016-09-27 09:38:21.541541811 +0200 CEST
-// 127.0.0.1 - frank [10/Oct/2000:13:55:36 -0700]
-// "GET /apache_pb.gif HTTP/1.0" 200 2326
-// "http://www.example.com/start.html"
-// "Mozilla/4.08 [en] (Win98; I ;Nav)"
-var timeFormat = "02/01/2006:15:04:05 -0700"
+type Fn func(c *gin.Context) []zapcore.Field
 
-// Logger is the logrus logger handler
-func Logger(notLogged ...string) gin.HandlerFunc {
+// Config is config setting for Ginzap
+type Config struct {
+	TimeFormat string
+	UTC        bool
+	SkipPaths  []string
+	Context    Fn
+}
 
-	var logger = logrus.New() // logrus.FieldLogger
+// Ginzap returns a gin.HandlerFunc (middleware) that logs requests using uber-go/zap.
+//
+// Requests with errors are logged using zap.Error().
+// Requests without errors are logged using zap.Info().
+//
+// It receives:
+//  1. A time package format string (e.g. time.RFC3339).
+//  2. A boolean stating whether to use UTC time zone or local.
+func GinZap(logger *zap.Logger, timeFormat string, utc bool) gin.HandlerFunc {
+	return GinZapWithConfig(logger, &Config{TimeFormat: timeFormat, UTC: utc})
+}
 
-	hostname, err := os.Hostname()
-
-	if err != nil {
-		hostname = "unknow"
+// GinZapWithConfig returns a gin.HandlerFunc using configs
+func GinZapWithConfig(logger *zap.Logger, conf *Config) gin.HandlerFunc {
+	skipPaths := make(map[string]bool, len(conf.SkipPaths))
+	for _, path := range conf.SkipPaths {
+		skipPaths[path] = true
 	}
-
-	var skip map[string]struct{}
-
-	if length := len(notLogged); length > 0 {
-		skip = make(map[string]struct{}, length)
-
-		for _, p := range notLogged {
-			skip[p] = struct{}{}
-		}
-	}
-
-	loggerConfig := config.Conf.Logger
-
-	fileName := path.Join(loggerConfig.Dir+loggerConfig.Path, time.Now().Format("20060102"))
-
-	//写入文件
-	httpSrc, err := os.OpenFile(fileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
-
-	if err != nil {
-		fmt.Println("logger file open error: ", err)
-	}
-
-	// 设置输出
-	logger.Out = httpSrc
-
-	// 设置日志级别
-	logger.SetLevel(logrus.DebugLevel)
-
-	// 设置 rotatelogs
-	logWriter, err := rotatelogs.New(
-		// 分割后的文件名称
-		// "%Y%m%d.log",
-		fileName+".log",
-
-		// 生成软链，指向最新日志文件
-		rotatelogs.WithLinkName(fileName),
-
-		// 设置最大保存时间(7天)
-		rotatelogs.WithMaxAge(7*24*time.Hour),
-
-		// 设置日志切割时间间隔(1天)
-		rotatelogs.WithRotationTime(24*time.Hour),
-	)
-
-	if err != nil {
-		fmt.Println("rotatelogs logger error: ", err)
-	}
-
-	writeMap := lfshook.WriterMap{
-		logrus.InfoLevel:  logWriter,
-		logrus.FatalLevel: logWriter,
-		logrus.DebugLevel: logWriter,
-		logrus.WarnLevel:  logWriter,
-		logrus.ErrorLevel: logWriter,
-		logrus.PanicLevel: logWriter,
-	}
-
-	lfHook := lfshook.NewHook(writeMap, &logrus.JSONFormatter{
-		TimestampFormat: "2006-01-02 15:04:05",
-	})
-
-	// 新增 Hook
-	logger.AddHook(lfHook)
 
 	return func(c *gin.Context) {
-		// // other handler can change c.Path so:
-		path := c.Request.URL.Path
 		start := time.Now()
+		// some evil middlewares modify this values
+		path := c.Request.URL.Path
+		query := c.Request.URL.RawQuery
 		c.Next()
-		stop := time.Since(start)
-		latency := int(math.Ceil(float64(stop.Nanoseconds()) / 1000000.0))
-		statusCode := c.Writer.Status()
-		clientIP := c.ClientIP()
-		clientUserAgent := c.Request.UserAgent()
-		referer := c.Request.Referer()
-		dataLength := c.Writer.Size()
-		if dataLength < 0 {
-			dataLength = 0
-		}
 
-		if _, ok := skip[path]; ok {
-			return
-		}
+		if _, ok := skipPaths[path]; !ok {
+			end := time.Now()
+			latency := end.Sub(start)
+			if conf.UTC {
+				end = end.UTC()
+			}
 
-		entry := logger.WithFields(logrus.Fields{
-			"hostname":   hostname,
-			"statusCode": statusCode,
-			"latency":    latency, // time to process
-			"clientIP":   clientIP,
-			"method":     c.Request.Method,
-			"path":       path,
-			"referer":    referer,
-			"dataLength": dataLength,
-			"userAgent":  clientUserAgent,
-		})
+			fields := []zapcore.Field{
+				zap.Int("status", c.Writer.Status()),
+				zap.String("method", c.Request.Method),
+				zap.String("path", path),
+				zap.String("query", query),
+				zap.String("ip", c.ClientIP()),
+				zap.String("user-agent", c.Request.UserAgent()),
+				zap.Duration("latency", latency),
+			}
+			if conf.TimeFormat != "" {
+				fields = append(fields, zap.String("time", end.Format(conf.TimeFormat)))
+			}
 
-		if len(c.Errors) > 0 {
-			entry.Error(c.Errors.ByType(gin.ErrorTypePrivate).String())
-		} else {
-			msg := fmt.Sprintf("%s - %s [%s] \"%s %s\" %d %d \"%s\" \"%s\" (%dms)", clientIP, hostname, time.Now().Format(timeFormat), c.Request.Method, path, statusCode, dataLength, referer, clientUserAgent, latency)
-			if statusCode >= http.StatusInternalServerError {
-				entry.Error(msg)
-			} else if statusCode >= http.StatusBadRequest {
-				entry.Warn(msg)
+			if conf.Context != nil {
+				fields = append(fields, conf.Context(c)...)
+			}
+
+			if len(c.Errors) > 0 {
+				// Append error field if this is an erroneous request.
+				for _, e := range c.Errors.Errors() {
+					logger.Error(e, fields...)
+				}
 			} else {
-				entry.Info(msg)
+				logger.Info(path, fields...)
 			}
 		}
+	}
+}
 
+func defaultHandleRecovery(c *gin.Context, err interface{}) {
+	c.AbortWithStatus(http.StatusInternalServerError)
+}
+
+// RecoveryWithZap returns a gin.HandlerFunc (middleware)
+// that recovers from any panics and logs requests using uber-go/zap.
+// All errors are logged using zap.Error().
+// stack means whether output the stack info.
+// The stack info is easy to find where the error occurs but the stack info is too large.
+func RecoveryWithZap(logger *zap.Logger, stack bool) gin.HandlerFunc {
+	return CustomRecoveryWithZap(logger, stack, defaultHandleRecovery)
+}
+
+// CustomRecoveryWithZap returns a gin.HandlerFunc (middleware) with a custom recovery handler
+// that recovers from any panics and logs requests using uber-go/zap.
+// All errors are logged using zap.Error().
+// stack means whether output the stack info.
+// The stack info is easy to find where the error occurs but the stack info is too large.
+func CustomRecoveryWithZap(logger *zap.Logger, stack bool, recovery gin.RecoveryFunc) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		defer func() {
+			if err := recover(); err != nil {
+				// Check for a broken connection, as it is not really a
+				// condition that warrants a panic stack trace.
+				var brokenPipe bool
+				if ne, ok := err.(*net.OpError); ok {
+					if se, ok := ne.Err.(*os.SyscallError); ok {
+						if strings.Contains(strings.ToLower(se.Error()), "broken pipe") || strings.Contains(strings.ToLower(se.Error()), "connection reset by peer") {
+							brokenPipe = true
+						}
+					}
+				}
+
+				httpRequest, _ := httputil.DumpRequest(c.Request, false)
+				if brokenPipe {
+					logger.Error(c.Request.URL.Path,
+						zap.Any("error", err),
+						zap.String("request", string(httpRequest)),
+					)
+					// If the connection is dead, we can't write a status to it.
+					c.Error(err.(error)) // nolint: errcheck
+					c.Abort()
+					return
+				}
+
+				if stack {
+					logger.Error("[Recovery from panic]",
+						zap.Time("time", time.Now()),
+						zap.Any("error", err),
+						zap.String("request", string(httpRequest)),
+						zap.String("stack", string(debug.Stack())),
+					)
+				} else {
+					logger.Error("[Recovery from panic]",
+						zap.Time("time", time.Now()),
+						zap.Any("error", err),
+						zap.String("request", string(httpRequest)),
+					)
+				}
+				recovery(c, err)
+			}
+		}()
+		c.Next()
 	}
 }
