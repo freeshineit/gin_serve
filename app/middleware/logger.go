@@ -4,6 +4,7 @@ package middleware
 // Code structure based on ginrus package.
 // https://github.com/gin-contrib/zap
 import (
+	"gin_serve/helper"
 	"net"
 	"net/http"
 	"net/http/httputil"
@@ -13,6 +14,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
@@ -39,6 +41,8 @@ func GinZap(logger *zap.Logger, timeFormat string, utc bool) gin.HandlerFunc {
 	return GinZapWithConfig(logger, &Config{TimeFormat: timeFormat, UTC: utc})
 }
 
+const X_UUID = "x-uuid"
+
 // GinZapWithConfig returns a gin.HandlerFunc using configs
 func GinZapWithConfig(logger *zap.Logger, conf *Config) gin.HandlerFunc {
 	skipPaths := make(map[string]bool, len(conf.SkipPaths))
@@ -51,6 +55,10 @@ func GinZapWithConfig(logger *zap.Logger, conf *Config) gin.HandlerFunc {
 		// some evil middlewares modify this values
 		path := c.Request.URL.Path
 		query := c.Request.URL.RawQuery
+
+		xUuid := uuid.New().String()
+		c.Header(X_UUID, xUuid)
+
 		c.Next()
 
 		if _, ok := skipPaths[path]; !ok {
@@ -60,12 +68,22 @@ func GinZapWithConfig(logger *zap.Logger, conf *Config) gin.HandlerFunc {
 				end = end.UTC()
 			}
 
+			tokenClaims, exists := c.Get(TokenClaims)
+
+			var userID uint64
+
+			if exists {
+				userID = tokenClaims.(*helper.TokenClaim).UserID
+			}
+
 			fields := []zapcore.Field{
 				zap.Int("status", c.Writer.Status()),
 				zap.String("method", c.Request.Method),
 				zap.String("path", path),
 				zap.String("query", query),
 				zap.String("ip", c.ClientIP()),
+				zap.Uint64("user_id", userID),
+				zap.String(X_UUID, xUuid),
 				zap.String("user-agent", c.Request.UserAgent()),
 				zap.Duration("latency", latency),
 			}

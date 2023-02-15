@@ -71,7 +71,7 @@ func Serve(mode string) error {
 
 	zap.S().Info("App server exiting")
 
-	defer zap.S().Sync()
+	defer logger.Sync()
 
 	// close
 	defer config.CloseMysqlConnection(DB)
