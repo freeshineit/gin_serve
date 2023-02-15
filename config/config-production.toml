@@ -11,9 +11,9 @@
   secret = "xiaoshaoqq@gmail.com,.<>?"
   issuer = "xiaoshaoqq@gmail.com"
 
-[database.mysql]
-# docker mysql service
-# Need to be used in docker, if you use another host, please modify
+[mysql]
+  # docker mysql service
+  # Need to be used in docker, if you use another host, please modify
   host = "mysql-service"
   port = 3306
   database = "go_app"
@@ -21,9 +21,9 @@
   password = "123456"
   connection_max = 1000
 
-[cache.redis]
-# Docker redis service
-# Need to be used in docker, if you use another host, please modify
+[redis]
+  # Docker redis service
+  # Need to be used in docker, if you use another host, please modify
   host = "redis-service"
   port = 6379
   db = 5
@@ -31,6 +31,6 @@
 
 [logger]
   dir = "logs/"
-  http_path = "http/"
+  http_path = "info/"
   error_path = "error/"
 

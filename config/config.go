@@ -1,50 +1,50 @@
 package config
 
 type LoggerConfig struct {
-	Dir       string
-	HttpPath  string
-	ErrorPath string
+	Dir       string `mapstructure:"dir"`
+	Path      string `mapstructure:"path"`
+	ErrorPath string `mapstructure:"errorPath"`
 }
 
-type DatabaseConfig struct {
-	Host          string
-	Port          string
-	Database      string
-	User          string
-	Password      string
-	ConnectionMax int32
+type MysqlConfig struct {
+	Host          string `mapstructure:"host"`
+	Port          string `mapstructure:"port"`
+	Database      string `mapstructure:"database"`
+	User          string `mapstructure:"user"`
+	Password      string `mapstructure:"password"`
+	ConnectionMax int32  `mapstructure:"connectionMax"`
 }
 type RedisConfig struct {
-	Host     string
-	Port     int32
-	Db       int32
-	Password string
+	Host     string `mapstructure:"host"`
+	Port     int32  `mapstructure:"port"`
+	Db       int32  `mapstructure:"db"`
+	Password string `mapstructure:"password"`
 }
 
 type JWTConfig struct {
-	Secret string
-	Issuer string
+	Secret string `mapstructure:"secret"`
+	Issuer string `mapstructure:"issuer"`
 }
 
 type AppConfig struct {
-	Port string
+	Port string `mapstructure:"port"`
 }
 
 type ProxyConfig struct {
-	Port string
+	Port string `mapstructure:"port"`
 }
 
 type SocketConfig struct {
-	Port string
+	Port string `mapstructure:"port"`
 }
 
 type Config struct {
-	Logger   LoggerConfig
-	Database DatabaseConfig
-	Redis    RedisConfig
-	JWT      JWTConfig
-	App      AppConfig
-	Proxy    ProxyConfig
-	Socket   SocketConfig
-	Name     string
+	Logger LoggerConfig `mapstructure:"logger"`
+	Mysql  MysqlConfig  `mapstructure:"mysql"`
+	Redis  RedisConfig  `mapstructure:"redis"`
+	JWT    JWTConfig    `mapstructure:"jwt"`
+	App    AppConfig    `mapstructure:"app"`
+	Proxy  ProxyConfig  `mapstructure:"proxy"`
+	Socket SocketConfig `mapstructure:"socket"`
+	Name   string
 }
