@@ -26,7 +26,9 @@ func Serve(mode string) error {
 
 	r := gin.New()
 
-	middleware.SetMiddleware(r)
+	logger := config.SetUpZapLogger(mode == "release")
+
+	middleware.SetMiddleware(r, logger)
 
 	if mode == "release" {
 		gin.SetMode(gin.ReleaseMode)

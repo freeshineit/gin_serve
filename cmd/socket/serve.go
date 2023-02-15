@@ -32,8 +32,9 @@ func Serve(mode string) error {
 	port := config.Conf.Socket.Port
 
 	r := gin.New()
+	logger := config.SetUpZapLogger(mode == "release")
 
-	r.Use(middleware.Logger(), gin.Recovery())
+	middleware.SetMiddleware(r, logger)
 
 	routes.SetupSocketRoutes(r)
 

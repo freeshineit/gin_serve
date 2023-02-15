@@ -1,6 +1,7 @@
 package app
 
 import (
+	"fmt"
 	"gin_serve/app/middleware"
 	"gin_serve/app/model"
 	"gin_serve/app/routes"
@@ -8,11 +9,11 @@ import (
 	"gin_serve/config"
 	"gin_serve/helper"
 	"gin_serve/swagger"
-	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cobra"
+	"go.uber.org/zap"
 )
 
 var AppCmd = &cobra.Command{
@@ -28,12 +29,13 @@ var AppCmd = &cobra.Command{
 func Serve(mode string) error {
 
 	// helper.InitTranslation("zh")
-
 	if mode == "release" {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
 	port := config.Conf.App.Port
+
+	logger := config.SetUpZapLogger(mode == "release")
 
 	DB := config.SetupDatabaseConnection()
 	config.SetupRedisConnection()
@@ -42,7 +44,7 @@ func Serve(mode string) error {
 
 	r := gin.New()
 	// 中间件
-	middleware.SetMiddleware(r)
+	middleware.SetMiddleware(r, logger)
 
 	if mode != "release" {
 		// api docs
@@ -57,15 +59,19 @@ func Serve(mode string) error {
 		Handler: r,
 	}
 
-	log.Printf("app server listen: %s\n", helper.ColorBlueString("http://localhost:"+port))
+	fmt.Printf("app server listen: %s\n", helper.ColorBlueString("http://localhost:"+port))
+
+	zap.S().Infof("app server listen: %s\n", "http://localhost:"+port)
 
 	err := helper.ListenAndServe(srv)
 
 	if err != nil {
-		log.Fatal("App server forced to shutdown:", err)
+		zap.S().Fatal("App server forced to shutdown:", err)
 	}
 
-	log.Println("App server exiting")
+	zap.S().Info("App server exiting")
+
+	defer zap.S().Sync()
 
 	// close
 	defer config.CloseMysqlConnection(DB)

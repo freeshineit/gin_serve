@@ -5,11 +5,12 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
-func SetMiddleware(router *gin.Engine) {
-	router.Use(Logger(), gin.Recovery(), cors.New(cors.Config{
-		AllowOrigins:     []string{"https://foo.com"},
+func SetMiddleware(router *gin.Engine, logger *zap.Logger) {
+	router.Use(GinZap(logger, time.RFC3339, true), RecoveryWithZap(logger, true), cors.New(cors.Config{
+		AllowOrigins:     []string{"https://foo.com", "http://localhost:8080", "http://localhost:8081", "http://localhost:8082", "http://localhost:3001", "http://localhost:3002", "http://localhost:3003"},
 		AllowMethods:     []string{"GET", "POST", "DELETE", "PUT", "PATCH"},
 		AllowHeaders:     []string{"Origin"},
 		ExposeHeaders:    []string{"Content-Length"},

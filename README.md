@@ -42,7 +42,7 @@ docker build -t gin_serve:latest .
 docker run -it -p 3000:3000 -p 3001:3001 -p 3002:3002 --rm --net my_net --name gin_serve_api_service gin_serve:latest
 
 # or (Makefile)
-make api
+make serve
 
 
 # generate api docs
