@@ -5,9 +5,9 @@ import (
 	"gin_serve/app/dto"
 	"gin_serve/app/model"
 	"gin_serve/app/repo"
-	"log"
 
 	"github.com/mashingan/smapping"
+	"go.uber.org/zap"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -41,7 +41,7 @@ func (service *authService) VerifyCredential(email string, password string) (dto
 			err := smapping.FillStruct(&userToCreate, smapping.MapFields(&user))
 
 			if err != nil {
-				log.Fatalf("Failed map %v", err)
+				zap.S().Errorf("Failed map %v", err)
 			}
 
 			return userToCreate, nil
@@ -60,7 +60,7 @@ func (service *authService) CreateUser(user dto.UserRegisterDTO) dto.UserDTO {
 	err := smapping.FillStruct(&userToCreate, smapping.MapFields(&user))
 
 	if err != nil {
-		log.Fatalf("Failed map %v", err)
+		zap.S().Fatalf("Failed map %v", err)
 	}
 
 	userToDTO := dto.UserDTO{}
@@ -79,7 +79,7 @@ func (service *authService) FindByEmail(email string) dto.UserDTO {
 	err := smapping.FillStruct(&userToDTO, smapping.MapFields(&user))
 
 	if err != nil {
-		log.Fatalf("Failed map %v", err)
+		zap.S().Fatalf("Failed map %v", err)
 	}
 
 	return userToDTO
@@ -98,7 +98,7 @@ func comparePassword(hashPassword, plainPassword string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hashPassword), []byte(plainPassword))
 
 	if err != nil {
-		log.Println(err.Error())
+		zap.S().Fatalf(err.Error())
 		return false
 	}
 

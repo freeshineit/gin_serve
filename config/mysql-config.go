@@ -2,8 +2,8 @@ package config
 
 import (
 	"fmt"
-	"log"
 
+	"go.uber.org/zap"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -29,7 +29,7 @@ func SetupDatabaseConnection() *gorm.DB {
 	}), &gorm.Config{})
 
 	if err != nil {
-		log.Fatal("Mysql connect fail...", err)
+		zap.S().Fatalf("Mysql connect fail...", err)
 		panic("Failed to create a connection to mysql")
 	}
 

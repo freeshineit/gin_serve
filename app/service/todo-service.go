@@ -6,9 +6,9 @@ import (
 	"gin_serve/app/model"
 	"gin_serve/app/repo"
 	"gin_serve/message"
-	"log"
 
 	"github.com/mashingan/smapping"
+	"go.uber.org/zap"
 )
 
 type TodoService interface {
@@ -44,7 +44,7 @@ func (service *todoService) CreateTodo(todo dto.TodoCreateDTO, userID uint64) (d
 		err := smapping.FillStruct(&todoDTO, smapping.MapFields(&t))
 
 		if err != nil {
-			log.Fatalf("Failed map %v", err)
+			zap.S().Fatalf("Failed map %v", err)
 		}
 
 		return todoDTO, nil
@@ -73,7 +73,7 @@ func (service *todoService) FindAll(userId uint64, limit, page int) ([]dto.TodoD
 		err := smapping.FillStruct(&todo, smapping.MapFields(&t))
 
 		if err != nil {
-			log.Fatalf("Failed map %v", err)
+			zap.S().Fatalf("Failed map %v", err)
 		}
 
 		todos = append(todos, todo)

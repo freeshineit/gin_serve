@@ -9,11 +9,11 @@ import (
 	"gin_serve/config"
 	"gin_serve/helper"
 	"gin_serve/message"
-	"log"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 // var Todos = make([]model.Todo, 0)
@@ -102,11 +102,11 @@ func GetTodos(ctx *gin.Context) {
 
 		query := dto.PaginationRequestDTO{}
 		if err := ctx.ShouldBindQuery(&query); err != nil {
-			log.Println(err.Error())
+			zap.S().Error(err.Error())
 		}
 
 		if query.Offset <= 0 || query.Page <= 0 {
-			log.Printf("query error: %v \n", query)
+			zap.S().Errorf("query error: %v \n", query)
 			ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(message.BadRequestCode, "fail", fmt.Sprintf("query error: %v", query)))
 			return
 		}

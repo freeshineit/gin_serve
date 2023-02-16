@@ -10,6 +10,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cobra"
+	"go.uber.org/zap"
 )
 
 var ProxyCmd = &cobra.Command{
@@ -49,7 +50,7 @@ func Serve(mode string) error {
 	err := helper.ListenAndServe(srv)
 
 	if err != nil {
-		log.Fatal("Proxy server forced to shutdown:", err)
+		zap.S().Fatalf("Proxy server forced to shutdown:", err)
 	}
 
 	log.Println("Proxy server exiting")
