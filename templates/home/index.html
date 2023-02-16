@@ -6,13 +6,20 @@
 <head>
     {{template "globals/_head.html" .}}
     <title>{{.title}}</title>
+    <style>
+        .container {
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
 </head>
 
 <body>
     {{template "globals/_header.html" .}}
 
     <div class="container">
-        Home
+        <div><img src="https://go.dev/images/gophers/biplane.svg" height="100px" /></div>
+        <div style="margin-top: 20px;">Gin Serve</div>
     </div>
 
     {{template "globals/_footer.html" .}}

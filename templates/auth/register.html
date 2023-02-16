@@ -35,7 +35,7 @@
                 <input type="file" id="avatar" name="avatar" placeholder="Avatar" accept="image/*">
                 <input type="text" id="gender" name="gender" placeholder="Gender">
                 <input type="number" id="age" name="gender" placeholder="Age">
-                <button type="submit" class="btn btn-primary btn-block">Register</button>
+                <button type="submit" class="btn btn-primary btn-block">Sign up</button>
             </form>
         </div>
     </div>
@@ -53,7 +53,7 @@
                 fd.append('file', file.files[0])
                 Axios({
                     method: "post",
-                    url: "/api/file_upload",
+                    url: "/api/upload",
                     headers: {
                         "Content-Type": "application/form-data"
                     },
