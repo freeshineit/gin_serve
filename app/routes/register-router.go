@@ -21,6 +21,7 @@ func RegisterGroup(router *gin.RouterGroup) *gin.RouterGroup {
 	// curl -X POST http://localhost:8080/api/login -H 'accept: application/json' -H 'Content-Type: application/json' -d '{"email": "xiaoshaoqq@gmail.com","password": "123456"}'
 	router.POST("/login", api.Login)
 	router.POST("/logout", api.Logout)
+	router.POST("/upload", api.FileUpload) // /api/upload [post]
 
 	router.GET("/query", func(c *gin.Context) {
 		// message := c.Query("message")
@@ -38,7 +39,7 @@ func RegisterGroup(router *gin.RouterGroup) *gin.RouterGroup {
 func RegisterGroupWithAuth(router *gin.RouterGroup) *gin.RouterGroup {
 	authRouter := router.Group("/", jwtAuthMiddleware)
 
-	authRouter.POST("/file_upload", api.FileUpload) // /api/file_upload [post]
+	authRouter.POST("/upload_file", api.FileUpload) // /api/upload_file [post]
 	authRouter.GET("/user/:id", api.GetUserByID)    // /api/user/:id [get]
 	authRouter.POST("/user", api.CreateUser)        // /api/user [post]
 	authRouter.PUT("/user/:id", api.UpdateUser)     // /api/user/:id [put]
