@@ -56,6 +56,15 @@ table {
 
 /* common */
 
+a {
+    color: #000;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #0099e5;
+}
+
 button {
     outline: none;
     position: relative;
