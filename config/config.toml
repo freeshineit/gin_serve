@@ -35,3 +35,7 @@
   # max_age = 50 # 日志保留时间，单位: 天 (day)
   # compress= false # 是否压缩日志
   # logStdout = true # 是否输出到控制台
+
+[email]
+  # 163邮箱 POP3/SMTP 服务授权密码
+  password =""
