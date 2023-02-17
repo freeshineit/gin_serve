@@ -10,6 +10,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 // Register
@@ -50,6 +51,12 @@ func Register(ctx *gin.Context) {
 
 	u := authService.CreateUser(user)
 
+	if err := helper.SendActiveEmail(&u); err != nil {
+		zap.S().Fatal(err.Error())
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(1, "send email fail!", "send email fail!"))
+		return
+	}
+
 	ctx.JSON(http.StatusCreated, helper.BuildResponse("success", u))
 }
 
@@ -78,6 +85,11 @@ func Login(ctx *gin.Context) {
 
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(1, "fail", err.Error()))
+		return
+	}
+
+	if *u.IsActive != 1 {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(1, "fail", "用户还未激活，请激活后再试！"))
 		return
 	}
 
@@ -123,4 +135,32 @@ func Refresh(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, helper.BuildResponse("success", user))
+}
+
+// Verify Email
+// @Summary	Account
+// @Schemes
+// @Description	Verify Email
+// @Tags	    account
+// @Accept	    json
+// @Produce		json
+// @Success		200	  {object}	  helper.Response  "success"
+// @Failure     400   {object}    helper.Response  "failed"
+// @Router		/api/verify/{id} [post]
+func VerifyEmail(c *gin.Context) {
+	token := c.Param("token")
+
+	if token == "" {
+		c.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(1, "no token", "no token"))
+		return
+	}
+
+	authService := service.NewAuthService(repo.NewUserRepo(config.DB))
+
+	ok := authService.VerifyEmail(token)
+	if ok {
+		c.JSON(http.StatusOK, helper.BuildResponse("success", "激活成功"))
+		return
+	}
+	c.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(1, "fail", "激活失败"))
 }

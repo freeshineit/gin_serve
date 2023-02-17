@@ -6,6 +6,7 @@ import "gorm.io/gorm"
 func GormAutoMigration(Db *gorm.DB) {
 	// auto migrate
 	Db.AutoMigrate(
+		&Role{},
 		&User{},
 		// &LoginRecord{},
 		&Todo{},

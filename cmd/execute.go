@@ -5,10 +5,10 @@ import (
 	"gin_serve/cmd/proxy"
 	"gin_serve/cmd/socket"
 	"gin_serve/cmd/version"
-	"log"
 	"os"
 
 	"github.com/spf13/cobra"
+	"go.uber.org/zap"
 	"golang.org/x/sync/errgroup"
 
 	"gin_serve/config"
@@ -45,7 +45,7 @@ var rootCmd = &cobra.Command{
 		})
 
 		if err := g.Wait(); err != nil {
-			log.Fatal(err)
+			zap.S().Fatal(err)
 		}
 	},
 }

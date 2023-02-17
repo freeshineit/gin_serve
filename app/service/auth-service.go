@@ -5,9 +5,10 @@ import (
 	"gin_serve/app/dto"
 	"gin_serve/app/model"
 	"gin_serve/app/repo"
-	"log"
+	"gin_serve/helper"
 
 	"github.com/mashingan/smapping"
+	"go.uber.org/zap"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -16,6 +17,7 @@ type AuthService interface {
 	CreateUser(user dto.UserRegisterDTO) dto.UserDTO
 	FindByEmail(email string) dto.UserDTO
 	IsDuplicateEmail(email string) bool
+	VerifyEmail(tokenStr string) bool
 }
 
 type authService struct {
@@ -41,7 +43,7 @@ func (service *authService) VerifyCredential(email string, password string) (dto
 			err := smapping.FillStruct(&userToCreate, smapping.MapFields(&user))
 
 			if err != nil {
-				log.Fatalf("Failed map %v", err)
+				zap.S().Errorf("Failed map %v", err)
 			}
 
 			return userToCreate, nil
@@ -60,7 +62,7 @@ func (service *authService) CreateUser(user dto.UserRegisterDTO) dto.UserDTO {
 	err := smapping.FillStruct(&userToCreate, smapping.MapFields(&user))
 
 	if err != nil {
-		log.Fatalf("Failed map %v", err)
+		zap.S().Fatalf("Failed map %v", err)
 	}
 
 	userToDTO := dto.UserDTO{}
@@ -79,7 +81,7 @@ func (service *authService) FindByEmail(email string) dto.UserDTO {
 	err := smapping.FillStruct(&userToDTO, smapping.MapFields(&user))
 
 	if err != nil {
-		log.Fatalf("Failed map %v", err)
+		zap.S().Fatalf("Failed map %v", err)
 	}
 
 	return userToDTO
@@ -98,9 +100,19 @@ func comparePassword(hashPassword, plainPassword string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hashPassword), []byte(plainPassword))
 
 	if err != nil {
-		log.Println(err.Error())
+		zap.S().Fatalf(err.Error())
 		return false
 	}
 
 	return true
+}
+
+func (service *authService) VerifyEmail(tokenStr string) bool {
+	token, tokenClaims, err := helper.ValidateEmailTokenAndClaims(tokenStr)
+
+	if err == nil && token.Valid {
+		zap.S().Info(tokenClaims.UserID, tokenClaims.Email)
+		return service.userRepos.VerifyActiveEmail(tokenClaims.UserID, tokenClaims.Email)
+	}
+	return false
 }

@@ -2,8 +2,8 @@ package repo
 
 import (
 	"gin_serve/app/model"
-	"log"
 
+	"go.uber.org/zap"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
@@ -16,6 +16,7 @@ type UserRepo interface {
 	IsDuplicateEmail(email string) *gorm.DB
 	FindByEmail(email string) model.User
 	ProfileUser(userID string) model.User
+	VerifyActiveEmail(userID uint64, email string) bool
 }
 
 type userConnection struct {
@@ -77,12 +78,25 @@ func (db *userConnection) ProfileUser(userID string) model.User {
 	return user
 }
 
+// VerifyActiveEmail
+func (db *userConnection) VerifyActiveEmail(userID uint64, email string) bool {
+	user := model.User{ID: userID, Email: email}
+
+	err := db.connection.Model(&user).Update("is_active", 1).Error
+
+	if err != nil {
+		return false
+	}
+
+	return true
+}
+
 // hashAndSalt be used when encrypt password
 func hashAndSalt(pwd []byte) string {
 	hash, err := bcrypt.GenerateFromPassword(pwd, bcrypt.DefaultCost)
 
 	if err != nil {
-		log.Panicln("Failed to hash a password")
+		zap.S().Panicln("Failed to hash a password")
 	}
 
 	return string(hash)

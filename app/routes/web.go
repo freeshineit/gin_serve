@@ -14,4 +14,5 @@ func SetRoutesPage(r *gin.Engine) {
 	r.GET("/register", api.RegisterPage)
 	r.GET("/list", api.ListPage)
 	r.GET("/socket", api.SocketPage)
+	r.GET("/verify_email/:id", api.VerifyEmailPage)
 }

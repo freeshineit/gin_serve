@@ -11,6 +11,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cobra"
+	"go.uber.org/zap"
 )
 
 var SocketCmd = &cobra.Command{
@@ -48,7 +49,7 @@ func Serve(mode string) error {
 	err := helper.ListenAndServe(srv)
 
 	if err != nil {
-		log.Fatal("Socket Server forced to shutdown:", err)
+		zap.S().Fatalf("Socket Server forced to shutdown:", err)
 	}
 
 	log.Println("Socket Server exiting")
