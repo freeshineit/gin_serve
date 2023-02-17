@@ -50,3 +50,11 @@ func SocketPage(c *gin.Context) {
 		"proxyPort": config.Conf.Proxy.Port,
 	})
 }
+
+func VerifyEmailPage(c *gin.Context) {
+	c.HTML(http.StatusOK, "auth/verify_email_active.html", gin.H{
+		"title": "Email Active",
+		// "port":      config.Conf.Socket.Port,
+		// "proxyPort": config.Conf.Proxy.Port,
+	})
+}

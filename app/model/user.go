@@ -11,6 +11,6 @@ type User struct {
 	Gender   string `json:"gender" form:"gender" binding:"required" gorm:"type:varchar(40)"`
 	Avatar   string `json:"avatar" form:"avatar" binding:"required" gorm:"type:varchar(255)"`
 	Password string `json:"-" form:"-" gorm:"->;<-;not null"`
-	Status   *uint  `json:"status" form:"status" gorm:"not null;default:0"`   // 收否激活 0 未激活 1 已激活
-	RoleId   *uint  `json:"role_id" form:"role_id" gorm:"not null;default:0"` // 角色 0 默认角色
+	IsActive *uint  `json:"is_active" form:"is_active" gorm:"not null;default:0"` // 收否激活 0 未激活 1 已激活
+	RoleId   *uint  `json:"role_id" form:"role_id" gorm:"not null;default:1"`     // 角色 1 默认角色
 }

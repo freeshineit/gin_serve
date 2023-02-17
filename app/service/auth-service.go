@@ -5,6 +5,7 @@ import (
 	"gin_serve/app/dto"
 	"gin_serve/app/model"
 	"gin_serve/app/repo"
+	"gin_serve/helper"
 
 	"github.com/mashingan/smapping"
 	"go.uber.org/zap"
@@ -16,6 +17,7 @@ type AuthService interface {
 	CreateUser(user dto.UserRegisterDTO) dto.UserDTO
 	FindByEmail(email string) dto.UserDTO
 	IsDuplicateEmail(email string) bool
+	VerifyEmail(tokenStr string) bool
 }
 
 type authService struct {
@@ -103,4 +105,14 @@ func comparePassword(hashPassword, plainPassword string) bool {
 	}
 
 	return true
+}
+
+func (service *authService) VerifyEmail(tokenStr string) bool {
+	token, tokenClaims, err := helper.ValidateEmailTokenAndClaims(tokenStr)
+
+	if err == nil && token.Valid {
+		zap.S().Info(tokenClaims.UserID, tokenClaims.Email)
+		return service.userRepos.VerifyActiveEmail(tokenClaims.UserID, tokenClaims.Email)
+	}
+	return false
 }

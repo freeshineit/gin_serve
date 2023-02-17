@@ -41,6 +41,10 @@ type SocketConfig struct {
 	Port string `mapstructure:"port"`
 }
 
+type EmailConfig struct {
+	Password string `mapstructure:"password"`
+}
+
 type Config struct {
 	Logger LoggerConfig `mapstructure:"logger"`
 	Mysql  MysqlConfig  `mapstructure:"mysql"`
@@ -49,5 +53,6 @@ type Config struct {
 	App    AppConfig    `mapstructure:"app"`
 	Proxy  ProxyConfig  `mapstructure:"proxy"`
 	Socket SocketConfig `mapstructure:"socket"`
+	Email  EmailConfig  `mapstructure:"email"`
 	Name   string
 }

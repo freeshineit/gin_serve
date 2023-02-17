@@ -17,6 +17,7 @@ var jwtAuthMiddleware = middleware.JwtAuth()
 // register with auth api /api/xxx
 func RegisterGroup(router *gin.RouterGroup) *gin.RouterGroup {
 	router.POST("/register", api.Register)
+	router.POST("/verify_email/:token", api.VerifyEmail)
 
 	// curl -X POST http://localhost:8080/api/login -H 'accept: application/json' -H 'Content-Type: application/json' -d '{"email": "xiaoshaoqq@gmail.com","password": "123456"}'
 	router.POST("/login", api.Login)

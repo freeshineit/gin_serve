@@ -1,0 +1,51 @@
+{{define "auth/verify_email_active.html"}}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{template "globals/_head.html"}}
+    <title>Verify Email</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+    <script src="/static/js/axios.js"></script>
+
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            width: 100vw;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #result {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div id="result"></div>
+        <a href="/"><button type="submit" class="btn btn-primary btn-block">Home</button></a>
+    </div>
+    <script>
+        (function () {
+            const paths = location.pathname.split('/')
+            const token = paths[paths.length - 1]
+            const result = document.getElementById("result")
+            Axios.post(`/api/verify_email/${token}`, {})
+                .then(res => {
+                    if (res.code == 0) {
+                        result.innerHTML = "Active Success"
+                    } else {
+                        result.innerHTML = "Active Failed"
+                    }
+                }).catch(err => {
+                    result.innerHTML = "Active Failed"
+                })
+        })();
+    </script>
+</body>
+
+</html>
+{{end}}

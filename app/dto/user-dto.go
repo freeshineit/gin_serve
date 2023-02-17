@@ -2,12 +2,14 @@ package dto
 
 type UserDTO struct {
 	Model
-	ID     uint64 `json:"id" form:"id" binding:"required"`
-	Name   string `json:"name" form:"name" binding:"required"`
-	Email  string `json:"email" form:"email" binding:"required,email"`
-	Age    uint   `json:"age" form:"age" binding:"required,gte=1,lte=200"`
-	Gender string `json:"gender" form:"gender" binding:"required"`
-	Avatar string `json:"avatar" form:"avatar" binding:"required"`
+	ID       uint64 `json:"id" form:"id" binding:"required"`
+	Name     string `json:"name" form:"name" binding:"required"`
+	Email    string `json:"email" form:"email" binding:"required,email"`
+	Age      uint   `json:"age" form:"age" binding:"required,gte=1,lte=200"`
+	Gender   string `json:"gender" form:"gender" binding:"required"`
+	Avatar   string `json:"avatar" form:"avatar" binding:"required"`
+	IsActive *uint  `json:"is_active" form:"is_active"` // 收否激活 0 未激活 1 已激活
+	RoleId   *uint  `json:"role_id" form:"role_id"`     // 角色 1 默认角色
 }
 
 // UserRegisterDTO is used by when user register

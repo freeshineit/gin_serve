@@ -16,6 +16,7 @@ type UserRepo interface {
 	IsDuplicateEmail(email string) *gorm.DB
 	FindByEmail(email string) model.User
 	ProfileUser(userID string) model.User
+	VerifyActiveEmail(userID uint64, email string) bool
 }
 
 type userConnection struct {
@@ -75,6 +76,19 @@ func (db *userConnection) ProfileUser(userID string) model.User {
 	var user model.User
 	db.connection.Find(&user, userID)
 	return user
+}
+
+// VerifyActiveEmail
+func (db *userConnection) VerifyActiveEmail(userID uint64, email string) bool {
+	user := model.User{ID: userID, Email: email}
+
+	err := db.connection.Model(&user).Update("is_active", 1).Error
+
+	if err != nil {
+		return false
+	}
+
+	return true
 }
 
 // hashAndSalt be used when encrypt password
