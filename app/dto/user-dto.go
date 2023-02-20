@@ -36,6 +36,8 @@ type UserUpdateDTO struct {
 
 // UserLoginDTO is used by when user login
 type UserLoginDTO struct {
-	Email    string `json:"email" form:"email" binding:"required,email"`
-	Password string `json:"password" form:"password" binding:"required,min=6,max=40"`
+	Email     string `json:"email" form:"email" binding:"required,email"`
+	Password  string `json:"password" form:"password" binding:"required,min=6,max=40"`
+	Code      string `json:"code" form:"code" binding:"required"`
+	CaptchaID string `json:"captcha_id" form:"captcha_id" binding:"required"`
 }

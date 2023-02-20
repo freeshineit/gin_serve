@@ -52,7 +52,12 @@ http://localhost:8080/swagger/index.html
 
 ```
 
-## golang
+## Feature 
+
+- [x] RESTful API 
+- [x] JWT authentication
+- [x] Email login/register
+- [x] Swagger api document
 
 
 

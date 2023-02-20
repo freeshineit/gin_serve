@@ -90,8 +90,8 @@ func GetTodo(c *gin.Context) {
 // @Produce		json
 // @Param       offset query   int  false   "offset" default(10)
 // @Param       page   query   int   false  "page"   default(1)
-// @Success		200	 {object}	helper.Response
-// @Router		/api/v1/todos?page=1&offset=10 [get]
+// @Success		200	  {object}	helper.Response
+// @Router		/api/v1/todos [get]
 // @Security    Bearer
 func GetTodos(ctx *gin.Context) {
 	tokenClaims, exists := ctx.Get(middleware.TokenClaims)

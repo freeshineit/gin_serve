@@ -72,16 +72,25 @@ func Register(ctx *gin.Context) {
 // @Failure     400   {object}    helper.Response   "failed"
 // @Router		/api/login [post]
 func Login(ctx *gin.Context) {
-	var user dto.UserLoginDTO
+	var userDTO dto.UserLoginDTO
 
-	if err := ctx.ShouldBind(&user); err != nil {
+	if err := ctx.ShouldBind(&userDTO); err != nil {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(1, "fail", err.Error()))
+		return
+	}
+
+	serviceCaptcha := service.NewCaptchaService()
+
+	ok := serviceCaptcha.VerifyCaptcha(userDTO.CaptchaID, userDTO.Code)
+
+	if !ok {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(1, "fail", "验证码错误"))
 		return
 	}
 
 	authService := service.NewAuthService(repo.NewUserRepo(config.DB))
 
-	u, err := authService.VerifyCredential(user.Email, user.Password)
+	u, err := authService.VerifyCredential(userDTO.Email, userDTO.Password)
 
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(1, "fail", err.Error()))
