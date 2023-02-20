@@ -24,6 +24,23 @@
         #login_form>input {
             margin-bottom: 20px;
         }
+
+        .code-wrapper {
+            position: relative;
+        }
+
+        .code-wrapper input {
+            width: 230px;
+        }
+
+        .captcha-img {
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 32px;
+            width: 77px;
+            border: 1px solid #d9d9d9;
+        }
     </style>
 </head>
 
@@ -33,6 +50,10 @@
             <form id="login_form">
                 <input type="email" id="email" placeholder="Email">
                 <input type="password" id="password" placeholder="Password">
+                <div class="code-wrapper">
+                    <input id="code" placeholder="Captcha">
+                    <img src="" class="captcha-img" id="captcha" />
+                </div>
                 <div style="height: 30px; text-align: right">
                     <a href="/register">Sign up</a>
                 </div>
@@ -43,6 +64,23 @@
     {{template "globals/_footer.html"}}
     <script>
         ; (function () {
+
+            const captchaImg = document.getElementById('captcha')
+
+            function getCaptcha() {
+                Axios.get("/api/captcha").then(res => {
+                    console.log(res)
+                    captchaImg.src = res.data.image_url
+                    captchaImg.setAttribute('data-id', res.data.captcha_id)
+                })
+            }
+
+            getCaptcha()
+
+            captchaImg.addEventListener("click", () => {
+                getCaptcha()
+            }, false)
+
             const login_form = document.getElementById('login_form')
             login_form.addEventListener('submit', (e) => {
                 // e.stopPropagation()
@@ -50,18 +88,29 @@
 
                 const emailEle = document.getElementById('email')
                 const passwordEle = document.getElementById('password')
+                const codeEle = document.getElementById('code')
+                const captchaId = captchaImg.getAttribute("data-id")
 
-                const email = emailEle.value
-                const password = passwordEle.value
+                const email = emailEle.value.trim()
+                const password = passwordEle.value.trim()
+                const code = codeEle.value.trim()
+
+                if (email === '' || password === '' || code === '' || captchaId === '') {
+                    return
+                }
 
                 if (email && password) {
                     Axios.post("/api/login", {
                         email,
-                        password
+                        password,
+                        code,
+                        captcha_id: captchaId
                     }).then(res => {
                         if (res.code === 0) {
                             location.href = '/'
                         }
+                    }).catch(err => {
+                        getCaptcha()
                     })
                 }
 
