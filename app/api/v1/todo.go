@@ -42,7 +42,7 @@ func CreateTodo(ctx *gin.Context) {
 
 	if exists {
 		service := service.NewTodoService(repo.NewTodoRepo(config.DB))
-		userID := tokenClaims.(*helper.TokenClaim).UserID
+		userID := tokenClaims.(*helper.JWTAuthCustomClaim).UserID
 		t, err := service.CreateTodo(todo, userID)
 		if err == nil {
 			ctx.JSON(http.StatusCreated, helper.BuildResponse("success", t))
@@ -98,7 +98,7 @@ func GetTodos(ctx *gin.Context) {
 
 	if exists {
 		service := service.NewTodoService(repo.NewTodoRepo(config.DB))
-		userID := tokenClaims.(*helper.TokenClaim).UserID
+		userID := tokenClaims.(*helper.JWTAuthCustomClaim).UserID
 
 		query := dto.PaginationRequestDTO{}
 		if err := ctx.ShouldBindQuery(&query); err != nil {
@@ -113,7 +113,7 @@ func GetTodos(ctx *gin.Context) {
 
 		list, total, _ := service.FindAll(userID, query.Offset, query.Page)
 
-		ctx.JSON(http.StatusCreated, helper.BuildResponse("success", dto.ListDTO[dto.TodoDTO]{
+		ctx.JSON(http.StatusOK, helper.BuildResponse("success", dto.ListDTO[dto.TodoDTO]{
 			List: list,
 			Page: dto.PaginationResponseDTO{
 				Offset: query.Offset,
@@ -162,7 +162,7 @@ func PutTodoContent(ctx *gin.Context) {
 	if exists {
 		service := service.NewTodoService(repo.NewTodoRepo(config.DB))
 
-		userID := tokenClaims.(*helper.TokenClaim).UserID
+		userID := tokenClaims.(*helper.JWTAuthCustomClaim).UserID
 
 		ok, err := service.UpdateTodoContent(tid, todoUpdateContentDTO.Content, userID)
 
@@ -211,7 +211,7 @@ func PutTodoStatus(ctx *gin.Context) {
 	if exists {
 		service := service.NewTodoService(repo.NewTodoRepo(config.DB))
 
-		userID := tokenClaims.(*helper.TokenClaim).UserID
+		userID := tokenClaims.(*helper.JWTAuthCustomClaim).UserID
 
 		ok, err := service.UpdateTodoStatus(tid, *todoUpdateStatusDTO.Status, userID)
 
@@ -251,7 +251,7 @@ func DeleteTodo(ctx *gin.Context) {
 	if exists {
 		service := service.NewTodoService(repo.NewTodoRepo(config.DB))
 
-		userID := tokenClaims.(*helper.TokenClaim).UserID
+		userID := tokenClaims.(*helper.JWTAuthCustomClaim).UserID
 
 		ok, err := service.DeleteTodo(tid, userID)
 

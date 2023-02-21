@@ -73,7 +73,7 @@ func GinZapWithConfig(logger *zap.Logger, conf *Config) gin.HandlerFunc {
 			var userID uint64
 
 			if exists {
-				userID = tokenClaims.(*helper.TokenClaim).UserID
+				userID = tokenClaims.(*helper.JWTAuthCustomClaim).UserID
 			}
 
 			fields := []zapcore.Field{

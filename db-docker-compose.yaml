@@ -34,9 +34,8 @@ services:
 
     volumes:
       - ./docker/redis/data:/data
-      - ./docker/redis/redis.conf:/etc/redis/redis.conf
 
-    command: redis-server /etc/redis/redis.conf
+    command: redis-server
 
     privileged: true
     restart: always

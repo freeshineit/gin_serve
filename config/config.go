@@ -20,13 +20,14 @@ type MysqlConfig struct {
 type RedisConfig struct {
 	Host     string `mapstructure:"host"`
 	Port     int32  `mapstructure:"port"`
-	Db       int32  `mapstructure:"db"`
+	Db       int    `mapstructure:"db"`
 	Password string `mapstructure:"password"`
 }
 
 type JWTConfig struct {
-	Secret string `mapstructure:"secret"`
-	Issuer string `mapstructure:"issuer"`
+	Secret     string `mapstructure:"secret"`
+	Issuer     string `mapstructure:"issuer"`
+	JWTExpires int    `mapstructure:"jwt_expires"`
 }
 
 type AppConfig struct {

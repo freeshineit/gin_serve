@@ -46,6 +46,19 @@
     <div class="flex h_right">
         <div class="h_login"><a href="/login">Sign in</a></div>
         <div class="h_register"><a href="/register">Sign up</a></div>
+        <div class="h_register" id="_LOGOUT_">Logout</div>
     </div>
+    <script>
+        (function () {
+            document.getElementById('_LOGOUT_').addEventListener("click", () => {
+                Axios.post('/api/logout').then(res => {
+                    console.log(res)
+                }).catch(err => {
+                    console.log(err)
+                })
+            }, false)
+
+        })();
+    </script>
 </header>
 {{end}}

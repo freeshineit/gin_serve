@@ -108,11 +108,13 @@ func comparePassword(hashPassword, plainPassword string) bool {
 }
 
 func (service *authService) VerifyEmail(tokenStr string) bool {
-	token, tokenClaims, err := helper.ValidateEmailTokenAndClaims(tokenStr)
 
-	if err == nil && token.Valid {
-		zap.S().Info(tokenClaims.UserID, tokenClaims.Email)
-		return service.userRepos.VerifyActiveEmail(tokenClaims.UserID, tokenClaims.Email)
+	emailClaims, valid, err := helper.ValidateEmailTokenAndBackClaims(tokenStr)
+
+	if err == nil && valid {
+		zap.S().Info(emailClaims.UserID, emailClaims.Email)
+		return service.userRepos.VerifyActiveEmail(emailClaims.UserID, emailClaims.Email)
 	}
+
 	return false
 }

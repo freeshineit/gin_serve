@@ -12,6 +12,7 @@
 [jwt]
   secret = "xiaoshaoqq@gmail.com,.<>?"
   issuer = "xiaoshaoqq@gmail.com"
+  jwt_expires = 86400  # 单位秒  3600 * 24 = 86400
 
 [mysql]
   host = "localhost"
@@ -22,10 +23,10 @@
   connection_max = 1000
 
 [redis]
-  host = "localhost"
+  host = "127.0.0.1"
   port = 6379
-  db = 5
-  password = "123456"
+  db = 0
+  password = ""
 
 # development environment console out
 [logger]
