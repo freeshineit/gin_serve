@@ -22,22 +22,13 @@ import (
 // @Produce		json
 // @Param       user  body        dto.UserRegisterDTO  true  "UserRegisterDTO JSON"
 // @Success		200	  {object}	  helper.Response  "success"
-// @Failure     400   {object}    helper.Response  "register failed!"
+// @Failure     400   {object}    helper.BuildErrorResponse  "register failed!"
 // @Router		/api/register [post]
 func Register(ctx *gin.Context) {
 
 	var user dto.UserRegisterDTO
 
 	if err := ctx.ShouldBind(&user); err != nil {
-
-		// errs, _ := err.(validator.ValidationErrors)
-
-		// if !ok {
-		// 	ctx.AbortWithStatusJSON(http.StatusBadGateway, "")
-		// }
-
-		// log.Println(errs.Translate(helper.Trans))
-
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(1, "register failed!", err.Error()))
 		return
 	}
@@ -69,7 +60,7 @@ func Register(ctx *gin.Context) {
 // @Produce		json
 // @Param       user  body   	  dto.UserLoginDTO  true   "UserLoginDTO json"  default(dto.UserLoginDTO{"xiaoshaoqq@gmail.com", "123456"})
 // @Success		200	  {object}	  helper.Response   "success"
-// @Failure     400   {object}    helper.Response   "failed"
+// @Failure     400   {object}    helper.BuildErrorResponse   "failed"
 // @Router		/api/login [post]
 func Login(ctx *gin.Context) {
 	var userDTO dto.UserLoginDTO
@@ -118,11 +109,19 @@ func Login(ctx *gin.Context) {
 // @Description	User logout
 // @Tags	    account
 // @Success		200	  {object}	helper.Response  "success"
-// @Failure     400   {object}  helper.Response  "failed"
+// @Failure     400   {object}  helper.BuildErrorResponse  "failed"
 // @Router		/api/logout [post]
-func Logout(c *gin.Context) {
+func Logout(ctx *gin.Context) {
+	authorization := helper.GetHeaderToken(ctx)
 
-	c.JSON(http.StatusOK, helper.BuildResponse("success", helper.EmptyObj{}))
+	service := service.NewJWTService(config.RedisClient)
+
+	if err := service.JoinBlackList(authorization); err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(1, "fail", err.Error()))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, helper.BuildResponse("success", helper.EmptyObj{}))
 }
 
 // Refresh login token
@@ -133,7 +132,7 @@ func Logout(c *gin.Context) {
 // @Accept	    json
 // @Produce		json
 // @Success		200	  {object}	  helper.Response  "success"
-// @Failure     400   {object}    helper.Response  "failed"
+// @Failure     400   {object}    helper.BuildErrorResponse  "failed"
 // @Router		/api/refresh [post]
 func Refresh(c *gin.Context) {
 	var user model.User
@@ -154,7 +153,7 @@ func Refresh(c *gin.Context) {
 // @Accept	    json
 // @Produce		json
 // @Success		200	  {object}	  helper.Response  "success"
-// @Failure     400   {object}    helper.Response  "failed"
+// @Failure     400   {object}    helper.BuildErrorResponse  "failed"
 // @Router		/api/verify/{id} [post]
 func VerifyEmail(c *gin.Context) {
 	token := c.Param("token")

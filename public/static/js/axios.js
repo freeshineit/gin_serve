@@ -15,7 +15,7 @@ var Axios = (function () {
       }
 
       if (token && config["headers"]) {
-        config["headers"]["Authorization"] = `Basic ${token}`;
+        config["headers"]["Authorization"] = `Bearer ${token}`;
       }
       return config;
     },

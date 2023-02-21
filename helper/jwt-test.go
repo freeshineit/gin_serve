@@ -3,14 +3,7 @@ package helper
 import (
 	"fmt"
 	"testing"
-
-	"github.com/golang-jwt/jwt/v4"
 )
-
-type MyCustomClaims struct {
-	Foo string `json:"foo"`
-	jwt.RegisteredClaims
-}
 
 // Example creating a token using a custom claims type. The RegisteredClaims is embedded
 // in the custom type to allow for easy encoding, parsing and validation of registered claims.
@@ -32,9 +25,11 @@ func TestExampleParseWithClaims(t *testing.T) {
 		t.Errorf("jwt_Service.GenerateToken Error: %v", err.Error())
 	}
 
-	token, jwtCustomClaim, err := ValidateTokenAndClaims(tokenString)
+	jwtCustomClaim := &JWTAuthCustomClaim{}
+
+	jwtCustomClaim, valid, err := ValidateTokenAndBackClaims(tokenString)
 
 	if err != nil {
-		t.Errorf("ParseToken: %v , %v,  %v", token, jwtCustomClaim, err.Error())
+		t.Errorf("ParseToken: %v , %v,  %v", valid, jwtCustomClaim, err.Error())
 	}
 }

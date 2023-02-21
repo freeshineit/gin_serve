@@ -1,6 +1,8 @@
 package middleware
 
 import (
+	"gin_serve/app/service"
+	"gin_serve/config"
 	"gin_serve/helper"
 	"gin_serve/message"
 	"net/http"
@@ -15,11 +17,6 @@ var TokenClaims = "TokenClaims"
 func JwtAuth() gin.HandlerFunc {
 
 	return func(ctx *gin.Context) {
-		// // cookie, _ := c.Cookie("authorization")
-		// // if err != nil {
-		// // 	c.AbortWithStatusJSON(http.StatusUnauthorized, helper.BuildErrorResponse(401, "no token", "no token found"))
-		// // }
-		// // log.Println("cookie", cookie)
 
 		authorization := helper.GetHeaderToken(ctx)
 
@@ -28,14 +25,22 @@ func JwtAuth() gin.HandlerFunc {
 			return
 		}
 
-		token, tokenClaims, err := helper.ValidateTokenAndClaims(authorization)
+		jwtService := service.NewJWTService(config.RedisClient)
 
-		if err == nil && token.Valid {
+		if jwtService.IsInBlacklist(authorization) {
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, helper.BuildErrorResponse(message.UnauthorizedCode, message.UnauthorizedExpired, message.UnauthorizedExpired))
+			return
+		}
+
+		tokenClaims, valid, err := helper.ValidateTokenAndBackClaims(authorization)
+
+		if err == nil && valid {
 			ctx.Set(TokenClaims, tokenClaims)
 			ctx.Next()
 			return
 		} else {
 			ctx.AbortWithStatusJSON(http.StatusUnauthorized, helper.BuildErrorResponse(message.UnauthorizedCode, message.UnauthorizedExpired, message.UnauthorizedExpired))
+			return
 		}
 	}
 }

@@ -10,6 +10,8 @@
 [jwt]
   secret = "xiaoshaoqq@gmail.com,.<>?"
   issuer = "xiaoshaoqq@gmail.com"
+  jwt_expires = 86400  # 单位秒  3600s * 24 = 24h
+
 
 [mysql]
   # docker mysql service
@@ -28,7 +30,7 @@
   # host = "localhost"
   host = "redis-service"
   port = 6379
-  db = 5
+  db = 10
   password = "123456"
 
 [logger]
