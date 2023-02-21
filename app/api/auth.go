@@ -22,7 +22,7 @@ import (
 // @Produce		json
 // @Param       user  body        dto.UserRegisterDTO  true  "UserRegisterDTO JSON"
 // @Success		200	  {object}	  helper.Response  "success"
-// @Failure     400   {object}    helper.ErrorResponse  "register failed!"
+// @Failure     400   {object}    helper.Response  "register failed!"
 // @Router		/api/register [post]
 func Register(ctx *gin.Context) {
 
@@ -60,7 +60,7 @@ func Register(ctx *gin.Context) {
 // @Produce		json
 // @Param       user  body   	  dto.UserLoginDTO  true   "UserLoginDTO json"  default(dto.UserLoginDTO{"xiaoshaoqq@gmail.com", "123456"})
 // @Success		200	  {object}	  helper.Response   "success"
-// @Failure     400   {object}    helper.ErrorResponse   "failed"
+// @Failure     400   {object}    helper.Response   "failed"
 // @Router		/api/login [post]
 func Login(ctx *gin.Context) {
 	var userDTO dto.UserLoginDTO
@@ -109,7 +109,7 @@ func Login(ctx *gin.Context) {
 // @Description	User logout
 // @Tags	    account
 // @Success		200	  {object}	helper.Response  "success"
-// @Failure     400   {object}  helper.ErrorResponse  "failed"
+// @Failure     400   {object}  helper.Response  "failed"
 // @Router		/api/logout [post]
 func Logout(ctx *gin.Context) {
 	authorization := helper.GetHeaderToken(ctx)
@@ -132,7 +132,7 @@ func Logout(ctx *gin.Context) {
 // @Accept	    json
 // @Produce		json
 // @Success		200	  {object}	  helper.Response  "success"
-// @Failure     400   {object}    helper.ErrorResponse  "failed"
+// @Failure     400   {object}    helper.Response  "failed"
 // @Router		/api/refresh [post]
 func Refresh(c *gin.Context) {
 	var user model.User
@@ -153,7 +153,7 @@ func Refresh(c *gin.Context) {
 // @Accept	    json
 // @Produce		json
 // @Success		200	  {object}	  helper.Response  "success"
-// @Failure     400   {object}    helper.ErrorResponse  "failed"
+// @Failure     400   {object}    helper.Response  "failed"
 // @Router		/api/verify/{id} [post]
 func VerifyEmail(c *gin.Context) {
 	token := c.Param("token")

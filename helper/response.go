@@ -6,16 +6,17 @@ import (
 )
 
 type Response struct {
-	Data    interface{} `json:"data"`
 	Code    int         `json:"code"`
 	Message string      `json:"message"`
+	Data    interface{} `json:"data,omitempty"`
+	Error   []string    `json:"error,omitempty"`
 }
 
-type ErrorResponse struct {
-	Error   []string `json:"error"`
-	Code    int      `json:"code"`
-	Message string   `json:"message"`
-}
+// type ErrorResponse struct {
+// 	Error   []string `json:"error"`
+// 	Code    int      `json:"code"`
+// 	Message string   `json:"message"`
+// }
 
 type EmptyObj struct{}
 
@@ -39,10 +40,10 @@ func BuildResponse[T any](msg string, data T) Response {
 // err split `\n`
 // examples
 // BuildErrorResponse(1, "用户名不对", "用户名不对\n密码不对")
-func BuildErrorResponse(code int, msg string, err string) ErrorResponse {
+func BuildErrorResponse(code int, msg string, err string) Response {
 	errs := strings.Split(err, "\n")
 
-	res := ErrorResponse{
+	res := Response{
 		Code:    code,
 		Message: msg,
 		Error:   errs,
