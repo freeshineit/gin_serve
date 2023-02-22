@@ -1,7 +1,6 @@
 package helper
 
 import (
-	"fmt"
 	"gin_serve/config"
 	"strings"
 	"time"
@@ -56,7 +55,7 @@ func ValidateTokenAndBackClaims(tokenStr string) (*JWTAuthCustomClaim, bool, err
 		return []byte(jwtConfig.Secret), nil
 	})
 
-	fmt.Printf("ValidateTokenAndBackClaims: %v, %v \n", token.Valid, claims)
+	// fmt.Printf("ValidateTokenAndBackClaims: %v, %v \n", token.Valid, claims)
 
 	return claims, token.Valid, err
 }
