@@ -44,7 +44,6 @@ docker run -it -p 3000:3000 -p 3001:3001 -p 3002:3002 --rm --net my_net --name g
 # or (Makefile)
 make serve
 
-
 # generate api docs
 swag init -g ./main.go
 
@@ -58,6 +57,7 @@ http://localhost:8080/swagger/index.html
 - [x] JWT authentication
 - [x] Email login/register
 - [x] Swagger api document
+- [x] [Sentry](https://sentry.io/welcome/)
 
 
 

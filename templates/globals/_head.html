@@ -2,5 +2,26 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+<script src="/static/js/axios.js"></script>
+
 <link href="/static/style/common.css" rel="stylesheet">
+
+<script src="https://browser.sentry-cdn.com/7.38.0/bundle.min.js"></script>
+<script>
+    (function () {
+        Sentry.init({
+            dsn: "http://40205812fd434a58980010baa8cd950d@localhost:9000/2",
+            // this assumes your build process replaces `process.env.npm_package_version` with a value
+            release: "gin_serve@0.1.0",
+
+            // We recommend adjusting this value in production, or using tracesSampler
+            // for finer control
+            // tracesSampleRate: 1.0,
+            logErrors: true,
+
+        });
+    })();
+</script>
 {{end}}
