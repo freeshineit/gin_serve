@@ -43,7 +43,7 @@ var Axios = (function () {
       return response.data;
     },
     (error) => {
-      if (error.response.status === 401) {
+      if (error.response && error.response.status === 401) {
         location.href = "/login";
       }
       // err.message = "请求超时或服务器异常，请检查网络或联系管理员！";
