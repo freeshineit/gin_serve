@@ -72,7 +72,7 @@ func CreateUser(c *gin.Context) {
 	var user dto.UserRegisterDTO
 
 	if err := c.ShouldBind(&user); err != nil {
-		c.JSON(http.StatusBadRequest, helper.BuildErrorResponse(1, "register failed!", err.Error()))
+		c.JSON(http.StatusBadRequest, helper.BuildErrorResponse(1, "register failed!", helper.ParseBindingError(err)))
 		return
 	}
 

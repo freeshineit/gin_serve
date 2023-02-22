@@ -34,7 +34,7 @@ func CreateTodo(ctx *gin.Context) {
 	var todo dto.TodoCreateDTO
 
 	if err := ctx.ShouldBind(&todo); err != nil {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(1, "create fail", err.Error()))
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(1, "create fail", helper.ParseBindingError(err)))
 		return
 	}
 
@@ -153,7 +153,7 @@ func PutTodoContent(ctx *gin.Context) {
 	var todoUpdateContentDTO dto.TodoUpdateContentDTO
 
 	if err := ctx.ShouldBind(&todoUpdateContentDTO); err != nil {
-		ctx.AbortWithStatusJSON(http.StatusOK, helper.BuildErrorResponse(1, "fail", "content format is incorrect"))
+		ctx.AbortWithStatusJSON(http.StatusOK, helper.BuildErrorResponse(1, "fail", helper.ParseBindingError(err)))
 		return
 	}
 
@@ -202,7 +202,7 @@ func PutTodoStatus(ctx *gin.Context) {
 	var todoUpdateStatusDTO dto.TodoUpdateStatusDTO
 
 	if err := ctx.ShouldBind(&todoUpdateStatusDTO); err != nil {
-		ctx.AbortWithStatusJSON(http.StatusOK, helper.BuildErrorResponse(1, "fail", "status format is incorrect"))
+		ctx.AbortWithStatusJSON(http.StatusOK, helper.BuildErrorResponse(1, "fail", helper.ParseBindingError(err)))
 		return
 	}
 

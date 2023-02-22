@@ -29,7 +29,7 @@ func Register(ctx *gin.Context) {
 	var user dto.UserRegisterDTO
 
 	if err := ctx.ShouldBind(&user); err != nil {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(1, "register failed!", err.Error()))
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(1, "register failed!", helper.ParseBindingError(err)))
 		return
 	}
 
@@ -66,7 +66,7 @@ func Login(ctx *gin.Context) {
 	var userDTO dto.UserLoginDTO
 
 	if err := ctx.ShouldBind(&userDTO); err != nil {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(1, "fail", err.Error()))
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(1, "fail", helper.ParseBindingError(err)))
 		return
 	}
 
@@ -138,7 +138,7 @@ func Refresh(c *gin.Context) {
 	var user model.User
 
 	if err := c.ShouldBind(&user); err != nil {
-		c.JSON(http.StatusOK, helper.BuildErrorResponse(1, "use should bind error", err.Error()))
+		c.JSON(http.StatusOK, helper.BuildErrorResponse(1, "use should bind error", helper.ParseBindingError(err)))
 		return
 	}
 
