@@ -39,7 +39,9 @@ func (service *authService) VerifyCredential(email string, password string) (dto
 
 	if err == nil {
 		result := comparePassword(user.Password, password)
+
 		if result && user.Email == email {
+
 			err := smapping.FillStruct(&userToCreate, smapping.MapFields(&user))
 
 			if err != nil {
@@ -62,7 +64,7 @@ func (service *authService) CreateUser(user dto.UserRegisterDTO) dto.UserDTO {
 	err := smapping.FillStruct(&userToCreate, smapping.MapFields(&user))
 
 	if err != nil {
-		zap.S().Fatalf("Failed map %v", err)
+		zap.S().Errorf("Failed map %v", err)
 	}
 
 	userToDTO := dto.UserDTO{}
@@ -81,7 +83,7 @@ func (service *authService) FindByEmail(email string) dto.UserDTO {
 	err := smapping.FillStruct(&userToDTO, smapping.MapFields(&user))
 
 	if err != nil {
-		zap.S().Fatalf("Failed map %v", err)
+		zap.S().Errorf("Failed map %v", err)
 	}
 
 	return userToDTO
@@ -97,10 +99,10 @@ func (service *authService) IsDuplicateEmail(email string) bool {
 
 // Compare password
 func comparePassword(hashPassword, plainPassword string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(hashPassword), []byte(plainPassword))
 
+	err := bcrypt.CompareHashAndPassword([]byte(hashPassword), []byte(plainPassword))
 	if err != nil {
-		zap.S().Fatalf(err.Error())
+		zap.S().Infof(err.Error())
 		return false
 	}
 

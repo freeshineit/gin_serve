@@ -28,7 +28,11 @@ var AppCmd = &cobra.Command{
 
 func Serve(mode string) error {
 
-	// helper.InitTranslation("zh")
+	if err := helper.InitTrans("zh"); err != nil {
+		fmt.Println("初始化翻译器错误")
+		return err
+	}
+
 	if mode == "release" {
 		gin.SetMode(gin.ReleaseMode)
 	}
