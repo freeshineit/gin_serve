@@ -57,7 +57,7 @@ http://localhost:8080/swagger/index.html
 - [x] JWT authentication
 - [x] Email login/register
 - [x] Swagger api document
-- [x] [Sentry](https://sentry.io/welcome/)
+- [ ] [Sentry](https://sentry.io/welcome/)
 
 
 

@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"gin_serve/cmd/app"
+	"gin_serve/cmd/avatar"
 	"gin_serve/cmd/proxy"
 	"gin_serve/cmd/socket"
 	"gin_serve/cmd/version"
@@ -63,6 +64,7 @@ func init() {
 	rootCmd.AddCommand(app.AppCmd)
 	rootCmd.AddCommand(proxy.ProxyCmd)
 	rootCmd.AddCommand(socket.SocketCmd)
+	rootCmd.AddCommand(avatar.AvatarCmd)
 
 	cobra.OnInitialize(initConfig)
 
