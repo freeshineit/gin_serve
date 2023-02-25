@@ -65,8 +65,11 @@ func Serve(mode string) error {
 
 func BlueHandler(ctx *gin.Context) {
 	m := image.NewRGBA(image.Rect(0, 0, 240, 240))
-	blue := color.RGBA{0, 0, 255, 255}
-	draw.Draw(m, m.Bounds(), &image.Uniform{blue}, image.ZP, draw.Src)
+	blue := color.RGBA{0, 0, 255, 100}
+	draw.Draw(m, m.Bounds(), &image.Uniform{blue}, image.Point{
+		X: 100,
+		Y: 100,
+	}, draw.Src)
 
 	var img image.Image = m
 	writeImage(ctx, &img)

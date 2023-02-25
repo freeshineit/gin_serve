@@ -33,6 +33,7 @@ var rootCmd = &cobra.Command{
 			mode = os.Getenv("GIN_MODE")
 		}
 
+		// all serve
 		g.Go(func() error {
 			return app.Serve(mode)
 		})
@@ -43,6 +44,10 @@ var rootCmd = &cobra.Command{
 
 		g.Go(func() error {
 			return socket.Serve(mode)
+		})
+
+		g.Go(func() error {
+			return avatar.Serve(mode)
 		})
 
 		if err := g.Wait(); err != nil {
