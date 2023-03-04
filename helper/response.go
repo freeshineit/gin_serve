@@ -12,12 +12,6 @@ type Response struct {
 	Error   []string    `json:"error,omitempty"`
 }
 
-// type ErrorResponse struct {
-// 	Error   []string `json:"error"`
-// 	Code    int      `json:"code"`
-// 	Message string   `json:"message"`
-// }
-
 type EmptyObj struct{}
 
 // build response success
