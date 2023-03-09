@@ -7,6 +7,7 @@ import (
 	"gin_serve/app/service"
 	"gin_serve/config"
 	"gin_serve/helper"
+	"gin_serve/message"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -29,14 +30,14 @@ func Register(ctx *gin.Context) {
 	var user dto.UserRegisterDTO
 
 	if err := ctx.ShouldBind(&user); err != nil {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(1, "register failed!", helper.ParseBindingError(err)))
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(http.StatusBadRequest, "register failed!", helper.ParseBindingError(err)))
 		return
 	}
 
 	authService := service.NewAuthService(repo.NewUserRepo(config.DB))
 
 	if duplicate := authService.IsDuplicateEmail(user.Email); duplicate {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(1, "register failed!", "email is exist!"))
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(http.StatusBadRequest, "register failed!", "email is exist!"))
 		return
 	}
 
@@ -44,7 +45,7 @@ func Register(ctx *gin.Context) {
 
 	if err := helper.SendActiveEmail(&u); err != nil {
 		zap.S().Fatal(err.Error())
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(1, "send email fail!", "send email fail!"))
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(http.StatusBadRequest, "send email fail!", "send email fail!"))
 		return
 	}
 
@@ -66,7 +67,7 @@ func Login(ctx *gin.Context) {
 	var userDTO dto.UserLoginDTO
 
 	if err := ctx.ShouldBind(&userDTO); err != nil {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(1, "fail", helper.ParseBindingError(err)))
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(http.StatusBadRequest, message.InvalidParameter, helper.ParseBindingError(err)))
 		return
 	}
 
@@ -75,7 +76,7 @@ func Login(ctx *gin.Context) {
 	ok := serviceCaptcha.VerifyCaptcha(userDTO.CaptchaID, userDTO.Code)
 
 	if !ok {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(1, "fail", "验证码错误"))
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(http.StatusBadRequest, "fail", "验证码错误"))
 		return
 	}
 
@@ -84,19 +85,19 @@ func Login(ctx *gin.Context) {
 	u, err := authService.VerifyCredential(userDTO.Email, userDTO.Password)
 
 	if err != nil {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(1, "fail", err.Error()))
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(http.StatusBadRequest, "fail", err.Error()))
 		return
 	}
 
 	if *u.IsActive != 1 {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(1, "fail", "用户还未激活，请激活后再试！"))
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(http.StatusBadRequest, "fail", "用户还未激活，请激活后再试！"))
 		return
 	}
 
 	token, err := helper.GenerateToken(u.ID)
 
 	if err != nil {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(1, "token generate fail", err.Error()))
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(http.StatusBadRequest, "token generate fail", err.Error()))
 		return
 	}
 
@@ -117,7 +118,7 @@ func Logout(ctx *gin.Context) {
 	service := service.NewJWTService(config.RedisClient)
 
 	if err := service.JoinBlackList(authorization); err != nil {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(1, "fail", err.Error()))
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(http.StatusBadRequest, "fail", err.Error()))
 		return
 	}
 
@@ -138,7 +139,7 @@ func Refresh(c *gin.Context) {
 	var user model.User
 
 	if err := c.ShouldBind(&user); err != nil {
-		c.JSON(http.StatusOK, helper.BuildErrorResponse(1, "use should bind error", helper.ParseBindingError(err)))
+		c.JSON(http.StatusBadRequest, helper.BuildErrorResponse(http.StatusBadRequest, message.InvalidParameter, helper.ParseBindingError(err)))
 		return
 	}
 
@@ -159,7 +160,7 @@ func VerifyEmail(c *gin.Context) {
 	token := c.Param("token")
 
 	if token == "" {
-		c.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(1, "no token", "no token"))
+		c.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(http.StatusBadRequest, "no token", "no token"))
 		return
 	}
 
@@ -170,5 +171,6 @@ func VerifyEmail(c *gin.Context) {
 		c.JSON(http.StatusOK, helper.BuildResponse("success", "激活成功"))
 		return
 	}
-	c.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(1, "fail", "激活失败"))
+
+	c.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(http.StatusBadRequest, "fail", "激活失败"))
 }
