@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"gin_serve/app/constant"
 	"gin_serve/app/service"
 	"gin_serve/config"
 	"gin_serve/helper"
@@ -9,8 +10,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 )
-
-var TokenClaims = "TokenClaims"
 
 // the jwt middleware
 // JWTAuth jwt中间件
@@ -35,7 +34,7 @@ func JwtAuth() gin.HandlerFunc {
 		tokenClaims, valid, err := helper.ValidateTokenAndBackClaims(authorization)
 
 		if err == nil && valid {
-			ctx.Set(TokenClaims, tokenClaims)
+			ctx.Set(constant.CtxTokenClaimsKey, tokenClaims)
 			ctx.Next()
 			return
 		} else {

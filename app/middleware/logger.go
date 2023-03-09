@@ -4,6 +4,7 @@ package middleware
 // Code structure based on ginrus package.
 // https://github.com/gin-contrib/zap
 import (
+	"gin_serve/app/constant"
 	"gin_serve/helper"
 	"net"
 	"net/http"
@@ -68,7 +69,7 @@ func GinZapWithConfig(logger *zap.Logger, conf *Config) gin.HandlerFunc {
 				end = end.UTC()
 			}
 
-			tokenClaims, exists := c.Get(TokenClaims)
+			tokenClaims, exists := c.Get(constant.CtxTokenClaimsKey)
 
 			var userID uint64
 
