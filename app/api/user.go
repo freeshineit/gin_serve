@@ -1,10 +1,7 @@
 package api
 
 import (
-	"fmt"
 	"gin_serve/app/constant"
-	"gin_serve/app/dto"
-	"gin_serve/app/model"
 	"gin_serve/app/repo"
 	"gin_serve/app/service"
 	"gin_serve/config"
@@ -33,18 +30,31 @@ func GetUserByID(ctx *gin.Context) {
 	nID, err := strconv.ParseUint(id, 10, 0)
 
 	if err != nil {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(http.StatusBadRequest, "无效参数", err.Error()))
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(http.StatusBadRequest, message.InvalidParameter, err.Error()))
 		return
 	}
 
-	service := service.NewAuthService(repo.NewUserRepo(config.DB))
+	tokenClaims, exit := ctx.Get(constant.CtxTokenClaimsKey)
 
-	t := service.FindByID(nID)
+	if exit {
+		userID := tokenClaims.(*helper.JWTAuthCustomClaim).UserID
 
-	if t.Email != "" {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(1, "user no exists", "user no exists"))
-	} else {
-		ctx.JSON(http.StatusCreated, helper.BuildResponse("success", t))
+		// 判断当前范访问的用户是否是同一个用户， 否则不允许访问
+		if userID == nID {
+			service := service.NewAuthService(repo.NewUserRepo(config.DB))
+
+			t := service.FindByID(nID)
+
+			if t.Email == "" {
+				ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(http.StatusBadRequest, "user no exists", "user no exists"))
+			} else {
+				ctx.JSON(http.StatusCreated, helper.BuildResponse("success", t))
+			}
+
+			return
+		}
+
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(http.StatusBadRequest, "no promise", "no promise"))
 	}
 
 }
@@ -62,8 +72,6 @@ func GetUserByID(ctx *gin.Context) {
 func GetMe(ctx *gin.Context) {
 
 	tokenClaims, exit := ctx.Get(constant.CtxTokenClaimsKey)
-
-	fmt.Println(tokenClaims)
 
 	if exit {
 		service := service.NewAuthService(repo.NewUserRepo(config.DB))
@@ -83,51 +91,51 @@ func GetMe(ctx *gin.Context) {
 
 func DeleteUser(c *gin.Context) {
 
-	id := c.Param("id")
+	// id := c.Param("id")
 
-	nID, err := strconv.ParseUint(id, 10, 0)
+	// nID, err := strconv.ParseUint(id, 10, 0)
 
-	if err != nil {
+	// if err != nil {
 
-	}
+	// }
 
-	c.JSON(http.StatusOK, helper.BuildResponse("success", model.User{
-		ID:     nID,
-		Name:   "XiaoShao",
-		Email:  "xiaoshaoqq@gmail.com",
-		Gender: "M",
-		Avatar: "/",
-	}))
+	// c.JSON(http.StatusOK, helper.BuildResponse("success", model.User{
+	// 	ID:     nID,
+	// 	Name:   "XiaoShao",
+	// 	Email:  "xiaoshaoqq@gmail.com",
+	// 	Gender: "M",
+	// 	Avatar: "/",
+	// }))
 }
 
 func UpdateUser(c *gin.Context) {
-	id := c.Param("id")
+	// id := c.Param("id")
 
-	nID, err := strconv.ParseUint(id, 10, 0)
+	// nID, err := strconv.ParseUint(id, 10, 0)
 
-	if err != nil {
+	// if err != nil {
 
-	}
+	// }
 
-	c.JSON(http.StatusOK, helper.BuildResponse("success", model.User{
-		ID:     nID,
-		Name:   "XiaoShao",
-		Email:  "xiaoshaoqq@gmail.com",
-		Gender: "M",
-		Avatar: "/",
-	}))
+	// c.JSON(http.StatusOK, helper.BuildResponse("success", model.User{
+	// 	ID:     nID,
+	// 	Name:   "XiaoShao",
+	// 	Email:  "xiaoshaoqq@gmail.com",
+	// 	Gender: "M",
+	// 	Avatar: "/",
+	// }))
 }
 
 func CreateUser(c *gin.Context) {
 
-	var user dto.UserRegisterDTO
+	// var user dto.UserRegisterDTO
 
-	if err := c.ShouldBind(&user); err != nil {
-		c.JSON(http.StatusBadRequest, helper.BuildErrorResponse(http.StatusBadRequest, message.InvalidParameter, helper.ParseBindingError(err)))
-		return
-	}
+	// if err := c.ShouldBind(&user); err != nil {
+	// 	c.JSON(http.StatusBadRequest, helper.BuildErrorResponse(http.StatusBadRequest, message.InvalidParameter, helper.ParseBindingError(err)))
+	// 	return
+	// }
 
-	fmt.Println(user)
+	// fmt.Println(user)
 
-	c.JSON(http.StatusOK, helper.BuildResponse("success", ""))
+	// c.JSON(http.StatusOK, helper.BuildResponse("success", ""))
 }
