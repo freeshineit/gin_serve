@@ -2,8 +2,8 @@ package v1
 
 import (
 	"fmt"
+	"gin_serve/app/constant"
 	"gin_serve/app/dto"
-	"gin_serve/app/middleware"
 	"gin_serve/app/repo"
 	"gin_serve/app/service"
 	"gin_serve/config"
@@ -34,11 +34,11 @@ func CreateTodo(ctx *gin.Context) {
 	var todo dto.TodoCreateDTO
 
 	if err := ctx.ShouldBind(&todo); err != nil {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(1, "create fail", helper.ParseBindingError(err)))
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(http.StatusBadRequest, message.InvalidParameter, helper.ParseBindingError(err)))
 		return
 	}
 
-	tokenClaims, exists := ctx.Get(middleware.TokenClaims)
+	tokenClaims, exists := ctx.Get(constant.CtxTokenClaimsKey)
 
 	if exists {
 		service := service.NewTodoService(repo.NewTodoRepo(config.DB))
@@ -48,9 +48,9 @@ func CreateTodo(ctx *gin.Context) {
 			ctx.JSON(http.StatusCreated, helper.BuildResponse("success", t))
 			return
 		}
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(1, "insert fail", err.Error()))
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(http.StatusBadRequest, "insert fail", err.Error()))
 	} else {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(1, "user no exists", "user no exists"))
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(http.StatusBadRequest, "user no exists", "user no exists"))
 	}
 }
 
@@ -70,7 +70,7 @@ func GetTodo(c *gin.Context) {
 	aid, err := strconv.ParseUint(id, 10, 0)
 
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(message.BadRequestCode, "fail", "id convert failed"))
+		c.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(message.BadRequestCode, message.InvalidParameter, "id convert failed"))
 		return
 	}
 
@@ -94,7 +94,7 @@ func GetTodo(c *gin.Context) {
 // @Router		/api/v1/todos [get]
 // @Security    Bearer
 func GetTodos(ctx *gin.Context) {
-	tokenClaims, exists := ctx.Get(middleware.TokenClaims)
+	tokenClaims, exists := ctx.Get(constant.CtxTokenClaimsKey)
 
 	if exists {
 		service := service.NewTodoService(repo.NewTodoRepo(config.DB))
@@ -146,18 +146,18 @@ func PutTodoContent(ctx *gin.Context) {
 	tid, err := strconv.ParseUint(id, 10, 0)
 
 	if err != nil {
-		ctx.AbortWithStatusJSON(http.StatusOK, helper.BuildErrorResponse(1, "fail", "id convert failed"))
+		ctx.AbortWithStatusJSON(http.StatusOK, helper.BuildErrorResponse(1, message.InvalidParameter, "id convert failed"))
 		return
 	}
 
 	var todoUpdateContentDTO dto.TodoUpdateContentDTO
 
 	if err := ctx.ShouldBind(&todoUpdateContentDTO); err != nil {
-		ctx.AbortWithStatusJSON(http.StatusOK, helper.BuildErrorResponse(1, "fail", helper.ParseBindingError(err)))
+		ctx.AbortWithStatusJSON(http.StatusOK, helper.BuildErrorResponse(1, message.InvalidParameter, helper.ParseBindingError(err)))
 		return
 	}
 
-	tokenClaims, exists := ctx.Get(middleware.TokenClaims)
+	tokenClaims, exists := ctx.Get(constant.CtxTokenClaimsKey)
 
 	if exists {
 		service := service.NewTodoService(repo.NewTodoRepo(config.DB))
@@ -169,7 +169,7 @@ func PutTodoContent(ctx *gin.Context) {
 		if ok {
 			ctx.JSON(http.StatusOK, helper.BuildResponse("success", "update success"))
 		} else {
-			ctx.JSON(http.StatusOK, helper.BuildErrorResponse(1, "fail", err.Error()))
+			ctx.JSON(http.StatusOK, helper.BuildErrorResponse(http.StatusBadRequest, "fail", err.Error()))
 		}
 		return
 	} else {
@@ -195,18 +195,18 @@ func PutTodoStatus(ctx *gin.Context) {
 	tid, err := strconv.ParseUint(id, 10, 0)
 
 	if err != nil {
-		ctx.AbortWithStatusJSON(http.StatusOK, helper.BuildErrorResponse(1, "fail", "id convert failed"))
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(http.StatusBadRequest, message.InvalidParameter, "id convert failed"))
 		return
 	}
 
 	var todoUpdateStatusDTO dto.TodoUpdateStatusDTO
 
 	if err := ctx.ShouldBind(&todoUpdateStatusDTO); err != nil {
-		ctx.AbortWithStatusJSON(http.StatusOK, helper.BuildErrorResponse(1, "fail", helper.ParseBindingError(err)))
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(1, message.InvalidParameter, helper.ParseBindingError(err)))
 		return
 	}
 
-	tokenClaims, exists := ctx.Get(middleware.TokenClaims)
+	tokenClaims, exists := ctx.Get(constant.CtxTokenClaimsKey)
 
 	if exists {
 		service := service.NewTodoService(repo.NewTodoRepo(config.DB))
@@ -218,11 +218,11 @@ func PutTodoStatus(ctx *gin.Context) {
 		if ok {
 			ctx.JSON(http.StatusOK, helper.BuildResponse("success", "update success"))
 		} else {
-			ctx.JSON(http.StatusOK, helper.BuildErrorResponse(1, "fail", err.Error()))
+			ctx.JSON(http.StatusBadRequest, helper.BuildErrorResponse(http.StatusBadRequest, "fail", err.Error()))
 		}
 		return
 	} else {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(1, "user no exists", "user no exists"))
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(http.StatusBadRequest, "user no exists", "user no exists"))
 	}
 }
 
@@ -242,11 +242,11 @@ func DeleteTodo(ctx *gin.Context) {
 	tid, err := strconv.ParseUint(id, 10, 0)
 
 	if err != nil {
-		ctx.AbortWithStatusJSON(http.StatusOK, helper.BuildErrorResponse(message.BadRequestCode, "fail", "id convert failed"))
+		ctx.AbortWithStatusJSON(http.StatusOK, helper.BuildErrorResponse(message.BadRequestCode, message.InvalidParameter, "id convert failed"))
 		return
 	}
 
-	tokenClaims, exists := ctx.Get(middleware.TokenClaims)
+	tokenClaims, exists := ctx.Get(constant.CtxTokenClaimsKey)
 
 	if exists {
 		service := service.NewTodoService(repo.NewTodoRepo(config.DB))
@@ -258,11 +258,11 @@ func DeleteTodo(ctx *gin.Context) {
 		if ok {
 			ctx.JSON(http.StatusOK, helper.BuildResponse("success", "delete success"))
 		} else {
-			ctx.JSON(http.StatusOK, helper.BuildErrorResponse(1, "fail", err.Error()))
+			ctx.JSON(http.StatusBadRequest, helper.BuildErrorResponse(http.StatusBadRequest, message.InvalidParameter, err.Error()))
 		}
 		return
 	} else {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(1, "user no exists", "user no exists"))
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(http.StatusBadRequest, "user no exists", "user no exists"))
 	}
 
 }
