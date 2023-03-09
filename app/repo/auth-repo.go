@@ -15,6 +15,7 @@ type UserRepo interface {
 	VerifyCredential(email string) (model.User, error)
 	IsDuplicateEmail(email string) *gorm.DB
 	FindByEmail(email string) model.User
+	FindByID(id uint64) model.User
 	ProfileUser(userID string) model.User
 	VerifyActiveEmail(userID uint64, email string) bool
 }
@@ -68,6 +69,13 @@ func (db *userConnection) IsDuplicateEmail(email string) (tx *gorm.DB) {
 func (db *userConnection) FindByEmail(email string) model.User {
 	var user model.User
 	db.connection.Where("email = ?", email).Take(&user)
+	return user
+}
+
+// FindByID be used when find user by email form database
+func (db *userConnection) FindByID(id uint64) model.User {
+	var user model.User
+	db.connection.Where("id = ?", id).Take(&user)
 	return user
 }
 

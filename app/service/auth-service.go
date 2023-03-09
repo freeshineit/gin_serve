@@ -16,6 +16,7 @@ type AuthService interface {
 	VerifyCredential(email string, password string) (dto.UserDTO, error)
 	CreateUser(user dto.UserRegisterDTO) dto.UserDTO
 	FindByEmail(email string) dto.UserDTO
+	FindByID(id uint64) dto.UserDTO
 	IsDuplicateEmail(email string) bool
 	VerifyEmail(tokenStr string) bool
 }
@@ -80,6 +81,20 @@ func (service *authService) FindByEmail(email string) dto.UserDTO {
 
 	userToDTO := dto.UserDTO{}
 	user := service.userRepos.FindByEmail(email)
+	err := smapping.FillStruct(&userToDTO, smapping.MapFields(&user))
+
+	if err != nil {
+		zap.S().Errorf("Failed map %v", err)
+	}
+
+	return userToDTO
+}
+
+// FindByID be used when find user
+func (service *authService) FindByID(id uint64) dto.UserDTO {
+
+	userToDTO := dto.UserDTO{}
+	user := service.userRepos.FindByID(id)
 	err := smapping.FillStruct(&userToDTO, smapping.MapFields(&user))
 
 	if err != nil {
