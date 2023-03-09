@@ -9,4 +9,7 @@ const (
 	UnauthorizedExpired = "token is expired"      // token is expired
 	// bad
 	BadRequestCode = http.StatusBadRequest // 400
+
+	//
+	InvalidParameter = "invalid parameter"
 )
