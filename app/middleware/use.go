@@ -10,7 +10,7 @@ import (
 
 func SetMiddleware(router *gin.Engine, logger *zap.Logger) {
 	router.Use(GinZap(logger, time.RFC3339, true), RecoveryWithZap(logger, true), cors.New(cors.Config{
-		AllowOrigins:     []string{"https://foo.com", "http://localhost:8080", "http://localhost:8081", "http://localhost:8082", "http://localhost:3001", "http://localhost:3002", "http://localhost:3003", "http://127.0.0.1:5173"},
+		AllowOrigins:     []string{"*"},
 		AllowMethods:     []string{"GET", "POST", "DELETE", "PUT", "PATCH"},
 		AllowHeaders:     []string{"Origin"},
 		ExposeHeaders:    []string{"Content-Length"},
