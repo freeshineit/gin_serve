@@ -44,7 +44,7 @@ func Register(ctx *gin.Context) {
 	u := authService.CreateUser(user)
 
 	if err := helper.SendActiveEmail(&u); err != nil {
-		zap.S().Fatal(err.Error())
+		zap.S().Errorf(err.Error())
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.BuildErrorResponse(http.StatusBadRequest, "send email fail!", "send email fail!"))
 		return
 	}
