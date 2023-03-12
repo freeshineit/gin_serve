@@ -20,7 +20,7 @@ import (
 // @Tags	    account
 // @Accept	    application/json
 // @Produce		json
-// @Param       user  path   	  int  true
+// @Param       id       path   int  true   "user id"
 // @Success		200	  {object}	  helper.Response   "success"
 // @Failure     400   {object}    helper.Response   "failed"
 // @Router		/api/user/{id} [get]
