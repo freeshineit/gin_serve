@@ -49,6 +49,9 @@ swag init -g ./main.go
 
 http://localhost:8080/swagger/index.html
 
+#
+go mod tidy
+
 ```
 
 ## Feature 
