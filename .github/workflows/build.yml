@@ -28,4 +28,4 @@ jobs:
         run: make test
 
       - name: Build
-        run: make build
+        run: make all
