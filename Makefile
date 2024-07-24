@@ -30,9 +30,9 @@ clean:
 
 db: 
 # docker network create my_net
-	docker-compose -f db-docker-compose.yaml up -d
+	docker compose -f db-docker-compose.yaml up -d
 
 serve:
 	docker build -t gin_serve:latest .
 # docker network create my_net
-	docker-compose -f serve-docker-compose.yaml up -d
+	docker compose -f serve-docker-compose.yaml up -d
