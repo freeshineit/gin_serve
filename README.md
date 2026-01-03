@@ -4,26 +4,28 @@
 ## Use
 
 ```bash
-# create docker network
+# 1. create docker network
 docker network create my_net
 
 # 初始化 mysql , redis 等 （前提是已经安装docker） 
-# initialization docker container, mysql, redis...
+# 2. initialization docker container, mysql, redis...
 docker-compose -f db-docker-compose.yaml up -d
 # or (Makefile)
 make db
 
-# run development
+# 3. hot run development
 # https://github.com/cosmtrek/air Live reload for Go apps
 air
 
-## development
+## or
+## 3. run development
 # http://localhost:8080
 # http://localhost:8081
 # http://localhost:8082
 # http://localhost:8080/swagger/index.html
-go run cmd/main.go
+go run main.go
 
+## Build Production
 # Run make build to compile app.
 make build
 
