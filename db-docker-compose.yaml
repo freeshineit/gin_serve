@@ -11,7 +11,8 @@ services:
       - MYSQL_ROOT_PASSWORD=123456
 
     volumes:
-      - ./docker/mysql/conf:/etc/mysql
+      - ./docker/mysql/conf.d:/etc/mysql/conf.d
+      - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
       - ./docker/mysql/logs:/var/log/mysql
       - ./docker/mysql/data:/var/lib/mysql
 

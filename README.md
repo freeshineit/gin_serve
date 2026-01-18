@@ -13,6 +13,9 @@ docker-compose -f db-docker-compose.yaml up -d
 # or (Makefile)
 make db
 
+# 创建数据库go_app
+./mysql.sh
+
 # 3. hot run development
 # https://github.com/cosmtrek/air Live reload for Go apps
 air

@@ -1,0 +1,7 @@
+# MySQL database server configuration file.
+#
+# This file contains additional configuration for MySQL 5.7
+
+[mysqld]
+skip-host-cache
+skip-name-resolve
