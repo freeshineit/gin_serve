@@ -7,5 +7,6 @@ upload/
 logs/
 bin
 docs
+gin_serve
 
 .DS_Store
